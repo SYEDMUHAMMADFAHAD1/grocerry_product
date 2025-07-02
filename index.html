@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GroceryMart - Premium Online Grocery Store</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        .category-card {
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .product-card {
+            transition: all 0.3s ease;
+            border: 1px solid #e2e8f0;
+        }
+        .product-card:hover {
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-color: #667eea;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .shopping-cart {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        .price-edit-mode {
+            background-color: #fef3cd;
+            border: 2px dashed #f59e0b;
+        }
+
+        /* Print Styles */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .print-area, .print-area * {
+                visibility: visible;
+            }
+            .print-area {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
+
+        /* Bill Print Styles */
+        .bill-print-content {
+            font-family: 'Courier New', monospace;
+            max-width: 300px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 2px solid #000;
+        }
+        .bill-header {
+            text-align: center;
+            border-bottom: 2px solid #000;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+        .bill-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 0;
+            border-bottom: 1px dotted #ccc;
+            padding-bottom: 2px;
+        }
+        .bill-total {
+            border-top: 2px solid #000;
+            margin-top: 10px;
+            padding-top: 10px;
+            font-weight: bold;
+            text-align: right;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="gradient-bg text-white py-6 shadow-lg no-print">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-shopping-basket text-3xl"></i>
+                    <div>
+                        <h1 class="text-3xl font-bold">حاجی فخرالدین کریانہ اینڈ جنرل ہولسیل اسٹور</h1>
+                        <p class="text-sm opacity-90">Premium Quality • Best Prices</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="adminToggle" class="bg-white bg-opacity-20 px-4 py-2 rounded-lg hover:bg-opacity-30 transition">
+                        <i class="fas fa-user-cog mr-2"></i>Admin Mode
+                    </button>
+                    <div class="text-right">
+                        <div class="text-sm opacity-90">Total Sales Today</div>
+                        <div class="text-xl font-bold" id="totalSalesToday">0 PKR</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Shopping Cart -->
+    <div class="shopping-cart no-print">
+        <div class="bg-white rounded-lg shadow-lg p-4 w-80">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-semibold flex items-center">
+                    <i class="fas fa-shopping-cart mr-2 text-blue-600"></i>Cart
+                </h3>
+                <span class="bg-blue-600 text-white px-2 py-1 rounded-full text-sm" id="cartCount">0</span>
+            </div>
+            <div id="cartItems" class="max-h-60 overflow-y-auto mb-4"></div>
+            <div class="border-t pt-4">
+                <div class="flex justify-between items-center text-lg font-bold">
+                    <span>Total:</span>
+                    <span id="cartTotal">0 PKR</span>
+                </div>
+                <button id="checkoutBtn" class="w-full bg-green-600 text-white py-2 rounded-lg mt-2 hover:bg-green-700 transition">
+                    <i class="fas fa-credit-card mr-2"></i>Checkout
+                </button>
+                <button id="clearCartBtn" class="w-full bg-red-600 text-white py-2 rounded-lg mt-2 hover:bg-red-700 transition">
+                    <i class="fas fa-trash mr-2"></i>Clear Cart
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8 no-print">
+        <!-- Categories Grid -->
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold text-center mb-8 text-gray-800">
+                <i class="fas fa-th-large mr-3 text-blue-600"></i>Shop by Category
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="categoriesGrid">
+                <!-- Categories will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Products Section -->
+        <section id="productsSection" class="hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800" id="categoryTitle"></h2>
+                <button id="backToCategories" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition">
+                    <i class="fas fa-arrow-left mr-2"></i>Back to Categories
+                </button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="productsGrid">
+                <!-- Products will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Sales Dashboard -->
+        <section class="mt-12 bg-white rounded-lg shadow-lg p-6">
+            <h2 class="text-2xl font-bold mb-6 text-gray-800">
+                <i class="fas fa-chart-line mr-3 text-green-600"></i>Sales Dashboard
+            </h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Daily Sales Summary</h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
+                            <span>Total Items Sold:</span>
+                            <span class="font-bold text-blue-600" id="totalItemsSold">0</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+                            <span>Total Revenue:</span>
+                            <span class="font-bold text-green-600" id="totalRevenue">0 PKR</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-purple-50 rounded-lg">
+                            <span>Total Orders:</span>
+                            <span class="font-bold text-purple-600" id="totalOrders">0</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-orange-50 rounded-lg">
+                            <span>Average Order Value:</span>
+                            <span class="font-bold text-orange-600" id="avgOrderValue">0 PKR</span>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Recent Sales</h3>
+                    <div id="recentSales" class="space-y-2 max-h-64 overflow-y-auto">
+                        <!-- Recent sales will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Bill Print Area -->
+    <div id="billPrintArea" class="print-area" style="display: none;">
+        <div class="bill-print-content">
+            <div class="bill-header">
+                <h2 style="margin: 0; font-size: 14px; font-weight: bold;">حاجی فخرالدین کریانہ اینڈ جنرل ہولسیل اسٹور</h2>
+                <p style="margin: 5px 0; font-size: 10px;">Premium Quality • Best Prices</p>
+                <p style="margin: 5px 0; font-size: 10px;">Phone: +92 325 3545682</p>
+                <hr style="margin: 10px 0;">
+                <p style="margin: 0; font-size: 10px;" id="billDate">Date: </p>
+            </div>
+            <div id="billItemsList">
+                <!-- Bill items will be populated here -->
+            </div>
+            <div class="bill-total">
+                <div style="display: flex; justify-content: space-between; margin: 5px 0;">
+                    <span>TOTAL:</span>
+                    <span id="billFinalTotal">0 PKR</span>
+                </div>
+                <hr style="margin: 10px 0;">
+                <p style="text-align: center; font-size: 10px; margin-top: 15px;">Thank you for your business!</p>
+                <p style="text-align: center; font-size: 8px;">Visit us again!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bill Summary Modal -->
+    <div id="billModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 no-print">
+        <div class="bg-white rounded-lg p-8 max-w-md w-full mx-4">
+            <div class="text-center mb-6">
+                <i class="fas fa-receipt text-4xl text-green-600 mb-4"></i>
+                <h3 class="text-2xl font-bold text-gray-800">Order Summary</h3>
+            </div>
+            <div id="billDetails" class="space-y-2 mb-6"></div>
+            <div class="border-t pt-4">
+                <div class="flex justify-between items-center text-xl font-bold">
+                    <span>Total Amount:</span>
+                    <span id="billTotal" class="text-green-600">0 PKR</span>
+                </div>
+            </div>
+            <div class="flex space-x-4 mt-6">
+                <button id="printBill" class="flex-1 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
+                    <i class="fas fa-print mr-2"></i>Print
+                </button>
+                <button id="closeBill" class="flex-1 bg-gray-600 text-white py-2 rounded-lg hover:bg-gray-700 transition">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-12 no-print">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">حاجی فخرالدین کریانہ اینڈ جنرل ہولسیل اسٹور</h3>
+                    <p class="text-gray-300">Your trusted partner for fresh groceries and household essentials. Quality products at unbeatable prices.</p>
+                </div>
+                <div></div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Connect With Us</h3>
+                    <p class="text-gray-300"><i class="fas fa-phone mr-2"></i>+92 325 3545682</p>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 pt-8 mt-8 text-center text-gray-400">
+                <p>&copy; 2025 GroceryMart. All rights reserved. Made with <i class="fas fa-heart text-red-500"></i> in Pakistan</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Product Data
+        const groceryData = {
+            "Ghee": [
+                {name: "Taza Ghee 1 kg", price: 460, image: null},
+                {name: "Taza Ghee 1/2 kg", price: 240, image: null},
+                {name: "Taza Ghee 250g", price: 120, image: null},
+                {name: "Kisan Ghee 1 kg", price: 520, image: null}
+            ],
+            "Oils": [
+                {name: "Kisan Oil 1 kg", price: 520, image: null},
+                {name: "Taza Oil 1 kg", price: 480, image: null},
+                {name: "Naryal Tel 125g", price: 210, image: null},
+                {name: "Naryal Tel 250g", price: 380, image: null},
+                {name: "Sarso Tel 125g", price: 130, image: null},
+                {name: "Sarso Tel 250g", price: 340, image: null}
+            ],
+            "Mixed Lentils": [
+                {name: "Mong Dal A 1 kg", price: 390, image: null},
+                {name: "Masoor Dal A 1 kg", price: 280, image: null},
+                {name: "Chana Dal VIP 1 kg", price: 300, image: null},
+                {name: "Mash Dal Khurmi 1 kg", price: 540, image: null},
+                {name: "Masoor Dal Sabit 1 kg", price: 320, image: null}
+            ],
+            "Wheat & Rice": [
+                {name: "Sabit Gandum 1 kg", price: 120, image: null},
+                {name: "Lal Chawal 1 kg", price: 120, image: null},
+                {name: "Chawal ka Atta VIP 1 kg", price: 120, image: null}
+            ],
+            "Millets & Grains": [
+                {name: "Bajra Mota 1 kg", price: 140, image: null},
+                {name: "Bajra Kangni 1 kg", price: 200, image: null},
+                {name: "VIP Dalya 1 kg", price: 140, image: null}
+            ],
+            "Chickpeas": [
+                {name: "Safaid Chana 10mm 1 kg", price: 440, image: null},
+                {name: "Kala Chana VIP 1 kg", price: 280, image: null},
+                {name: "Chora VIP 1 kg", price: 320, image: null},
+                {name: "Mori VIP 1 kg", price: 320, image: null},
+                {name: "White Lobia VIP 1 kg", price: 440, image: null},
+                {name: "Bhuna Chana 1 kg", price: 400, image: null}
+            ],
+            "Mixed Spices": [
+                {name: "Pisi Mirch 1 kg", price: 1000, image: null},
+                {name: "Kuti Mirch 1 kg", price: 1000, image: null},
+                {name: "Sabit Mirch 1 kg", price: 1200, image: null},
+                {name: "Pisi Haldi VIP 1 kg", price: 1000, image: null},
+                {name: "Pisi Dhania VIP 1 kg", price: 800, image: null},
+                {name: "Mix Masala VIP 1 kg", price: 800, image: null},
+                {name: "Safaid Zeera VIP 1 kg", price: 1600, image: null},
+                {name: "Kali Mirch VIP 1 kg", price: 2400, image: null},
+                {name: "Methi Dana 1 kg", price: 500, image: null},
+                {name: "Ajwain VIP 1 kg", price: 500, image: null},
+                {name: "Sarso Dana VIP 1 kg", price: 500, image: null},
+                {name: "Sabit Dhania Goli 1 kg", price: 800, image: null},
+                {name: "Sabit Dhania Desi 1 kg", price: 1200, image: null},
+                {name: "Chat Masala Khulla 1 kg", price: 600, image: null},
+                {name: "Finger Chips Masala 1 kg", price: 800, image: null}
+            ],
+            "Premium Spices": [
+                {name: "Khashkhash VIP 1 kg", price: 1000, image: null},
+                {name: "Sago Dana VIP 1 kg", price: 440, image: null},
+                {name: "Sonf VIP 1 kg", price: 800, image: null},
+                {name: "Tatri Top 1 kg", price: 1000, image: null},
+                {name: "China Namak 1 kg", price: 1400, image: null},
+                {name: "Dar Chini Top 1 kg", price: 2800, image: null},
+                {name: "Badyan Phol VIP 1 kg", price: 3200, image: null},
+                {name: "Bari Ilaichi VIP 1 kg", price: 6000, image: null},
+                {name: "Choti Ilaichi Top 1 kg", price: 10000, image: null},
+                {name: "Long Top 1 kg", price: 3000, image: null}
+            ],
+            "Dry Fruits": [
+                {name: "Badam Top 1 kg", price: 3200, image: null},
+                {name: "Pisi Naryal China Top 1 kg", price: 1000, image: null},
+                {name: "Sabit Naryal VIP 1 kg", price: 1600, image: null},
+                {name: "Chuwara VIP 1 kg", price: 800, image: null},
+                {name: "Kishmish Top 1 kg", price: 1200, image: null},
+                {name: "Munakka VIP 1 kg", price: 1600, image: null},
+                {name: "Asharfi Lal VIP 1 kg", price: 600, image: null},
+                {name: "Asharfi Hara VIP 1 kg", price: 600, image: null},
+                {name: "Til Safaid Top 1 kg", price: 1200, image: null},
+                {name: "Aalo Bukhara Kandhari 1 kg", price: 1200, image: null},
+                {name: "Imli VIP 1 kg", price: 600, image: null}
+            ],
+            "Milk Products": [
+                {name: "Everyday Doodh 1 kg", price: 1800, image: null},
+                {name: "Everyday Doodh 1/2 kg", price: 950, image: null},
+                {name: "Everyday Doodh 250g", price: 500, image: null},
+                {name: "Everyday Sachet 1 pcs", price: 30, image: null},
+                {name: "Bunyad Sachet 1 pcs", price: 55, image: null},
+                {name: "Cerelac Sachet 1 pcs", price: 55, image: null},
+                {name: "Nido Doodh 1 kg", price: 2300, image: null},
+                {name: "Nido Doodh 1/2 kg", price: 1100, image: null},
+                {name: "Nido Doodh 250g", price: 600, image: null},
+                {name: "Khulla Doodh Khushk VIP 1 kg", price: 1200, image: null},
+                {name: "Taday Doodh 1 pcs", price: 50, image: null}
+            ],
+            "Tea & Coffee": [
+                {name: "Patti Khulla VIP 1 kg", price: 1100, image: null},
+                {name: "Danedar Patti 250g", price: 370, image: null},
+                {name: "Danedar Patti 125g", price: 180, image: null},
+                {name: "Mezban Patti 250g", price: 370, image: null},
+                {name: "Mezban Patti 125g", price: 190, image: null},
+                {name: "Family Mixture Patti 250g", price: 370, image: null},
+                {name: "Family Mixture Patti 125g", price: 180, image: null},
+                {name: "Tezdum Patti 250g", price: 370, image: null},
+                {name: "Tezdum Patti 125g", price: 180, image: null},
+                {name: "Tezdum Patti Sachet 1 pcs", price: 10, image: null},
+                {name: "Green Tea Sachet 1 pcs", price: 50, image: null},
+                {name: "Coffee 3in1 1 pcs", price: 80, image: null},
+                {name: "Coffee Black 1 pcs", price: 50, image: null}
+            ],
+            "Bath Soaps": [
+                {name: "Skin White Sabun 1 pcs", price: 135, image: null},
+                {name: "Golden Pearl Sabun 1 pcs", price: 140, image: null},
+                {name: "Neem Sabun 1 pcs", price: 140, image: null},
+                {name: "Lux Sabun 1 pcs", price: 115, image: null},
+                {name: "Capri Sabun 1 pcs", price: 135, image: null},
+                {name: "Classic Sabun 1 pcs", price: 60, image: null},
+                {name: "Lifebuoy Sabun 1 pcs", price: 95, image: null},
+                {name: "Dettol Cool Sabun 1 pcs", price: 150, image: null},
+                {name: "Dettol Original Sabun 1 pcs", price: 140, image: null},
+                {name: "Palmolive Sabun 1 pcs", price: 145, image: null},
+                {name: "Tibet Sabun 1 pcs", price: 60, image: null},
+                {name: "Moti Sabun 1 pcs", price: 40, image: null},
+                {name: "Khushboo Sabun 1 pcs", price: 80, image: null},
+                {name: "Kite Sabun 1 pcs", price: 50, image: null},
+                {name: "Sofi Sabun 1 pcs", price: 60, image: null},
+                {name: "Sofi Darja Awwal 1 pcs", price: 130, image: null},
+                {name: "Harmony Sabun 1 pcs", price: 50, image: null},
+                {name: "Faiza Sabun 1 pcs", price: 110, image: null}
+            ],
+            "Dishwashing": [
+                {name: "Lemon Max Long Bar 1 pcs", price: 75, image: null},
+                {name: "Lemon Max Sabun 1 pcs", price: 15, image: null},
+                {name: "Lemon Max 1 pcs", price: 35, image: null},
+                {name: "Lemon Max 400g", price: 225, image: null},
+                {name: "Lemon Max 200g", price: 130, image: null},
+                {name: "Lemon Max Liquid 475g", price: 320, image: null},
+                {name: "Lemon Max Liquid 275g", price: 160, image: null},
+                {name: "Number 1 Long Bar 1 pcs", price: 50, image: null},
+                {name: "Lemon Dex 1 pcs", price: 20, image: null}
+            ],
+            "Personal Care": [
+                {name: "Fair Lovely Cream Tube 1 pcs", price: 145, image: null},
+                {name: "Fair Lovely Cream Jar 1 pcs", price: 390, image: null},
+                {name: "Fair Lovely Face Wash", price: 250, image: null},
+                {name: "Faiza Cream 1 pcs", price: 370, image: null},
+                {name: "Golden Pearl Cream", price: 350, image: null},
+                {name: "Tibet Snow Cream 1 pcs", price: 220, image: null},
+                {name: "Ponds Lotion 100g", price: 330, image: null},
+                {name: "Tibet Cold Cream 1 pcs", price: 170, image: null},
+                {name: "Nisa Hair Removal Cream 1 pcs", price: 40, image: null},
+                {name: "Dorco Razor 1 pcs", price: 40, image: null}
+            ],
+            "Shampoos": [
+                {name: "Pantene Shampoo 185g", price: 450, image: null},
+                {name: "Sunsilk Shampoo 185g", price: 440, image: null},
+                {name: "Head & Shoulder Shampoo 185g", price: 470, image: null},
+                {name: "Lifebuoy Shampoo 370g", price: 620, image: null},
+                {name: "Lifebuoy Shampoo 185g", price: 390, image: null},
+                {name: "Lifebuoy Shampoo 90g", price: 170, image: null},
+                {name: "Palmolive Shampoo 180g", price: 380, image: null},
+                {name: "Sunsilk Shampoo 80g", price: 190, image: null},
+                {name: "Dove Shampoo 1 pcs", price: 20, image: null}
+            ],
+            "Oral Care": [
+                {name: "Dentonic 1 pcs", price: 50, image: null},
+                {name: "Dentonic Large 1 pcs", price: 80, image: null},
+                {name: "Dentonic XL 1 pcs", price: 140, image: null},
+                {name: "Dentonic Red 1 pcs", price: 100, image: null},
+                {name: "Manjan 1 pcs", price: 20, image: null}
+            ],
+            "Hair Care": [
+                {name: "Dabur Amla 1 pcs", price: 300, image: null},
+                {name: "Hair Color Black Revlon 1 pcs", price: 80, image: null},
+                {name: "Hair Color Brown Revlon 1 pcs", price: 80, image: null},
+                {name: "Praima Color Black 1 pcs", price: 80, image: null},
+                {name: "Praima Color Brown 1 pcs", price: 75, image: null}
+            ],
+            "Household Items": [
+                {name: "Glucose 400g", price: 280, image: null},
+                {name: "Glucose 100g", price: 90, image: null},
+                {name: "Sirka 120g", price: 80, image: null},
+                {name: "Sirka Trio Pack 1 pcs", price: 200, image: null},
+                {name: "Machis 1 box", price: 50, image: null},
+                {name: "Neel 1 pcs", price: 50, image: null},
+                {name: "Akhbar 1 kg", price: 280, image: null},
+                {name: "Misri 1 kg", price: 400, image: null},
+                {name: "Nibad 1 kg", price: 400, image: null},
+                {name: "Ispaghol Sachet 1 pcs", price: 30, image: null}
+            ],
+            "Condiments": [
+                {name: "Mayonnaise 250g", price: 140, image: null},
+                {name: "Rooh Afza 475g", price: 250, image: null},
+                {name: "Rooh Afza 800g", price: 450, image: null},
+                {name: "Nouras 800g", price: 450, image: null},
+                {name: "Jame Shereen 800g", price: 480, image: null},
+                {name: "Ketchup 250g Red", price: 130, image: null},
+                {name: "Ketchup 250g Green", price: 130, image: null},
+                {name: "Ketchup Sachet 1 pcs", price: 20, image: null},
+                {name: "Shehad (Honey) 1 pcs", price: 170, image: null}
+            ],
+            "Laundry Detergents": [
+                {name: "Bonus Surf 1 kg", price: 230, image: null},
+                {name: "Bonus Surf 1/2 kg", price: 100, image: null},
+                {name: "Number 1 Surf 1 kg", price: 220, image: null},
+                {name: "Number 1 Surf 1/2 kg", price: 100, image: null},
+                {name: "Suraj Surf 1 kg", price: 220, image: null},
+                {name: "Suraj Surf 1/2 kg", price: 100, image: null},
+                {name: "Sunlight Surf 1 kg", price: 200, image: null},
+                {name: "Surf Excel 1 kg", price: 530, image: null},
+                {name: "Surf Excel 1/2 kg", price: 290, image: null},
+                {name: "Ariel Surf 1 kg", price: 550, image: null},
+                {name: "Ariel Surf 1/2 kg", price: 275, image: null},
+                {name: "Brite Surf 1 kg", price: 265, image: null}
+            ],
+            "Pasta & Noodles": [
+                {name: "Microni Khulla Elbow 1 kg", price: 240, image: null},
+                {name: "Microni Khulla Twist 1 kg", price: 240, image: null},
+                {name: "Cut Sawaiya Yellow 1 pcs", price: 150, image: null},
+                {name: "Cut Sawaiya Top 1 pcs", price: 150, image: null},
+                {name: "Sawaiya Packet VIP 1 pcs", price: 50, image: null},
+                {name: "Sawaiya Khulla Top 1 kg", price: 240, image: null},
+                {name: "Pasta Sawaiya 1 pcs", price: 70, image: null},
+                {name: "Falooda Sawaiya 1 pcs", price: 150, image: null},
+                {name: "Fajita Spaghetti 2in1 250g", price: 150, image: null},
+                {name: "Microni Tikka 2in1 250g", price: 150, image: null},
+                {name: "Bake Parlour Spaghetti 1 pcs", price: 230, image: null},
+                {name: "Microni Masala 1 pcs", price: 15, image: null}
+            ],
+            "Snacks": [
+                {name: "Papar Challa 1 kg", price: 200, image: null},
+                {name: "Papar Salenty 1 kg", price: 200, image: null},
+                {name: "Papar Badminton 1 kg", price: 400, image: null}
+            ],
+            "Air Fresheners": [
+                {name: "Metro 7 Agarbatti 1 pcs", price: 110, image: null},
+                {name: "Metro Milan Agarbatti 1 pcs", price: 70, image: null},
+                {name: "Room Spray VIP Khushboo 1 pcs", price: 550, image: null},
+                {name: "Mom Batti 1 pcs", price: 10, image: null}
+            ],
+            "Desserts": [
+                {name: "Custard Strawberry 80g", price: 190, image: null},
+                {name: "Custard Banana 80g", price: 190, image: null},
+                {name: "Custard Vanilla 80g", price: 190, image: null},
+                {name: "Custard Mango 80g", price: 190, image: null},
+                {name: "Custard Sachet Mixed 1 pcs", price: 40, image: null},
+                {name: "Jelly Sachet Banana 1 pcs", price: 40, image: null},
+                {name: "Jelly Sachet Strawberry 1 pcs", price: 40, image: null}
+            ],
+            "Pest Control": [
+                {name: "Tyfon Bug Control 1 pcs", price: 380, image: null},
+                {name: "Tyfon Total Control 1 pcs", price: 420, image: null},
+                {name: "Choha Dawai 1 pcs", price: 40, image: null},
+                {name: "Choha Kitab 1 pcs", price: 100, image: null},
+                {name: "Mortein Spray 1 pcs", price: 550, image: null}
+            ],
+            "Toilet Cleaners": [
+                {name: "Harpic Blue 1 pcs", price: 200, image: null},
+                {name: "Harpic Red 1 pcs", price: 250, image: null}
+            ],
+            "Beverages": [
+                {name: "Sogo Gloop 1 pcs", price: 100, image: null},
+                {name: "Tiger Gloop 1 pcs", price: 100, image: null},
+                {name: "Calcee 1 pcs", price: 30, image: null},
+                {name: "Tang Large 1 pcs", price: 330, image: null},
+                {name: "Tang Small 1 pcs", price: 25, image: null}
+            ],
+            "Masalas & Seasoning": [
+                {name: "Qourma Masala Dabba 1 pcs", price: 140, image: null},
+                {name: "Biryani Masala Dabba 1 pcs", price: 140, image: null},
+                {name: "Shami Masala Dabba 1 pcs", price: 140, image: null},
+                {name: "Haleem Masala Dabba 1 pcs", price: 140, image: null},
+                {name: "Achar Masala Dabba 1 pcs", price: 140, image: null},
+                {name: "Karahi Masala Dabba 1 pcs", price: 140, image: null},
+                {name: "Tikka Masala Dabba 1 pcs", price: 140, image: null},
+                {name: "Nihari Masala Sachet 1 pcs", price: 70, image: null},
+                {name: "Chat Masala Sachet 1 pcs", price: 70, image: null},
+                {name: "Kofta Masala Sachet 1 pcs", price: 70, image: null},
+                {name: "Raita Masala 1 pcs", price: 15, image: null},
+                {name: "Essence Biryani 1 pcs", price: 70, image: null},
+                {name: "Essence Kewra 1 pcs", price: 70, image: null}
+            ],
+            "Specialty Items": [
+                {name: "China Namak Packet 1 pcs", price: 10, image: null},
+                {name: "Zafrani Color Khulla 50g", price: 50, image: null},
+                {name: "Food Color Red 50g", price: 60, image: null},
+                {name: "Food Color Green 50g", price: 60, image: null},
+                {name: "Gur Peshawri 1 kg", price: 240, image: null}
+            ],
+            "Baby Care": [
+                {name: "Pamper Small 1 pcs", price: 20, image: null},
+                {name: "Pamper Medium 1 pcs", price: 25, image: null},
+                {name: "Pamper Large 1 pcs", price: 30, image: null}
+            ],
+            "Cleaning Accessories": [
+                {name: "Jhona Bartan VIP 1 pcs", price: 50, image: null},
+                {name: "Scotch Brite 1 pcs", price: 50, image: null},
+                {name: "Scotch Brite Large 1 pcs", price: 80, image: null}
+            ],
+            "Polish": [
+                {name: "Polish Black 1 pcs", price: 230, image: null},
+                {name: "Polish Small 1 pcs", price: 140, image: null}
+            ]
+        };
+
+        // Global variables
+        let cart = [];
+        let isAdminMode = false;
+        let salesData = JSON.parse(localStorage.getItem('salesData')) || {
+            totalSales: 0,
+            totalItems: 0,
+            totalOrders: 0,
+            salesHistory: []
+        };
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            renderCategories();
+            updateCartUI();
+            updateSalesDisplay();
+            setupEventListeners();
+        });
+
+        // Setup event listeners
+        function setupEventListeners() {
+            document.getElementById('adminToggle').addEventListener('click', toggleAdminMode);
+            document.getElementById('backToCategories').addEventListener('click', showCategories);
+            document.getElementById('checkoutBtn').addEventListener('click', checkout);
+            document.getElementById('clearCartBtn').addEventListener('click', clearCart);
+            document.getElementById('closeBill').addEventListener('click', closeBillModal);
+            document.getElementById('printBill').addEventListener('click', printBill);
+        }
+
+        // Render categories
+        function renderCategories() {
+            const categoriesGrid = document.getElementById('categoriesGrid');
+            const categoryIcons = {
+                'Ghee': 'fas fa-butter',
+                'Oils': 'fas fa-tint',
+                'Mixed Lentils': 'fas fa-seedling',
+                'Wheat & Rice': 'fas fa-grain',
+                'Millets & Grains': 'fas fa-wheat-awn',
+                'Chickpeas': 'fas fa-circle',
+                'Mixed Spices': 'fas fa-pepper-hot',
+                'Premium Spices': 'fas fa-star',
+                'Dry Fruits': 'fas fa-apple-alt',
+                'Milk Products': 'fas fa-glass-whiskey',
+                'Tea & Coffee': 'fas fa-coffee',
+                'Bath Soaps': 'fas fa-soap',
+                'Dishwashing': 'fas fa-sink',
+                'Personal Care': 'fas fa-user-check',
+                'Shampoos': 'fas fa-pump-soap',
+                'Oral Care': 'fas fa-tooth',
+                'Hair Care': 'fas fa-cut',
+                'Household Items': 'fas fa-home',
+                'Condiments': 'fas fa-bottle-droplet',
+                'Laundry Detergents': 'fas fa-tshirt',
+                'Pasta & Noodles': 'fas fa-utensils',
+                'Snacks': 'fas fa-cookie-bite',
+                'Air Fresheners': 'fas fa-air-freshener',
+                'Desserts': 'fas fa-ice-cream',
+                'Pest Control': 'fas fa-bug',
+                'Toilet Cleaners': 'fas fa-toilet',
+                'Beverages': 'fas fa-glass-water',
+                'Masalas & Seasoning': 'fas fa-mortar-pestle',
+                'Specialty Items': 'fas fa-gem',
+                'Baby Care': 'fas fa-baby',
+                'Cleaning Accessories': 'fas fa-broom',
+                'Polish': 'fas fa-shoe-prints'
+            };
+
+            categoriesGrid.innerHTML = Object.keys(groceryData).map(category => `
+                <div class="category-card rounded-lg p-6 text-white cursor-pointer hover:scale-105 transform transition-all duration-300 shadow-lg" onclick="showProducts('${category}')">
+                    <div class="text-center">
+                        <i class="${categoryIcons[category] || 'fas fa-shopping-basket'} text-4xl mb-4"></i>
+                        <h3 class="text-xl font-semibold mb-2">${category}</h3>
+                        <p class="text-sm opacity-90">${groceryData[category].length} items</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Show products for a category
+        function showProducts(category) {
+            document.getElementById('categoriesGrid').parentElement.classList.add('hidden');
+            document.getElementById('productsSection').classList.remove('hidden');
+            document.getElementById('categoryTitle').textContent = category;
+            
+            const productsGrid = document.getElementById('productsGrid');
+            productsGrid.innerHTML = groceryData[category].map((product, index) => {
+                const productId = `${category}-${index}`;
+                return `
+                <div class="product-card bg-white rounded-lg p-6 shadow-lg">
+                    <div class="text-center mb-4">
+                        <div class="w-20 h-20 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-box text-2xl text-blue-600"></i>
+                        </div>
+                        <h3 class="font-semibold text-gray-800 mb-2">${product.name}</h3>
+                        <div class="flex items-center justify-center space-x-2">
+                            <span class="text-2xl font-bold text-green-600" id="price-${productId}">${product.price} PKR</span>
+                            ${isAdminMode ? `<button onclick="editPrice('${productId}', '${product.name}', ${product.price}, '${category}', ${index})" class="bg-yellow-500 text-white px-2 py-1 rounded text-xs hover:bg-yellow-600 transition">
+                                <i class="fas fa-edit"></i>
+                            </button>` : ''}
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-2">
+                            <button onclick="changeQuantity('${productId}', '${product.name}', ${product.price}, -1)" class="bg-red-500 text-white w-8 h-8 rounded-full hover:bg-red-600 transition">-</button>
+                            <span class="font-semibold w-8 text-center" id="qty-${productId}">${getProductQuantity(product.name)}</span>
+                            <button onclick="changeQuantity('${productId}', '${product.name}', ${product.price}, 1)" class="bg-green-500 text-white w-8 h-8 rounded-full hover:bg-green-600 transition">+</button>
+                        </div>
+                        <button onclick="addToCart('${product.name}', ${product.price}, '${productId}')" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+                            <i class="fas fa-cart-plus mr-2"></i>Add
+                        </button>
+                    </div>
+                </div>
+            `;
+            }).join('');
+        }
+
+        // Show categories
+        function showCategories() {
+            document.getElementById('categoriesGrid').parentElement.classList.remove('hidden');
+            document.getElementById('productsSection').classList.add('hidden');
+        }
+
+        // Get product quantity from cart
+        function getProductQuantity(productName) {
+            const cartItem = cart.find(item => item.name === productName);
+            return cartItem ? cartItem.quantity : 0;
+        }
+
+        // Change quantity
+        function changeQuantity(productId, productName, price, delta) {
+            const qtyElement = document.getElementById(`qty-${productId}`);
+            let currentQty = parseInt(qtyElement.textContent);
+            let newQty = Math.max(0, currentQty + delta);
+            qtyElement.textContent = newQty;
+            
+            // Update cart
+            const cartItemIndex = cart.findIndex(item => item.name === productName);
+            if (cartItemIndex >= 0) {
+                if (newQty === 0) {
+                    cart.splice(cartItemIndex, 1);
+                } else {
+                    cart[cartItemIndex].quantity = newQty;
+                    cart[cartItemIndex].price = price; // Update price in case it was changed
+                }
+            } else if (newQty > 0) {
+                cart.push({ name: productName, price: price, quantity: newQty });
+            }
+            updateCartUI();
+        }
+
+        // Add to cart
+        function addToCart(productName, price, productId) {
+            const qtyElement = document.getElementById(`qty-${productId}`);
+            const quantity = parseInt(qtyElement.textContent);
+            
+            if (quantity === 0) {
+                qtyElement.textContent = 1;
+                const existingIndex = cart.findIndex(item => item.name === productName);
+                if (existingIndex >= 0) {
+                    cart[existingIndex].quantity = 1;
+                    cart[existingIndex].price = price;
+                } else {
+                    cart.push({ name: productName, price: price, quantity: 1 });
+                }
+            } else {
+                const cartItem = cart.find(item => item.name === productName);
+                if (cartItem) {
+                    cartItem.quantity = quantity;
+                    cartItem.price = price;
+                } else {
+                    cart.push({ name: productName, price: price, quantity: quantity });
+                }
+            }
+            updateCartUI();
+            
+            // Show success animation
+            const button = event.target.closest('button');
+            const originalContent = button.innerHTML;
+            button.innerHTML = '<i class="fas fa-check mr-2"></i>Added!';
+            button.classList.add('bg-green-600');
+            setTimeout(() => {
+                button.innerHTML = originalContent;
+                button.classList.remove('bg-green-600');
+            }, 1000);
+        }
+
+        // Update cart UI
+        function updateCartUI() {
+            const cartItemsElement = document.getElementById('cartItems');
+            const cartCountElement = document.getElementById('cartCount');
+            const cartTotalElement = document.getElementById('cartTotal');
+            
+            if (cart.length === 0) {
+                cartItemsElement.innerHTML = '<p class="text-gray-500 text-center">Cart is empty</p>';
+            } else {
+                cartItemsElement.innerHTML = cart.map(item => `
+                    <div class="flex justify-between items-center py-2 border-b">
+                        <div class="flex-1">
+                            <div class="font-medium text-sm">${item.name}</div>
+                            <div class="text-xs text-gray-500">${item.quantity} × ${item.price} PKR</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="font-semibold">${item.quantity * item.price} PKR</div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const totalAmount = cart.reduce((sum, item) => sum + (item.quantity * item.price), 0);
+            
+            cartCountElement.textContent = totalItems;
+            cartTotalElement.textContent = `${totalAmount} PKR`;
+        }
+
+        // Toggle admin mode
+        function toggleAdminMode() {
+            isAdminMode = !isAdminMode;
+            const adminToggle = document.getElementById('adminToggle');
+            
+            if (isAdminMode) {
+                adminToggle.innerHTML = '<i class="fas fa-user-shield mr-2"></i>Admin ON';
+                adminToggle.classList.add('bg-green-600');
+            } else {
+                adminToggle.innerHTML = '<i class="fas fa-user-cog mr-2"></i>Admin Mode';
+                adminToggle.classList.remove('bg-green-600');
+            }
+            
+            // Re-render current view to show/hide edit buttons
+            const currentCategory = document.getElementById('categoryTitle').textContent;
+            if (!document.getElementById('productsSection').classList.contains('hidden') && currentCategory) {
+                showProducts(currentCategory);
+            }
+        }
+
+        // Edit price
+        function editPrice(productId, productName, currentPrice, category, index) {
+            const newPrice = prompt(`Edit price for ${productName}:`, currentPrice);
+            if (newPrice && !isNaN(newPrice) && parseFloat(newPrice) > 0) {
+                const priceValue = parseFloat(newPrice);
+                
+                // Update price in data
+                groceryData[category][index].price = priceValue;
+                
+                // Update UI
+                document.getElementById(`price-${productId}`).textContent = `${priceValue} PKR`;
+                
+                // Update cart if item exists
+                const cartItem = cart.find(item => item.name === productName);
+                if (cartItem) {
+                    cartItem.price = priceValue;
+                    updateCartUI();
+                }
+                
+                // Save to localStorage
+                localStorage.setItem('groceryData', JSON.stringify(groceryData));
+            }
+        }
+
+        // Checkout
+        function checkout() {
+            if (cart.length === 0) {
+                alert('Cart is empty!');
+                return;
+            }
+            
+            // Update sales data
+            const totalAmount = cart.reduce((sum, item) => sum + (item.quantity * item.price), 0);
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            
+            salesData.totalSales += totalAmount;
+            salesData.totalItems += totalItems;
+            salesData.totalOrders += 1;
+            salesData.salesHistory.push({
+                date: new Date().toISOString(),
+                items: [...cart],
+                total: totalAmount
+            });
+            
+            localStorage.setItem('salesData', JSON.stringify(salesData));
+            
+            // Show bill modal
+            showBillModal();
+            
+            // Clear cart
+            cart = [];
+            updateCartUI();
+            updateSalesDisplay();
+            
+            // Reset all quantity displays
+            document.querySelectorAll('[id^="qty-"]').forEach(element => {
+                element.textContent = '0';
+            });
+        }
+
+        // Show bill modal
+        function showBillModal() {
+            const billModal = document.getElementById('billModal');
+            const billDetails = document.getElementById('billDetails');
+            const billTotal = document.getElementById('billTotal');
+            
+            const totalAmount = cart.reduce((sum, item) => sum + (item.quantity * item.price), 0);
+            
+            billDetails.innerHTML = cart.map(item => `
+                <div class="flex justify-between">
+                    <span>${item.name} (${item.quantity})</span>
+                    <span>${item.quantity * item.price} PKR</span>
+                </div>
+            `).join('');
+            
+            billTotal.textContent = `${totalAmount} PKR`;
+            
+            // Prepare print area
+            preparePrintBill();
+            
+            billModal.style.display = 'flex';
+        }
+
+        // Prepare print bill
+        function preparePrintBill() {
+            const billItemsList = document.getElementById('billItemsList');
+            const billFinalTotal = document.getElementById('billFinalTotal');
+            const billDate = document.getElementById('billDate');
+            
+            const totalAmount = cart.reduce((sum, item) => sum + (item.quantity * item.price), 0);
+            const currentDate = new Date().toLocaleDateString('en-GB') + ' ' + new Date().toLocaleTimeString('en-GB', {hour12: false});
+            
+            billDate.textContent = `Date: ${currentDate}`;
+            
+            billItemsList.innerHTML = cart.map(item => `
+                <div class="bill-item">
+                    <div style="flex: 1;">
+                        <div style="font-size: 11px; font-weight: bold;">${item.name}</div>
+                        <div style="font-size: 9px;">${item.quantity} × ${item.price}</div>
+                    </div>
+                    <div style="font-weight: bold;">${item.quantity * item.price}</div>
+                </div>
+            `).join('');
+            
+            billFinalTotal.textContent = `${totalAmount} PKR`;
+        }
+
+        // Close bill modal
+        function closeBillModal() {
+            document.getElementById('billModal').style.display = 'none';
+        }
+
+        // Print bill
+        function printBill() {
+            // Show print area and hide everything else
+            document.getElementById('billPrintArea').style.display = 'block';
+            
+            // Print
+            window.print();
+            
+            // Hide print area after printing
+            setTimeout(() => {
+                document.getElementById('billPrintArea').style.display = 'none';
+            }, 1000);
+        }
+
+        // Clear cart
+        function clearCart() {
+            if (confirm('Are you sure you want to clear the cart?')) {
+                cart = [];
+                updateCartUI();
+                
+                // Reset all quantity displays
+                document.querySelectorAll('[id^="qty-"]').forEach(element => {
+                    element.textContent = '0';
+                });
+            }
+        }
+
+        // Update sales display
+        function updateSalesDisplay() {
+            document.getElementById('totalSalesToday').textContent = `${salesData.totalSales} PKR`;
+            document.getElementById('totalItemsSold').textContent = salesData.totalItems;
+            document.getElementById('totalRevenue').textContent = `${salesData.totalSales} PKR`;
+            document.getElementById('totalOrders').textContent = salesData.totalOrders;
+            
+            const avgOrder = salesData.totalOrders > 0 ? 
+                Math.round(salesData.totalSales / salesData.totalOrders) : 0;
+            document.getElementById('avgOrderValue').textContent = `${avgOrder} PKR`;
+            
+            // Update recent sales
+            updateRecentSales();
+        }
+
+        // Update recent sales
+        function updateRecentSales() {
+            const recentSalesElement = document.getElementById('recentSales');
+            const recentSales = salesData.salesHistory.slice(-5).reverse();
+            
+            if (recentSales.length === 0) {
+                recentSalesElement.innerHTML = '<p class="text-gray-500 text-center">No recent sales</p>';
+            } else {
+                recentSalesElement.innerHTML = recentSales.map((sale, index) => {
+                    const date = new Date(sale.date);
+                    const timeString = date.toLocaleTimeString('en-GB', {hour12: false});
+                    return `
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <div class="flex justify-between items-center">
+                                <span class="font-medium">Order #${salesData.salesHistory.length - index}</span>
+                                <span class="text-green-600 font-bold">${sale.total} PKR</span>
+                            </div>
+                            <div class="text-sm text-gray-500">${timeString} • ${sale.items.length} items</div>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+
+        // Load saved data on startup
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedGroceryData = localStorage.getItem('groceryData');
+            if (savedGroceryData) {
+                Object.assign(groceryData, JSON.parse(savedGroceryData));
+            }
+        });
+    </script>
+</body>
+</html>
