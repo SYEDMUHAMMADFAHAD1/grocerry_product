@@ -3,10 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GroceryMart - Premium Online Grocery Store</title>
+    <title>Enhanced Grocery Store with Weight Controls</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .urdu-font {
+            font-family: 'Noto Sans Arabic', sans-serif;
+        }
+        
         .category-card {
             transition: all 0.3s ease;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -31,6 +40,132 @@
             border: 2px dashed #f59e0b;
         }
 
+        /* Logo Styles */
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Center the whole container */
+            gap: 15px;
+        }
+        
+        .logo-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #fcfffd 0%, #363434 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+            flex-shrink: 0; /* Prevent icon from shrinking */
+        }
+
+        .logo-container .text-center {
+            text-align: center; /* Ensure text inside is centered */
+        }
+
+        /* Search Styles */
+        .search-container {
+            position: relative;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: rgb(53, 54, 84);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            z-index: 50;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .search-item {
+            padding: 12px 16px;
+            border-bottom: 1px solid #080808;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .search-item:hover {
+            background-color: #4d38c0;
+        }
+        
+        .search-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Language Toggle */
+        .language-toggle {
+            display: flex;
+            background: white;
+            border-radius: 25px;
+            padding: 4px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .language-btn {
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        .language-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .language-btn:not(.active) {
+            color: #6b7280;
+        }
+
+        /* Weight Control Styles */
+        .weight-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .weight-btn {
+            padding: 4px 8px;
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            min-width: 50px;
+        }
+        
+        .weight-btn:hover {
+            background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+            transform: translateY(-1px);
+        }
+        
+        .weight-display {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            min-width: 80px;
+            text-align: center;
+        }
+
         /* Print Styles */
         @media print {
             body * {
@@ -48,35 +183,118 @@
             .no-print {
                 display: none !important;
             }
+
+            /* Bold and slightly larger text in print bill */
+            .bill-print-content .bill-table td {
+                font-weight: bold;
+                font-size: 12px; /* Slightly larger */
+            }
+
+            .bill-print-content .bill-total-row span {
+                font-weight: bold; /* Already bold, ensure it stays */
+                font-size: 16px; /* Slightly larger total */
+            }
         }
 
-        /* Bill Print Styles */
+        /* Enhanced Bill Print Styles */
         .bill-print-content {
             font-family: 'Courier New', monospace;
-            max-width: 300px;
+            max-width: 400px;
             margin: 0 auto;
             padding: 20px;
-            border: 2px solid #000;
+            background: white;
         }
+        
         .bill-header {
             text-align: center;
-            border-bottom: 2px solid #000;
-            padding-bottom: 10px;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .bill-header h2 {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0 0 5px 0;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        /* New Logo Styles for Print */
+        .logo-brand {
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Center the entire logo assembly */
+            gap: 10px; /* Space between elements */
             margin-bottom: 10px;
         }
-        .bill-item {
+
+        .logo-icon-print {
+            width: 40px; /* Same as current logo-print */
+            height: 40px; /* Same as current logo-print */
+            background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0; /* Prevent icon from shrinking */
+        }
+
+        .logo-text-left,
+        .logo-text-right {
+            font-size: 14px; /* Adjust font size as needed */
+            font-weight: bold;
+            color: #333; /* Darker color for print visibility */
+        }
+
+        .bill-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        
+        .bill-table th {
+            font-weight: bold;
+            padding: 8px 4px;
+            text-align: left;
+            font-size: 12px;
+            border-bottom: 1px solid #000;
+        }
+        
+        .bill-table td {
+            padding: 6px 4px;
+            font-size: 11px;
+            border-bottom: 1px dotted #ccc;
+        }
+        
+        .bill-table .text-right {
+            text-align: right;
+        }
+        
+        .bill-total {
+            padding-top: 10px;
+            margin-top: 15px;
+            border-top: 1px solid #000;
+        }
+        
+        .bill-total-row {
             display: flex;
             justify-content: space-between;
-            margin: 5px 0;
-            border-bottom: 1px dotted #ccc;
-            padding-bottom: 2px;
-        }
-        .bill-total {
-            border-top: 2px solid #000;
-            margin-top: 10px;
-            padding-top: 10px;
             font-weight: bold;
-            text-align: right;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        
+        .bill-footer {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #ccc;
+        }
+        
+        .bill-number {
+            text-align: center;
+            font-size: 12px;
+            margin-top: 15px;
+            font-weight: bold;
         }
 
         /* Cart styles for better mobile responsiveness */
@@ -84,107 +302,176 @@
             background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
             border-top: 3px solid #667eea;
         }
+        
+        /* RTL Support for Urdu */
+        .rtl {
+            direction: rtl;
+            text-align: right;
+        }
+        
+        .rtl .search-container {
+            direction: ltr; /* Keep search input LTR even in RTL mode */
+        }
+        
+        .rtl .bill-table th,
+        .rtl .bill-table td {
+            text-align: right;
+        }
+        
+        .rtl .bill-table .text-right {
+            text-align: left;
+        }
+
+        /* PDF Export Optimization */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .dashboard-section {
+            page-break-inside: avoid;
+        }
+        
+        .cart-content {
+            page-break-inside: avoid;
+        }
+
+        /* Responsive adjustments for better PDF export */
+        @media screen and (max-width: 768px) {
+            .categories-grid {
+                grid-template-columns: 1fr;
+            }
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Specific styles for the bill modal content to be bold and slightly larger */
+        #billDetails p {
+            font-weight: bold;
+            font-size: 1.1em; /* Slightly larger */
+        }
     </style>
 </head>
 <body class="bg-gray-50">
-    <!-- Header -->
     <header class="gradient-bg text-white py-6 shadow-lg no-print">
         <div class="container mx-auto px-4">
             <div class="flex justify-between items-center">
-                <div class="flex items-center space-x-3">
-                    <i class="fas fa-shopping-basket text-3xl"></i>
-                    <div>
-                        <h1 class="text-3xl font-bold">حاجی فخرالدین کریانہ اینڈ جنرل ہولسیل اسٹور</h1>
-                        <p class="text-sm opacity-90">Premium Quality • Best Prices</p>
-                    </div>
-                </div>
                 <div class="flex items-center space-x-4">
                     <button id="adminToggle" class="bg-white bg-opacity-20 px-4 py-2 rounded-lg hover:bg-opacity-30 transition">
-                        <i class="fas fa-user-cog mr-2"></i>Admin Mode
+                        <i class="fas fa-user-cog mr-2"></i><span data-translate="admin_mode">Admin Mode</span>
                     </button>
-                    <div class="text-right">
-                        <div class="text-sm opacity-90">Total Sales Today</div>
-                        <div class="text-xl font-bold" id="totalSalesToday">0 PKR</div>
+                    <div class="language-toggle">
+                        <div class="language-btn active" onclick="changeLanguage('en')">EN</div>
+                        <div class="language-btn" onclick="changeLanguage('ur')">اردو</div>
                     </div>
                 </div>
+                
+                <div class="logo-container">
+                    <div class="logo-icon">
+                        <i class="fas fa-shopping-basket text-2xl text-white"></i>
+                    </div>
+                    <div class="text-center">
+                        <h1 class="text-3xl font-bold" data-translate="store_name">حاجی فخرالدین کریانہ اینڈ جنرل ہولسیل اسٹور</h1>
+                        <p class="text-sm opacity-90" data-translate="store_tagline">All types of rice, various lentils, spices, and premium dry fruits are available here at reasonable prices.</p>
+                    </div>
+                </div>
+                
+                <div class="text-right">
+                    <div class="text-sm opacity-90" data-translate="total_sales_today">Total Sales Today</div>
+                    <div class="text-xl font-bold" id="totalSalesToday">0 PKR</div>
+                </div>
+            </div>
+            
+            <div class="search-container mt-6">
+                <div class="relative">
+                    <input type="text" id="searchInput" 
+                           class="w-full px-4 py-3 pl-12 pr-4 text-black bg-white rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-300" 
+                           data-translate-placeholder="search_placeholder" 
+                           placeholder="Search for grocery items...">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fas fa-search text-gray-400"></i>
+                    </div>
+                </div>
+                <div id="searchResults" class="search-results hidden"></div>
             </div>
         </div>
     </header>
 
-    <!-- Main Content -->
     <main class="container mx-auto px-4 py-8 no-print">
-        <!-- Categories Grid -->
         <section class="mb-12">
             <h2 class="text-3xl font-bold text-center mb-8 text-gray-800">
-                <i class="fas fa-th-large mr-3 text-blue-600"></i>Shop by Category
+                <i class="fas fa-th-large mr-3 text-blue-600"></i><span data-translate="shop_by_category">Shop by Category</span>
             </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="categoriesGrid">
-                <!-- Categories will be populated by JavaScript -->
-            </div>
+            <div class="categories-grid" id="categoriesGrid">
+                </div>
         </section>
 
-        <!-- Products Section -->
         <section id="productsSection" class="hidden">
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-2xl font-bold text-gray-800" id="categoryTitle"></h2>
                 <button id="backToCategories" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition">
-                    <i class="fas fa-arrow-left mr-2"></i>Back to Categories
+                    <i class="fas fa-arrow-left mr-2"></i><span data-translate="back_to_categories">Back to Categories</span>
                 </button>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="productsGrid">
-                <!-- Products will be populated by JavaScript -->
-            </div>
+            <div class="products-grid" id="productsGrid">
+                </div>
         </section>
 
-        <!-- Sales Dashboard -->
-        <section class="mt-12 bg-white rounded-lg shadow-lg p-6">
+        <section class="dashboard-section mt-12 bg-white rounded-lg shadow-lg p-6">
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-2xl font-bold text-gray-800">
-                    <i class="fas fa-chart-line mr-3 text-green-600"></i>Sales Dashboard
+                    <i class="fas fa-chart-line mr-3 text-green-600"></i><span data-translate="sales_dashboard">Sales Dashboard</span>
                 </h2>
                 <button id="resetSalesBtn" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition">
-                    <i class="fas fa-refresh mr-2"></i>Reset Daily Sales
+                    <i class="fas fa-refresh mr-2"></i><span data-translate="reset_daily_sales">Reset Daily Sales</span>
                 </button>
             </div>
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div>
-                    <h3 class="text-lg font-semibold mb-4">Daily Sales Summary</h3>
+                    <h3 class="text-lg font-semibold mb-4" data-translate="daily_sales_summary">Daily Sales Summary</h3>
                     <div class="space-y-4">
                         <div class="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
-                            <span>Total Items Sold:</span>
+                            <span data-translate="total_items_sold">Total Items Sold:</span>
                             <span class="font-bold text-blue-600" id="totalItemsSold">0</span>
                         </div>
                         <div class="flex justify-between items-center p-3 bg-green-50 rounded-lg">
-                            <span>Total Revenue:</span>
                             <span class="font-bold text-green-600" id="totalRevenue">0 PKR</span>
                         </div>
                         <div class="flex justify-between items-center p-3 bg-purple-50 rounded-lg">
-                            <span>Total Orders:</span>
+                            <span data-translate="total_orders">Total Orders:</span>
                             <span class="font-bold text-purple-600" id="totalOrders">0</span>
                         </div>
                         <div class="flex justify-between items-center p-3 bg-orange-50 rounded-lg">
-                            <span>Average Order Value:</span>
+                            <span data-translate="average_order_value">Average Order Value:</span>
                             <span class="font-bold text-orange-600" id="avgOrderValue">0 PKR</span>
                         </div>
                     </div>
                 </div>
                 <div>
-                    <h3 class="text-lg font-semibold mb-4">Recent Sales</h3>
+                    <h3 class="text-lg font-semibold mb-4" data-translate="recent_sales">Recent Sales</h3>
                     <div id="recentSales" class="space-y-2 max-h-64 overflow-y-auto">
-                        <!-- Recent sales will be populated here -->
-                    </div>
+                        </div>
                 </div>
             </div>
         </section>
     </main>
 
-    <!-- Shopping Cart Section -->
     <section class="cart-section py-8 no-print">
         <div class="container mx-auto px-4">
-            <div class="bg-white rounded-lg shadow-lg p-6 max-w-4xl mx-auto">
+            <div class="cart-content bg-white rounded-lg shadow-lg p-6 max-w-4xl mx-auto">
                 <div class="flex justify-between items-center mb-6">
                     <h3 class="text-2xl font-semibold flex items-center">
-                        <i class="fas fa-shopping-cart mr-3 text-blue-600"></i>Shopping Cart
+                        <i class="fas fa-shopping-cart mr-3 text-blue-600"></i><span data-translate="shopping_cart">Shopping Cart</span>
                     </h3>
                     <span class="bg-blue-600 text-white px-3 py-1 rounded-full text-lg font-bold" id="cartCount">0</span>
                 </div>
@@ -192,21 +479,21 @@
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <div class="lg:col-span-2">
                         <div id="cartItems" class="max-h-80 overflow-y-auto mb-4">
-                            <p class="text-gray-500 text-center py-8">Cart is empty</p>
+                            <p class="text-gray-500 text-center py-8" data-translate="cart_empty">Cart is empty</p>
                         </div>
                     </div>
                     
                     <div class="bg-gray-50 p-6 rounded-lg">
                         <div class="space-y-4">
                             <div class="flex justify-between items-center text-xl font-bold border-b pb-4">
-                                <span>Total:</span>
+                                <span data-translate="total">Total:</span>
                                 <span id="cartTotal" class="text-green-600">0 PKR</span>
                             </div>
                             <button id="checkoutBtn" class="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition text-lg font-semibold">
-                                <i class="fas fa-credit-card mr-2"></i>Checkout
+                                <i class="fas fa-credit-card mr-2"></i><span data-translate="checkout">Checkout</span>
                             </button>
                             <button id="clearCartBtn" class="w-full bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transition text-lg font-semibold">
-                                <i class="fas fa-trash mr-2"></i>Clear Cart
+                                <i class="fas fa-trash mr-2"></i><span data-translate="clear_cart">Clear Cart</span>
                             </button>
                         </div>
                     </div>
@@ -215,831 +502,902 @@
         </div>
     </section>
 
-    <!-- Bill Print Area -->
     <div id="billPrintArea" class="print-area" style="display: none;">
-        <div class="bill-print-content">
-            <div class="bill-header">
-                <h2 style="margin: 0; font-size: 14px; font-weight: bold;">حاجی فخرالدین کریانہ اینڈ جنرل ہولسیل اسٹور</h2>
-                <p style="margin: 5px 0; font-size: 10px;">Premium Quality • Best Prices</p>
-                <p style="margin: 5px 0; font-size: 10px;">Phone: +92 325 3545682</p>
-                <hr style="margin: 10px 0;">
-                <p style="margin: 0; font-size: 10px;" id="billDate">Date: </p>
-            </div>
-            <div id="billItemsList">
-                <!-- Bill items will be populated here -->
-            </div>
-            <div class="bill-total">
-                <div style="display: flex; justify-content: space-between; margin: 5px 0;">
-                    <span>TOTAL:</span>
-                    <span id="billFinalTotal">0 PKR</span>
-                </div>
-                <hr style="margin: 10px 0;">
-                <p style="text-align: center; font-size: 10px; margin-top: 15px;">Thank you for your business!</p>
-                <p style="text-align: center; font-size: 8px;">Visit us again!</p>
-            </div>
         </div>
-    </div>
 
-    <!-- Bill Summary Modal -->
     <div id="billModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 no-print">
         <div class="bg-white rounded-lg p-8 max-w-md w-full mx-4">
             <div class="text-center mb-6">
                 <i class="fas fa-receipt text-4xl text-green-600 mb-4"></i>
-                <h3 class="text-2xl font-bold text-gray-800">Order Summary</h3>
+                <h3 class="text-2xl font-bold text-gray-800" data-translate="order_summary">Order Summary</h3>
             </div>
             <div id="billDetails" class="space-y-2 mb-6"></div>
             <div class="border-t pt-4">
                 <div class="flex justify-between items-center text-xl font-bold">
-                    <span>Total Amount:</span>
+                    <span data-translate="total_amount">Total Amount:</span>
                     <span id="billTotal" class="text-green-600">0 PKR</span>
                 </div>
             </div>
             <div class="flex space-x-4 mt-6">
                 <button id="printBill" class="flex-1 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
-                    <i class="fas fa-print mr-2"></i>Print
+                    <i class="fas fa-print mr-2"></i><span data-translate="print">Print</span>
                 </button>
                 <button id="closeBill" class="flex-1 bg-gray-600 text-white py-2 rounded-lg hover:bg-gray-700 transition">
-                    Close
+                    <span data-translate="close">Close</span>
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- Footer -->
     <footer class="bg-gray-800 text-white py-8 mt-12 no-print">
         <div class="container mx-auto px-4">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div>
-                    <h3 class="text-xl font-bold mb-4">حاجی فخرالدین کریانہ اینڈ جنرل ہولسیل اسٹور</h3>
-                    <p class="text-gray-300">ہمارے یہاں ہر قسم کے چاول ہر قسم کے دالیں گرم مصالحہ جات اور بہترین ڈرایٔ فروٹ مناسب قیمت پر دستیاب ہیں</p>
+                    <h3 class="text-xl font-bold mb-4" data-translate="store_name"></h3>
+                    <p class="text-gray-300" data-translate="store_description"></p>
                 </div>
                 <div></div>
                 <div>
-                    <h3 class="text-lg font-semibold mb-4">Connect With Us</h3>
-                    <p class="text-gray-300"><i class="fas fa-phone mr-2"></i>0325 3545682</p>
+                    <h3 class="text-lg font-semibold mb-4" data-translate="connect_with_us">Connect With Us</h3>
+                    <p class="text-gray-300"><i class="fas fa-phone mr-2"></i>0325-3545682</p>
                     <p class="text-gray-300"><i class="fas fa-phone mr-2"></i>0341-3020958</p>
                 </div>
             </div>
             <div class="border-t border-gray-700 pt-8 mt-8 text-center text-gray-400">
-                <p>&copy; 2025 GroceryMart. All rights reserved. Made with <i class="fas fa-heart text-red-500"></i> in Pakistan</p>
+                <p data-translate="copyright">&copy; 2025 GroceryMart. All rights reserved. Made with <i class="fas fa-heart text-red-500"></i> in Pakistan</p>
             </div>
         </div>
     </footer>
 
     <script>
-        // Product Data
+        // Translation Data
+        const translations = {
+            en: {
+                store_name: "Haji Fakhruddin Grocery & General Wholesale Store",
+                store_tagline: "All types of rice, various lentils, spices, and premium dry fruits are available here at reasonable prices.",
+                store_description: "We have all types of rice, all types of lentils, hot spices and the best dry fruits available at reasonable prices",
+                admin_mode: "Admin Mode",
+                search_placeholder: "Search for grocery items...",
+                shop_by_category: "Shop by Category",
+                back_to_categories: "Back to Categories",
+                sales_dashboard: "Sales Dashboard",
+                reset_daily_sales: "Reset Daily Sales",
+                daily_sales_summary: "Daily Sales Summary",
+                total_items_sold: "Total Items Sold:",
+                total_revenue: "Total Revenue:",
+                total_orders: "Total Orders:",
+                average_order_value: "Average Order Value:",
+                recent_sales: "Recent Sales",
+                shopping_cart: "Shopping Cart",
+                cart_empty: "Cart is empty",
+                total: "Total:",
+                checkout: "Checkout",
+                clear_cart: "Clear Cart",
+                total_sales_today: "Total Sales Today",
+                order_summary: "Order Summary",
+                total_amount: "Total Amount:",
+                print: "Print",
+                close: "Close",
+                connect_with_us: "Connect With Us",
+                copyright: "&copy; 2025 GroceryMart. All rights reserved. Made with ❤️ in Pakistan",
+                thank_you: "Thank you for your business!",
+                visit_again: "Visit us again!",
+                bill_description: "Description",
+                bill_weight: "Weight",
+                bill_price: "Price",
+                bill_total: "Total",
+                bill_final_total: "TOTAL:",
+                add_to_cart: " Add",
+                phone1: "Phone: 0325-3545682",
+                phone2: "Phone: 0341-3020958",
+                // Category Translations (English)
+                "Ghee": "Ghee",
+                "Oils": "Oils",
+                "Mixed Lentils": "Mixed Lentils",
+                "Wheat & Rice": "Wheat & Rice",
+                "Flour": "Flour",
+                "Sugar": "Sugar",
+                "Millets & Grains": "Millets & Grains",
+                "Chickpeas": "Chickpeas",
+                "Mixed Spices": "Mixed Spices",
+                "Lazzat Masala Sachets": "Lazzat Masala Sachets",
+                "Premium Spices": "Premium Spices",
+                "Dry Fruits": "Dry Fruits",
+                "Other Items": "Other Items"
+            },
+            ur: {
+                store_name: "حاجی فخرالدین کریانہ اینڈ جنرل ہولسیل اسٹور",
+                store_tagline: "ہمارے یہاں ہر قسم کے چاول ہر قسم کے دالیں گرم مصالحہ جات اور بہترین ڈرایٔ فروٹ مناسب قیمت پر دستیاب ہیں ",
+                store_description: "ہمارے یہاں ہر قسم کے چاول ہر قسم کے دالیں گرم مصالحہ جات اور بہترین ڈرایٔ فروٹ مناسب قیمت پر دستیاب ہیں",
+                admin_mode: "ایڈمن موڈ",
+                search_placeholder: "کریانہ سامان تلاش کریں...",
+                shop_by_category: "کیٹگری کے ذریعے خریداری کریں",
+                back_to_categories: "کیٹگری میں واپس",
+                sales_dashboard: " سیلز ڈیش بورڈ",
+                reset_daily_sales: " یومیہ سیلز ری سیٹ کریں",
+                daily_sales_summary: "یومیہ سیلز خلاصہ",
+                total_items_sold: "کل فروخت شدہ اشیاء:",
+                total_revenue: "کل آمدنی:",
+                total_orders: "کل آرڈرز:",
+                average_order_value: "اوسط آرڈر ویلیو:",
+                recent_sales: "حالیہ سیلز",
+                shopping_cart: "شاپنگ کارٹ",
+                cart_empty: "کارٹ خالی ہے",
+                total: "کل:",
+                checkout: " چیک آؤٹ",
+                clear_cart: " کارٹ صاف کریں",
+                total_sales_today: "آج کی کل سیلز",
+                order_summary: "آرڈر کا خلاصہ",
+                total_amount: "کل رقم:",
+                print: " پرنٹ",
+                close: " بند کریں",
+                connect_with_us: "ہم سے رابطہ کریں",
+                copyright: "&copy; 2025 GroceryMart. تمام حقوق محفوظ ہیں۔ پاکستان میں ❤️ کے ساتھ بنایا گیا",
+                thank_you: "آپ کے کاروبار کے لیے شکریہ!",
+                visit_again: "دوبارہ تشریف لائیں!",
+                bill_description: "تفصیل",
+                bill_weight: "وزن",
+                bill_price: "قیمت",
+                bill_total: "کل",
+                bill_final_total: "کل رقم",
+                add_to_cart: "شامل کریں",
+                phone1: "فون: 3545682-0325",
+                phone2: "فون: 3020958-0341",
+                // Category Translations (Urdu)
+                "Ghee": "گھی",
+                "Oils": "تیل",
+                "Mixed Lentils": "مکس دالیں",
+                "Wheat & Rice": "گندم اور چاول",
+                "Flour": "آٹا",
+                "Sugar": "چینی",
+                "Millets & Grains": "باجرہ اور اناج",
+                "Chickpeas": "چنے",
+                "Mixed Spices": "مکس مصالحے",
+                "Lazzat Masala Sachets": "لذت مصالحہ ساشے",
+                "Premium Spices": "پریمیم مصالحے",
+                "Dry Fruits": "خشک میوہ جات",
+                "Other Items": "دیگر اشیاء"
+            }
+        };
+
+        // Product Data with Urdu translations and new items
         const groceryData = {
             "Ghee": [
-                {name: "Taza Ghee 1 kg", price: 460, image: null},
-                {name: "Taza Ghee 1/2 kg", price: 240, image: null},
-                {name: "Taza Ghee 250g", price: 120, image: null},
-                {name: "Kisan Ghee 1 kg", price: 520, image: null}
+                {name: "Taza Ghee 1 kg", nameUr: "تازہ گھی 1 کلو", price: 460, image: null},
+                {name: "Taza Ghee 1/2 kg", nameUr: "تازہ گھی نصف کلو", price: 240, image: null},
+                {name: "Taza Ghee 250g", nameUr: "تازہ گھی 250 گرام", price: 120, image: null},
+                {name: "Kisan Ghee 1 kg", nameUr: "کسان گھی 1 کلو", price: 520, image: null}
             ],
             "Oils": [
-                {name: "Kisan Oil 1 kg", price: 520, image: null},
-                {name: "Taza Oil 1 kg", price: 480, image: null},
-                {name: "Naryal Tel 125g", price: 210, image: null},
-                {name: "Naryal Tel 250g", price: 380, image: null},
-                {name: "Sarso Tel 125g", price: 130, image: null},
-                {name: "Sarso Tel 250g", price: 340, image: null}
+                {name: "Kisan Oil 1 kg", nameUr: "کسان آئل 1 کلو", price: 520, image: null},
+                {name: "Taza Oil 1 kg", nameUr: "تازہ آئل 1 کلو", price: 480, image: null},
+                {name: "Naryal Tel 125g", nameUr: "ناریل کا تیل 125 گرام", price: 210, image: null},
+                {name: "Naryal Tel 250g", nameUr: "ناریل کا تیل 250 گرام", price: 380, image: null},
+                {name: "Sarso Tel 125g", nameUr: "سرسوں کا تیل 125 گرام", price: 130, image: null},
+                {name: "Sarso Tel 250g", nameUr: "سرسوں کا تیل 250 گرام", price: 340, image: null},
+                {name: "Tel Port Wekum 1 kg", nameUr: "تیل پورٹ ویکم 1 کلو", price: 440, image: null},
+                {name: "Tel Olien 1 kg", nameUr: "تیل اولین 1 کلو", price: 430, image: null},
+                {name: "Tel Sarso 1 kg", nameUr: "تیل سرسوں 1 کلو", price: 450, image: null}
             ],
             "Mixed Lentils": [
-                {name: "Mong Dal A 1 kg", price: 390, image: null},
-                {name: "Masoor Dal A 1 kg", price: 280, image: null},
-                {name: "Chana Dal VIP 1 kg", price: 300, image: null},
-                {name: "Mash Dal Khurmi 1 kg", price: 540, image: null},
-                {name: "Masoor Dal Sabit 1 kg", price: 320, image: null}
+                {name: "Mong Dal A 1 kg", nameUr: "مونگ دال A 1 کلو", price: 390, image: null},
+                {name: "Masoor Dal A 1 kg", nameUr: "مسور دال A 1 کلو", price: 280, image: null},
+                {name: "Chana Dal VIP 1 kg", nameUr: "چنا دال وی آئی پی 1 کلو", price: 300, image: null},
+                {name: "Mash Dal Khurmi 1 kg", nameUr: "ماش دال خورمی 1 کلو", price: 540, image: null},
+                {name: "Masoor Dal Sabit 1 kg", nameUr: "مسور دال ثابت 1 کلو", price: 320, image: null}
             ],
             "Wheat & Rice": [
-                {name: "Sabit Gandum 1 kg", price: 120, image: null},
-                {name: "Lal Chawal 1 kg", price: 120, image: null},
-                {name: "Chawal ka Atta VIP 1 kg", price: 120, image: null}
+                {name: "Sabit Gandum 1 kg", nameUr: "ثابت گندم 1 کلو", price: 120, image: null},
+                {name: "Lal Chawal 1 kg", nameUr: "لال چاول 1 کلو", price: 120, image: null},
+                {name: "Chawal ka Atta VIP 1 kg", nameUr: "چاول کا آٹا وی آئی پی 1 کلو", price: 120, image: null},
+                {name: "Chawal Tota 1 kg", nameUr: "چاول توتا 1 کلو", price: 180, image: null},
+                {name: "Chawal Tota Premium 1 kg", nameUr: "چاول توتا پریمیم 1 کلو", price: 220, image: null},
+                {name: "Chawal Puniya 1 kg", nameUr: "چاول پنیا 1 کلو", price: 280, image: null},
+                {name: "Chawal Sela 1 kg", nameUr: "چاول سیلا 1 کلو", price: 370, image: null},
+                {name: "Chawal Mohabbat Basmati 1 kg", nameUr: "چاول محبت بسمتی 1 کلو", price: 370, image: null},
+                {name: "Chawal Basmati Sahil 1 kg", nameUr: "چاول بسمتی ساحل 1 کلو", price: 390, image: null},
+                {name: "Chawal Mota C9 1 kg", nameUr: "چاول موٹا C9 1 کلو", price: 240, image: null}
+            ],
+            "Flour": [
+                {name: "Chakki Aata 5 kg", nameUr: "چکی آٹا 5 کلو", price: 520, image: null},
+                {name: "Aata 10 kg", nameUr: "آٹا 10 کلو", price: 740, image: null},
+                {name: "Normal Aata 1 kg", nameUr: "عام آٹا 1 کلو", price: 80, image: null},
+                {name: "Fine Aata 1 kg", nameUr: "فائن آٹا 1 کلو", price: 90, image: null},
+                {name: "Besan Special 1 kg", nameUr: "بیسن سپیشل 1 کلو", price: 320, image: null}
+            ],
+            "Sugar": [
+                {name: "Cheeni Special 1 kg", nameUr: "چینی سپیشل 1 کلو", price: 190, image: null}
             ],
             "Millets & Grains": [
-                {name: "Bajra Mota 1 kg", price: 140, image: null},
-                {name: "Bajra Kangni 1 kg", price: 200, image: null},
-                {name: "VIP Dalya 1 kg", price: 140, image: null}
+                {name: "Bajra Mota 1 kg", nameUr: "باجرہ موٹا 1 کلو", price: 140, image: null},
+                {name: "Bajra Kangni 1 kg", nameUr: "باجرہ کنگنی 1 کلو", price: 200, image: null},
+                {name: "VIP Dalya 1 kg", nameUr: "وی آئی پی دلیہ 1 کلو", price: 140, image: null}
             ],
             "Chickpeas": [
-                {name: "Safaid Chana 10mm 1 kg", price: 440, image: null},
-                {name: "Kala Chana VIP 1 kg", price: 280, image: null},
-                {name: "Chora VIP 1 kg", price: 320, image: null},
-                {name: "Mori VIP 1 kg", price: 320, image: null},
-                {name: "White Lobia VIP 1 kg", price: 440, image: null},
-                {name: "Bhuna Chana 1 kg", price: 400, image: null}
+                {name: "Safaid Chana 10mm 1 kg", nameUr: "سفید چنا 10 ملی میٹر 1 کلو", price: 440, image: null},
+                {name: "Kala Chana VIP 1 kg", nameUr: "کالا چنا وی آئی پی 1 کلو", price: 280, image: null},
+                {name: "Chora VIP 1 kg", nameUr: "چورا وی آئی پی 1 کلو", price: 320, image: null},
+                {name: "Mori VIP 1 kg", nameUr: "موری وی آئی پی 1 کلو", price: 320, image: null},
+                {name: "White Lobia VIP 1 kg", nameUr: "سفید لوبیا وی آئی پی 1 کلو", price: 440, image: null},
+                {name: "Bhuna Chana 1 kg", nameUr: "بھنا چنا 1 کلو", price: 400, image: null}
             ],
             "Mixed Spices": [
-                {name: "Pisi Mirch 1 kg", price: 1000, image: null},
-                {name: "Kuti Mirch 1 kg", price: 1000, image: null},
-                {name: "Sabit Mirch 1 kg", price: 1200, image: null},
-                {name: "Pisi Haldi VIP 1 kg", price: 1000, image: null},
-                {name: "Pisi Dhania VIP 1 kg", price: 800, image: null},
-                {name: "Mix Masala VIP 1 kg", price: 800, image: null},
-                {name: "Safaid Zeera VIP 1 kg", price: 1600, image: null},
-                {name: "Kali Mirch VIP 1 kg", price: 2400, image: null},
-                {name: "Methi Dana 1 kg", price: 500, image: null},
-                {name: "Ajwain VIP 1 kg", price: 500, image: null},
-                {name: "Sarso Dana VIP 1 kg", price: 500, image: null},
-                {name: "Sabit Dhania Goli 1 kg", price: 800, image: null},
-                {name: "Sabit Dhania Desi 1 kg", price: 1200, image: null},
-                {name: "Chat Masala Khulla 1 kg", price: 600, image: null},
-                {name: "Finger Chips Masala 1 kg", price: 800, image: null}
+                {name: "Pisi Mirch 1 kg", nameUr: "پسی مرچ 1 کلو", price: 1000, image: null},
+                {name: "Kuti Mirch 1 kg", nameUr: "کٹی مرچ 1 کلو", price: 1000, image: null},
+                {name: "Sabit Mirch 1 kg", nameUr: "ثابت مرچ 1 کلو", price: 1200, image: null},
+                {name: "Pisi Haldi VIP 1 kg", nameUr: "پسی ہلدی وی آئی پی 1 کلو", price: 1000, image: null},
+                {name: "Pisi Dhania VIP 1 kg", nameUr: "پسا دھنیا وی آئی پی 1 کلو", price: 800, image: null},
+                {name: "Mix Masala VIP 1 kg", nameUr: "مکس مسالہ وی آئی پی 1 کلو", price: 800, image: null},
+                {name: "Safaid Zeera VIP 1 kg", nameUr: "سفید زیرہ وی آئی پی 1 کلو", price: 1600, image: null},
+                {name: "Kali Mirch VIP 1 kg", nameUr: "کالی مرچ وی آئی پی 1 کلو", price: 2400, image: null},
+                {name: "Methi Dana 1 kg", nameUr: "میتھی دانا 1 کلو", price: 500, image: null},
+                {name: "Ajwain VIP 1 kg", nameUr: "اجوائن وی آئی پی 1 کلو", price: 500, image: null},
+                {name: "Sarso Dana VIP 1 kg", nameUr: "سرسوں دانا وی آئی پی 1 کلو", price: 500, image: null},
+                {name: "Sabit Dhania Goli 1 kg", nameUr: "ثابت دھنیا گولی 1 کلو", price: 800, image: null},
+                {name: "Sabit Dhania Desi 1 kg", nameUr: "ثابت دھنیا دیسی 1 کلو", price: 1200, image: null},
+                {name: "Chat Masala Khulla 1 kg", nameUr: "چاٹ مسالہ کھلا 1 کلو", price: 600, image: null},
+                {name: "Finger Chips Masala 1 kg", nameUr: "فنگر چپس مسالہ 1 کلو", price: 800, image: null}
+            ],
+            "Lazzat Masala Sachets": [
+                {name: "Lazzat Biryani 1 pcs", nameUr: "لذت بریانی 1 پیس", price: 10, image: null},
+                {name: "Lazzat Karahi 1 pcs", nameUr: "لذت کڑاہی 1 پیس", price: 10, image: null},
+                {name: "Lazzat Achar Gosht 1 pcs", nameUr: "لذت اچار گوشت 1 پیس", price: 10, image: null},
+                {name: "Lazzat Qourma 1 pcs", nameUr: "لذت قورمہ 1 پیس", price: 10, image: null},
+                {name: "Lazzat Machli 1 pcs", nameUr: "لذت مچھلی 1 پیس", price: 10, image: null},
+                {name: "Lazzat Nihari 1 pcs", nameUr: "لذت نہاری 1 پیس", price: 20, image: null},
+                {name: "Lazzat Shami Kabab 1 pcs", nameUr: "لذت شامی کباب 1 پیس", price: 20, image: null},
+                {name: "Lazzat Qeema Fry 1 pcs", nameUr: "لذت قیمہ فرائی 1 پیس", price: 10, image: null},
+                {name: "Lazzat Dal Masala 1 pcs", nameUr: "لذت دال مسالہ 1 پیس", price: 10, image: null},
+                {name: "Lazzat Mix Sabzi 1 pcs", nameUr: "لذت مکس سبزی 1 پیس", price: 10, image: null},
+                {name: "Lazzat Mirch Fry 1 pcs", nameUr: "لذت مرچ فرائی 1 پیس", price: 10, image: null},
+                {name: "Lazzat Gosht Galany ka Powder 1 pcs", nameUr: "لذت گوشت گلانے کا پاؤڈر 1 پیس", price: 20, image: null},
+                {name: "Lazzat Pulao 1 pcs", nameUr: "لذت پلاؤ 1 پیس", price: 20, image: null},
+                {name: "Lazzat Kaleji Masala 1 pcs", nameUr: "لذت کلیجی مسالہ 1 پیس", price: 20, image: null},
+                {name: "Lazzat Kali Mirch Powder 1 pcs", nameUr: "لذت کالی مرچ پاؤڈر 1 پیس", price: 20, image: null},
+                {name: "Lazzat Garam Masala Powder 1 pcs", nameUr: "لذت گرم مسالہ پاؤڈر 1 پیس", price: 20, image: null},
+                {name: "Lazzat Chat Masala 1 pcs", nameUr: "لذت چاٹ مسالہ 1 پیس", price: 10, image: null}
             ],
             "Premium Spices": [
-                {name: "Khashkhash VIP 1 kg", price: 1000, image: null},
-                {name: "Sago Dana VIP 1 kg", price: 440, image: null},
-                {name: "Sonf VIP 1 kg", price: 800, image: null},
-                {name: "Tatri Top 1 kg", price: 1000, image: null},
-                {name: "China Namak 1 kg", price: 1400, image: null},
-                {name: "Dar Chini Top 1 kg", price: 2800, image: null},
-                {name: "Badyan Phol VIP 1 kg", price: 3200, image: null},
-                {name: "Bari Ilaichi VIP 1 kg", price: 6000, image: null},
-                {name: "Choti Ilaichi Top 1 kg", price: 10000, image: null},
-                {name: "Long Top 1 kg", price: 3000, image: null}
+                {name: "Khashkhash VIP 1 kg", nameUr: "خشخاش وی آئی پی 1 کلو", price: 1000, image: null},
+                {name: "Sago Dana VIP 1 kg", nameUr: "ساگو دانا وی آئی پی 1 کلو", price: 440, image: null},
+                {name: "Sonf VIP 1 kg", nameUr: "سونف وی آئی پی 1 کلو", price: 800, image: null},
+                {name: "Tatri Top 1 kg", nameUr: "تاتری ٹاپ 1 کلو", price: 1000, image: null},
+                {name: "China Namak 1 kg", nameUr: "چائنا نمک 1 کلو", price: 1400, image: null},
+                {name: "Dar Chini Top 1 kg", nameUr: "دار چینی ٹاپ 1 کلو", price: 2800, image: null},
+                {name: "Badyan Phol VIP 1 kg", nameUr: "بادیان پھول وی آئی پی 1 کلو", price: 3200, image: null},
+                {name: "Bari Ilaichi VIP 1 kg", nameUr: "بڑی الائچی وی آئی پی 1 کلو", price: 6000, image: null},
+                {name: "Choti Ilaichi Top 1 kg", nameUr: "چھوٹی الائچی ٹاپ 1 کلو", price: 10000, image: null},
+                {name: "Long Top 1 kg", nameUr: "لونگ ٹاپ 1 کلو", price: 3000, image: null}
             ],
             "Dry Fruits": [
-                {name: "Badam Top 1 kg", price: 3200, image: null},
-                {name: "Pisi Naryal China Top 1 kg", price: 1000, image: null},
-                {name: "Sabit Naryal VIP 1 kg", price: 1600, image: null},
-                {name: "Chuwara VIP 1 kg", price: 800, image: null},
-                {name: "Kishmish Top 1 kg", price: 1200, image: null},
-                {name: "Munakka VIP 1 kg", price: 1600, image: null},
-                {name: "Asharfi Lal VIP 1 kg", price: 600, image: null},
-                {name: "Asharfi Hara VIP 1 kg", price: 600, image: null},
-                {name: "Til Safaid Top 1 kg", price: 1200, image: null},
-                {name: "Aalo Bukhara Kandhari 1 kg", price: 1200, image: null},
-                {name: "Imli VIP 1 kg", price: 600, image: null}
+                {name: "Badam Top 1 kg", nameUr: "بادام ٹاپ 1 کلو", price: 3200, image: null},
+                {name: "Pisi Naryal China Top 1 kg", nameUr: "پسی ناریل چائنا ٹاپ 1 کلو", price: 1600, image: null},
+                {name: "Pista VIP 1 kg", nameUr: "پستہ وی آئی پی 1 کلو", price: 3000, image: null},
+                {name: "Kaju VIP 1 kg", nameUr: "کاجو وی آئی پی 1 کلو", price: 2800, image: null},
+                {name: "Akhrot VIP 1 kg", nameUr: "اخروٹ وی آئی پی 1 کلو", price: 2400, image: null},
+                {name: "Chilgoza VIP 1 kg", nameUr: "چلغوزہ وی آئی پی 1 کلو", price: 8000, image: null},
+                {name: "Kishmish VIP 1 kg", nameUr: "کشمش وی آئی پی 1 کلو", price: 1600, image: null},
+                {name: "Anjeer VIP 1 kg", nameUr: "انجیر وی آئی پی 1 کلو", price: 2000, image: null},
+                {name: "Khajoor VIP 1 kg", nameUr: "کھجور وی آئی پی 1 کلو", price: 1200, image: null},
+                {name: "Apricot VIP 1 kg", nameUr: "خوبانی وی آئی پی 1 کلو", price: 1800, image: null},
+                {name: "Mungfali Bhuni 1 kg", nameUr: "مونگ پھلی بھنی 1 کلو", price: 800, image: null},
+                {name: "Kaju Tukra 1 kg", nameUr: "کاجو ٹکڑا 1 کلو", price: 1800, image: null},
+                {name: "Badam Kagzi 1 kg", nameUr: "بادام کاغذی 1 کلو", price: 2800, image: null}
             ],
-            "Milk Products": [
-                {name: "Everyday Doodh 1 kg", price: 1800, image: null},
-                {name: "Everyday Doodh 1/2 kg", price: 950, image: null},
-                {name: "Everyday Doodh 250g", price: 500, image: null},
-                {name: "Everyday Sachet 1 pcs", price: 30, image: null},
-                {name: "Bunyad Sachet 1 pcs", price: 55, image: null},
-                {name: "Cerelac Sachet 1 pcs", price: 55, image: null},
-                {name: "Nido Doodh 1 kg", price: 2300, image: null},
-                {name: "Nido Doodh 1/2 kg", price: 1100, image: null},
-                {name: "Nido Doodh 250g", price: 600, image: null},
-                {name: "Khulla Doodh Khushk VIP 1 kg", price: 1200, image: null},
-                {name: "Taday Doodh 1 pcs", price: 50, image: null}
-            ],
-            "Tea & Coffee": [
-                {name: "Patti Khulla VIP 1 kg", price: 1100, image: null},
-                {name: "Danedar Patti 250g", price: 370, image: null},
-                {name: "Danedar Patti 125g", price: 180, image: null},
-                {name: "Mezban Patti 250g", price: 370, image: null},
-                {name: "Mezban Patti 125g", price: 190, image: null},
-                {name: "Family Mixture Patti 250g", price: 370, image: null},
-                {name: "Family Mixture Patti 125g", price: 180, image: null},
-                {name: "Tezdum Patti 250g", price: 370, image: null},
-                {name: "Tezdum Patti 125g", price: 180, image: null},
-                {name: "Tezdum Patti Sachet 1 pcs", price: 10, image: null},
-                {name: "Green Tea Sachet 1 pcs", price: 50, image: null},
-                {name: "Coffee 3in1 1 pcs", price: 80, image: null},
-                {name: "Coffee Black 1 pcs", price: 50, image: null}
-            ],
-            "Bath Soaps": [
-                {name: "Skin White Sabun 1 pcs", price: 135, image: null},
-                {name: "Golden Pearl Sabun 1 pcs", price: 140, image: null},
-                {name: "Neem Sabun 1 pcs", price: 140, image: null},
-                {name: "Lux Sabun 1 pcs", price: 115, image: null},
-                {name: "Capri Sabun 1 pcs", price: 135, image: null},
-                {name: "Classic Sabun 1 pcs", price: 60, image: null},
-                {name: "Lifebuoy Sabun 1 pcs", price: 95, image: null},
-                {name: "Dettol Cool Sabun 1 pcs", price: 150, image: null},
-                {name: "Dettol Original Sabun 1 pcs", price: 140, image: null},
-                {name: "Palmolive Sabun 1 pcs", price: 145, image: null},
-                {name: "Tibet Sabun 1 pcs", price: 60, image: null},
-                {name: "Moti Sabun 1 pcs", price: 40, image: null},
-                {name: "Khushboo Sabun 1 pcs", price: 80, image: null},
-                {name: "Kite Sabun 1 pcs", price: 50, image: null},
-                {name: "Sofi Sabun 1 pcs", price: 60, image: null},
-                {name: "Sofi Darja Awwal 1 pcs", price: 130, image: null},
-                {name: "Harmony Sabun 1 pcs", price: 50, image: null},
-                {name: "Faiza Sabun 1 pcs", price: 110, image: null}
-            ],
-            "Dishwashing": [
-                {name: "Lemon Max Long Bar 1 pcs", price: 75, image: null},
-                {name: "Lemon Max Sabun 1 pcs", price: 15, image: null},
-                {name: "Lemon Max 1 pcs", price: 35, image: null},
-                {name: "Lemon Max 400g", price: 225, image: null},
-                {name: "Lemon Max 200g", price: 130, image: null},
-                {name: "Lemon Max Liquid 475g", price: 320, image: null},
-                {name: "Lemon Max Liquid 275g", price: 160, image: null},
-                {name: "Number 1 Long Bar 1 pcs", price: 50, image: null},
-                {name: "Lemon Dex 1 pcs", price: 20, image: null}
-            ],
-            "Personal Care": [
-                {name: "Fair Lovely Cream Tube 1 pcs", price: 145, image: null},
-                {name: "Fair Lovely Cream Jar 1 pcs", price: 390, image: null},
-                {name: "Fair Lovely Face Wash", price: 250, image: null},
-                {name: "Faiza Cream 1 pcs", price: 370, image: null},
-                {name: "Golden Pearl Cream", price: 350, image: null},
-                {name: "Tibet Snow Cream 1 pcs", price: 220, image: null},
-                {name: "Ponds Lotion 100g", price: 330, image: null},
-                {name: "Tibet Cold Cream 1 pcs", price: 170, image: null},
-                {name: "Nisa Hair Removal Cream 1 pcs", price: 40, image: null},
-                {name: "Dorco Razor 1 pcs", price: 40, image: null}
-            ],
-            "Shampoos": [
-                {name: "Pantene Shampoo 185g", price: 450, image: null},
-                {name: "Sunsilk Shampoo 185g", price: 440, image: null},
-                {name: "Head & Shoulder Shampoo 185g", price: 470, image: null},
-                {name: "Lifebuoy Shampoo 370g", price: 620, image: null},
-                {name: "Lifebuoy Shampoo 185g", price: 390, image: null},
-                {name: "Lifebuoy Shampoo 90g", price: 170, image: null},
-                {name: "Palmolive Shampoo 180g", price: 380, image: null},
-                {name: "Sunsilk Shampoo 80g", price: 190, image: null},
-                {name: "Dove Shampoo 1 pcs", price: 20, image: null}
-            ],
-            "Oral Care": [
-                {name: "Dentonic 1 pcs", price: 50, image: null},
-                {name: "Dentonic Large 1 pcs", price: 80, image: null},
-                {name: "Dentonic XL 1 pcs", price: 140, image: null},
-                {name: "Dentonic Red 1 pcs", price: 100, image: null},
-                {name: "Manjan 1 pcs", price: 20, image: null}
-            ],
-            "Hair Care": [
-                {name: "Dabur Amla 1 pcs", price: 300, image: null},
-                {name: "Hair Color Black Revlon 1 pcs", price: 80, image: null},
-                {name: "Hair Color Brown Revlon 1 pcs", price: 80, image: null},
-                {name: "Praima Color Black 1 pcs", price: 80, image: null},
-                {name: "Praima Color Brown 1 pcs", price: 75, image: null}
-            ],
-            "Household Items": [
-                {name: "Glucose 400g", price: 280, image: null},
-                {name: "Glucose 100g", price: 90, image: null},
-                {name: "Sirka 120g", price: 80, image: null},
-                {name: "Sirka Trio Pack 1 pcs", price: 200, image: null},
-                {name: "Machis 1 box", price: 50, image: null},
-                {name: "Neel 1 pcs", price: 50, image: null},
-                {name: "Akhbar 1 kg", price: 280, image: null},
-                {name: "Misri 1 kg", price: 400, image: null},
-                {name: "Nibad 1 kg", price: 400, image: null},
-                {name: "Ispaghol Sachet 1 pcs", price: 30, image: null}
-            ],
-            "Condiments": [
-                {name: "Mayonnaise 250g", price: 140, image: null},
-                {name: "Rooh Afza 475g", price: 250, image: null},
-                {name: "Rooh Afza 800g", price: 450, image: null},
-                {name: "Nouras 800g", price: 450, image: null},
-                {name: "Jame Shereen 800g", price: 480, image: null},
-                {name: "Ketchup 250g Red", price: 130, image: null},
-                {name: "Ketchup 250g Green", price: 130, image: null},
-                {name: "Ketchup Sachet 1 pcs", price: 20, image: null},
-                {name: "Shehad (Honey) 1 pcs", price: 170, image: null}
-            ],
-            "Laundry Detergents": [
-                {name: "Bonus Surf 1 kg", price: 230, image: null},
-                {name: "Bonus Surf 1/2 kg", price: 100, image: null},
-                {name: "Number 1 Surf 1 kg", price: 220, image: null},
-                {name: "Number 1 Surf 1/2 kg", price: 100, image: null},
-                {name: "Suraj Surf 1 kg", price: 220, image: null},
-                {name: "Suraj Surf 1/2 kg", price: 100, image: null},
-                {name: "Sunlight Surf 1 kg", price: 200, image: null},
-                {name: "Surf Excel 1 kg", price: 530, image: null},
-                {name: "Surf Excel 1/2 kg", price: 290, image: null},
-                {name: "Ariel Surf 1 kg", price: 550, image: null},
-                {name: "Ariel Surf 1/2 kg", price: 275, image: null},
-                {name: "Brite Surf 1 kg", price: 265, image: null}
-            ],
-            "Pasta & Noodles": [
-                {name: "Microni Khulla Elbow 1 kg", price: 240, image: null},
-                {name: "Microni Khulla Twist 1 kg", price: 240, image: null},
-                {name: "Cut Sawaiya Yellow 1 pcs", price: 150, image: null},
-                {name: "Cut Sawaiya Top 1 pcs", price: 150, image: null},
-                {name: "Sawaiya Packet VIP 1 pcs", price: 50, image: null},
-                {name: "Sawaiya Khulla Top 1 kg", price: 240, image: null},
-                {name: "Pasta Sawaiya 1 pcs", price: 70, image: null},
-                {name: "Falooda Sawaiya 1 pcs", price: 150, image: null},
-                {name: "Fajita Spaghetti 2in1 250g", price: 150, image: null},
-                {name: "Microni Tikka 2in1 250g", price: 150, image: null},
-                {name: "Bake Parlour Spaghetti 1 pcs", price: 230, image: null},
-                {name: "Microni Masala 1 pcs", price: 15, image: null}
-            ],
-            "Snacks": [
-                {name: "Papar Challa 1 kg", price: 200, image: null},
-                {name: "Papar Salenty 1 kg", price: 200, image: null},
-                {name: "Papar Badminton 1 kg", price: 400, image: null}
-            ],
-            "Air Fresheners": [
-                {name: "Metro 7 Agarbatti 1 pcs", price: 110, image: null},
-                {name: "Metro Milan Agarbatti 1 pcs", price: 70, image: null},
-                {name: "Room Spray VIP Khushboo 1 pcs", price: 550, image: null},
-                {name: "Mom Batti 1 pcs", price: 10, image: null}
-            ],
-            "Desserts": [
-                {name: "Custard Strawberry 80g", price: 190, image: null},
-                {name: "Custard Banana 80g", price: 190, image: null},
-                {name: "Custard Vanilla 80g", price: 190, image: null},
-                {name: "Custard Mango 80g", price: 190, image: null},
-                {name: "Custard Sachet Mixed 1 pcs", price: 40, image: null},
-                {name: "Jelly Sachet Banana 1 pcs", price: 40, image: null},
-                {name: "Jelly Sachet Strawberry 1 pcs", price: 40, image: null}
-            ],
-            "Pest Control": [
-                {name: "Tyfon Bug Control 1 pcs", price: 380, image: null},
-                {name: "Tyfon Total Control 1 pcs", price: 420, image: null},
-                {name: "Choha Dawai 1 pcs", price: 40, image: null},
-                {name: "Choha Kitab 1 pcs", price: 100, image: null},
-                {name: "Mortein Spray 1 pcs", price: 550, image: null}
-            ],
-            "Toilet Cleaners": [
-                {name: "Harpic Blue 1 pcs", price: 200, image: null},
-                {name: "Harpic Red 1 pcs", price: 250, image: null}
-            ],
-            "Beverages": [
-                {name: "Sogo Gloop 1 pcs", price: 100, image: null},
-                {name: "Tiger Gloop 1 pcs", price: 100, image: null},
-                {name: "Calcee 1 pcs", price: 30, image: null},
-                {name: "Tang Large 1 pcs", price: 330, image: null},
-                {name: "Tang Small 1 pcs", price: 25, image: null}
-            ],
-            "Masalas & Seasoning": [
-                {name: "Qourma Masala Dabba 1 pcs", price: 140, image: null},
-                {name: "Biryani Masala Dabba 1 pcs", price: 140, image: null},
-                {name: "Shami Masala Dabba 1 pcs", price: 140, image: null},
-                {name: "Haleem Masala Dabba 1 pcs", price: 140, image: null},
-                {name: "Achar Masala Dabba 1 pcs", price: 140, image: null},
-                {name: "Karahi Masala Dabba 1 pcs", price: 140, image: null},
-                {name: "Tikka Masala Dabba 1 pcs", price: 140, image: null},
-                {name: "Nihari Masala Sachet 1 pcs", price: 70, image: null},
-                {name: "Chat Masala Sachet 1 pcs", price: 70, image: null},
-                {name: "Kofta Masala Sachet 1 pcs", price: 70, image: null},
-                {name: "Raita Masala 1 pcs", price: 15, image: null},
-                {name: "Essence Biryani 1 pcs", price: 70, image: null},
-                {name: "Essence Kewra 1 pcs", price: 70, image: null}
-            ],
-            "Specialty Items": [
-                {name: "China Namak Packet 1 pcs", price: 10, image: null},
-                {name: "Zafrani Color Khulla 50g", price: 50, image: null},
-                {name: "Food Color Red 50g", price: 60, image: null},
-                {name: "Food Color Green 50g", price: 60, image: null},
-                {name: "Gur Peshawri 1 kg", price: 240, image: null}
-            ],
-            "Baby Care": [
-                {name: "Pamper Small 1 pcs", price: 20, image: null},
-                {name: "Pamper Medium 1 pcs", price: 25, image: null},
-                {name: "Pamper Large 1 pcs", price: 30, image: null}
-            ],
-            "Cleaning Accessories": [
-                {name: "Jhona Bartan VIP 1 pcs", price: 50, image: null},
-                {name: "Scotch Brite 1 pcs", price: 50, image: null},
-                {name: "Scotch Brite Large 1 pcs", price: 80, image: null}
-            ],
-            "Polish": [
-                {name: "Polish Black 1 pcs", price: 230, image: null},
-                {name: "Polish Small 1 pcs", price: 140, image: null}
+            "Other Items": [
+                {name: "Dalia 1 kg", nameUr: "دلیہ 1 کلو", price: 140, image: null},
+                {name: "Sabudana 1 kg", nameUr: "ساگودانہ 1 کلو", price: 440, image: null},
+                {name: "Makhana 1 kg", nameUr: "مکھانا 1 کلو", price: 2000, image: null},
+                {name: "Imli 1 kg", nameUr: "املی 1 کلو", price: 400, image: null},
+                {name: "Aloo Bukhara 1 kg", nameUr: "آلو بخارا 1 کلو", price: 600, image: null},
+                {name: "Gari 1 kg", nameUr: "گاری 1 کلو", price: 800, image: null},
+                {name: "Sufaid Til 1 kg", nameUr: "سفید تل 1 کلو", price: 700, image: null},
+                {name: "Kala Til 1 kg", nameUr: "کالا تل 1 کلو", price: 700, image: null},
+                {name: "Khamira 1 kg", nameUr: "خمیرہ 1 کلو", price: 200, image: null},
+                {name: "Gulab Jal 1 pcs", nameUr: "گلاب جل 1 عدد", price: 100, image: null},
+                {name: "Ark-e-Gulab 1 pcs", nameUr: "عرق گلاب 1 عدد", price: 150, image: null},
+                {name: "Sirka 1 pcs", nameUr: "سرکہ 1 عدد", price: 80, image: null},
+                {name: "Kewra Water 1 pcs", nameUr: "کیوڑہ واٹر 1 عدد", price: 120, image: null},
+                {name: "Podina Khushk 1 kg", nameUr: "پودینہ خشک 1 کلو", price: 1000, image: null},
+                {name: "Adrak Powder 1 kg", nameUr: "ادرک پاؤڈر 1 کلو", price: 1200, image: null},
+                {name: "Lehsun Powder 1 kg", nameUr: "لہسن پاؤڈر 1 کلو", price: 1200, image: null},
+                {name: "Pyaz Powder 1 kg", nameUr: "پیاز پاؤڈر 1 کلو", price: 1000, image: null}
             ]
         };
 
-        // Global variables
-        let cart = [];
+        let currentLanguage = 'en';
+        let salesData = {};
+        let billCounter = 1;
         let isAdminMode = false;
-        let salesData = JSON.parse(localStorage.getItem('salesData')) || {
-            totalSales: 0,
-            totalItems: 0,
-            totalOrders: 0,
-            salesHistory: []
+        let allProducts = [];
+
+        // Category icons mapping
+        const categoryIcons = {
+            "Ghee": "fas fa-cheese",
+            "Oils": "fas fa-oil-can",
+            "Mixed Lentils": "fas fa-seedling", // Represents legumes/grains
+            "Wheat & Rice": "fas fa-wheat-alt",
+            "Flour": "fas fa-bread-slice",
+            "Sugar": "fas fa-cube", // Represents sugar cubes
+            "Millets & Grains": "fas fa-seedling", // Can reuse seedling or find a more specific grain icon
+            "Chickpeas": "fas fa-mitten", // A bit abstract, but could represent small, round items
+            "Mixed Spices": "fas fa-pepper-hot",
+            "Lazzat Masala Sachets": "fas fa-box", // Represents a packet/sachet
+            "Premium Spices": "fas fa-star", // Represents premium quality
+            "Dry Fruits": "fas fa-nut", // Or fas fa-apple-alt for general fruit/dry fruit
+            "Other Items": "fas fa-box-open" // General items
         };
 
-        // Initialize the application
-        document.addEventListener('DOMContentLoaded', function() {
-            renderCategories();
-            updateCartUI();
-            updateSalesDisplay();
-            setupEventListeners();
-        });
-
-        // Setup event listeners
-        function setupEventListeners() {
-            document.getElementById('adminToggle').addEventListener('click', toggleAdminMode);
-            document.getElementById('backToCategories').addEventListener('click', showCategories);
-            document.getElementById('checkoutBtn').addEventListener('click', checkout);
-            document.getElementById('clearCartBtn').addEventListener('click', clearCart);
-            document.getElementById('closeBill').addEventListener('click', closeBillModal);
-            document.getElementById('printBill').addEventListener('click', printBill);
-            document.getElementById('resetSalesBtn').addEventListener('click', resetSales);
-        }
-
-        // Render categories
-        function renderCategories() {
-            const categoriesGrid = document.getElementById('categoriesGrid');
-            const categoryIcons = {
-                'Ghee': 'fas fa-butter',
-                'Oils': 'fas fa-tint',
-                'Mixed Lentils': 'fas fa-seedling',
-                'Wheat & Rice': 'fas fa-grain',
-                'Millets & Grains': 'fas fa-wheat-awn',
-                'Chickpeas': 'fas fa-circle',
-                'Mixed Spices': 'fas fa-pepper-hot',
-                'Premium Spices': 'fas fa-star',
-                'Dry Fruits': 'fas fa-apple-alt',
-                'Milk Products': 'fas fa-glass-whiskey',
-                'Tea & Coffee': 'fas fa-coffee',
-                'Bath Soaps': 'fas fa-soap',
-                'Dishwashing': 'fas fa-sink',
-                'Personal Care': 'fas fa-user-check',
-                'Shampoos': 'fas fa-pump-soap',
-                'Oral Care': 'fas fa-tooth',
-                'Hair Care': 'fas fa-cut',
-                'Household Items': 'fas fa-home',
-                'Condiments': 'fas fa-bottle-droplet',
-                'Laundry Detergents': 'fas fa-tshirt',
-                'Pasta & Noodles': 'fas fa-utensils',
-                'Snacks': 'fas fa-cookie-bite',
-                'Air Fresheners': 'fas fa-air-freshener',
-                'Desserts': 'fas fa-ice-cream',
-                'Pest Control': 'fas fa-bug',
-                'Toilet Cleaners': 'fas fa-toilet',
-                'Beverages': 'fas fa-glass-water',
-                'Masalas & Seasoning': 'fas fa-mortar-pestle',
-                'Specialty Items': 'fas fa-gem',
-                'Baby Care': 'fas fa-baby',
-                'Cleaning Accessories': 'fas fa-broom',
-                'Polish': 'fas fa-shoe-prints'
-            };
-
-            categoriesGrid.innerHTML = Object.keys(groceryData).map(category => `
-                <div class="category-card rounded-lg p-6 text-white cursor-pointer hover:scale-105 transform transition-all duration-300 shadow-lg" onclick="showProducts('${category}')">
-                    <div class="text-center">
-                        <i class="${categoryIcons[category] || 'fas fa-shopping-basket'} text-4xl mb-4"></i>
-                        <h3 class="text-xl font-semibold mb-2">${category}</h3>
-                        <p class="text-sm opacity-90">${groceryData[category].length} items</p>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // Show products for a category
-        function showProducts(category) {
-            document.getElementById('categoriesGrid').parentElement.classList.add('hidden');
-            document.getElementById('productsSection').classList.remove('hidden');
-            document.getElementById('categoryTitle').textContent = category;
-            
-            const productsGrid = document.getElementById('productsGrid');
-            productsGrid.innerHTML = groceryData[category].map((product, index) => {
-                const productId = `${category}-${index}`;
-                return `
-                <div class="product-card bg-white rounded-lg p-6 shadow-lg">
-                    <div class="text-center mb-4">
-                        <div class="w-20 h-20 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <i class="fas fa-box text-2xl text-blue-600"></i>
-                        </div>
-                        <h3 class="font-semibold text-gray-800 mb-2">${product.name}</h3>
-                        <div class="flex items-center justify-center space-x-2">
-                            <span class="text-2xl font-bold text-green-600" id="price-${productId}">${product.price} PKR</span>
-                            ${isAdminMode ? `<button onclick="editPrice('${productId}', '${product.name}', ${product.price}, '${category}', ${index})" class="bg-yellow-500 text-white px-2 py-1 rounded text-xs hover:bg-yellow-600 transition">
-                                <i class="fas fa-edit"></i>
-                            </button>` : ''}
-                        </div>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-2">
-                            <button onclick="changeQuantity('${productId}', '${product.name}', ${product.price}, -1)" class="bg-red-500 text-white w-8 h-8 rounded-full hover:bg-red-600 transition">-</button>
-                            <span class="font-semibold w-8 text-center" id="qty-${productId}">${getProductQuantity(product.name)}</span>
-                            <button onclick="changeQuantity('${productId}', '${product.name}', ${product.price}, 1)" class="bg-green-500 text-white w-8 h-8 rounded-full hover:bg-green-600 transition">+</button>
-                        </div>
-                        <button onclick="addToCart('${product.name}', ${product.price}, '${productId}')" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
-                            <i class="fas fa-cart-plus mr-2"></i>Add
-                        </button>
-                    </div>
-                </div>
-            `;
-            }).join('');
-        }
-
-        // Show categories
-        function showCategories() {
-            document.getElementById('categoriesGrid').parentElement.classList.remove('hidden');
-            document.getElementById('productsSection').classList.add('hidden');
-        }
-
-        // Get product quantity from cart
-        function getProductQuantity(productName) {
-            const cartItem = cart.find(item => item.name === productName);
-            return cartItem ? cartItem.quantity : 0;
-        }
-
-        // Change quantity
-        function changeQuantity(productId, productName, price, delta) {
-            const qtyElement = document.getElementById(`qty-${productId}`);
-            let currentQty = parseInt(qtyElement.textContent);
-            let newQty = Math.max(0, currentQty + delta);
-            qtyElement.textContent = newQty;
-            
-            // Update cart
-            const cartItemIndex = cart.findIndex(item => item.name === productName);
-            if (cartItemIndex >= 0) {
-                if (newQty === 0) {
-                    cart.splice(cartItemIndex, 1);
-                } else {
-                    cart[cartItemIndex].quantity = newQty;
-                    cart[cartItemIndex].price = price; // Update price in case it was changed
-                }
-            } else if (newQty > 0) {
-                cart.push({ name: productName, price: price, quantity: newQty });
-            }
-            updateCartUI();
-        }
-
-        // Add to cart
-        function addToCart(productName, price, productId) {
-            const qtyElement = document.getElementById(`qty-${productId}`);
-            const quantity = parseInt(qtyElement.textContent);
-            
-            if (quantity === 0) {
-                qtyElement.textContent = 1;
-                const existingIndex = cart.findIndex(item => item.name === productName);
-                if (existingIndex >= 0) {
-                    cart[existingIndex].quantity = 1;
-                    cart[existingIndex].price = price;
-                } else {
-                    cart.push({ name: productName, price: price, quantity: 1 });
-                }
-            } else {
-                const cartItem = cart.find(item => item.name === productName);
-                if (cartItem) {
-                    cartItem.quantity = quantity;
-                    cartItem.price = price;
-                } else {
-                    cart.push({ name: productName, price: price, quantity: quantity });
-                }
-            }
-            updateCartUI();
-            
-            // Show success animation
-            const button = event.target.closest('button');
-            const originalContent = button.innerHTML;
-            button.innerHTML = '<i class="fas fa-check mr-2"></i>Added!';
-            button.classList.add('bg-green-600');
-            setTimeout(() => {
-                button.innerHTML = originalContent;
-                button.classList.remove('bg-green-600');
-            }, 1000);
-        }
-
-        // Update cart UI
-        function updateCartUI() {
-            const cartItemsElement = document.getElementById('cartItems');
-            const cartCountElement = document.getElementById('cartCount');
-            const cartTotalElement = document.getElementById('cartTotal');
-            
-            if (cart.length === 0) {
-                cartItemsElement.innerHTML = '<p class="text-gray-500 text-center py-8">Cart is empty</p>';
-            } else {
-                cartItemsElement.innerHTML = cart.map(item => `
-                    <div class="flex justify-between items-center py-3 border-b border-gray-200 hover:bg-gray-50 rounded px-3">
-                        <div class="flex-1">
-                            <div class="font-medium text-gray-800">${item.name}</div>
-                            <div class="text-sm text-gray-500">${item.quantity} × ${item.price} PKR</div>
-                        </div>
-                        <div class="text-right">
-                            <div class="font-bold text-lg text-green-600">${item.quantity * item.price} PKR</div>
-                        </div>
-                    </div>
-                `).join('');
-            }
-            
-            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-            const totalAmount = cart.reduce((sum, item) => sum + (item.quantity * item.price), 0);
-            
-            cartCountElement.textContent = totalItems;
-            cartTotalElement.textContent = `${totalAmount} PKR`;
-        }
-
-        // Toggle admin mode
-        function toggleAdminMode() {
-            isAdminMode = !isAdminMode;
-            const adminToggle = document.getElementById('adminToggle');
-            
-            if (isAdminMode) {
-                adminToggle.innerHTML = '<i class="fas fa-user-shield mr-2"></i>Admin ON';
-                adminToggle.classList.add('bg-green-600');
-            } else {
-                adminToggle.innerHTML = '<i class="fas fa-user-cog mr-2"></i>Admin Mode';
-                adminToggle.classList.remove('bg-green-600');
-            }
-            
-            // Re-render current view to show/hide edit buttons
-            const currentCategory = document.getElementById('categoryTitle').textContent;
-            if (!document.getElementById('productsSection').classList.contains('hidden') && currentCategory) {
-                showProducts(currentCategory);
-            }
-        }
-
-        // Edit price
-        function editPrice(productId, productName, currentPrice, category, index) {
-            const newPrice = prompt(`Edit price for ${productName}:`, currentPrice);
-            if (newPrice && !isNaN(newPrice) && parseFloat(newPrice) > 0) {
-                const priceValue = parseFloat(newPrice);
-                
-                // Update price in data
-                groceryData[category][index].price = priceValue;
-                
-                // Update UI
-                document.getElementById(`price-${productId}`).textContent = `${priceValue} PKR`;
-                
-                // Update cart if item exists
-                const cartItem = cart.find(item => item.name === productName);
-                if (cartItem) {
-                    cartItem.price = priceValue;
-                    updateCartUI();
-                }
-                
-                // Save to localStorage
-                localStorage.setItem('groceryData', JSON.stringify(groceryData));
-            }
-        }
-
-        // Reset sales data
-        function resetSales() {
-            if (confirm('Are you sure you want to reset all sales data? This action cannot be undone.')) {
-                salesData = {
-                    totalSales: 0,
-                    totalItems: 0,
-                    totalOrders: 0,
-                    salesHistory: []
-                };
-                localStorage.setItem('salesData', JSON.stringify(salesData));
-                updateSalesDisplay();
-                
-                // Show success message
-                const resetBtn = document.getElementById('resetSalesBtn');
-                const originalContent = resetBtn.innerHTML;
-                resetBtn.innerHTML = '<i class="fas fa-check mr-2"></i>Reset Complete!';
-                resetBtn.classList.remove('bg-red-600', 'hover:bg-red-700');
-                resetBtn.classList.add('bg-green-600');
-                
-                setTimeout(() => {
-                    resetBtn.innerHTML = originalContent;
-                    resetBtn.classList.remove('bg-green-600');
-                    resetBtn.classList.add('bg-red-600', 'hover:bg-red-700');
-                }, 3000);
-            }
-        }
-
-        // Checkout
-        function checkout() {
-            if (cart.length === 0) {
-                alert('Cart is empty!');
-                return;
-            }
-            
-            // Update sales data
-            const totalAmount = cart.reduce((sum, item) => sum + (item.quantity * item.price), 0);
-            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-            
-            salesData.totalSales += totalAmount;
-            salesData.totalItems += totalItems;
-            salesData.totalOrders += 1;
-            salesData.salesHistory.push({
-                date: new Date().toISOString(),
-                items: [...cart],
-                total: totalAmount
-            });
-            
-            localStorage.setItem('salesData', JSON.stringify(salesData));
-            
-            // Show bill modal
-            showBillModal();
-            
-            // Clear cart
-            cart = [];
-            updateCartUI();
-            updateSalesDisplay();
-            
-            // Reset all quantity displays
-            document.querySelectorAll('[id^="qty-"]').forEach(element => {
-                element.textContent = '0';
-            });
-        }
-
-        // Show bill modal
-        function showBillModal() {
-            const billModal = document.getElementById('billModal');
-            const billDetails = document.getElementById('billDetails');
-            const billTotal = document.getElementById('billTotal');
-            
-            const totalAmount = cart.reduce((sum, item) => sum + (item.quantity * item.price), 0);
-            
-            billDetails.innerHTML = cart.map(item => `
-                <div class="flex justify-between">
-                    <span>${item.name} (${item.quantity})</span>
-                    <span>${item.quantity * item.price} PKR</span>
-                </div>
-            `).join('');
-            
-            billTotal.textContent = `${totalAmount} PKR`;
-            
-            // Prepare print area
-            preparePrintBill();
-            
-            billModal.style.display = 'flex';
-        }
-
-        // Prepare print bill
-        function preparePrintBill() {
-            const billItemsList = document.getElementById('billItemsList');
-            const billFinalTotal = document.getElementById('billFinalTotal');
-            const billDate = document.getElementById('billDate');
-            
-            const totalAmount = cart.reduce((sum, item) => sum + (item.quantity * item.price), 0);
-            const currentDate = new Date().toLocaleDateString('en-GB') + ' ' + new Date().toLocaleTimeString('en-GB', {hour12: false});
-            
-            billDate.textContent = `Date: ${currentDate}`;
-            
-            billItemsList.innerHTML = cart.map(item => `
-                <div class="bill-item">
-                    <div style="flex: 1;">
-                        <div style="font-size: 11px; font-weight: bold;">${item.name}</div>
-                        <div style="font-size: 9px;">${item.quantity} × ${item.price}</div>
-                    </div>
-                    <div style="font-weight: bold;">${item.quantity * item.price}</div>
-                </div>
-            `).join('');
-            
-            billFinalTotal.textContent = `${totalAmount} PKR`;
-        }
-
-        // Close bill modal
-        function closeBillModal() {
-            document.getElementById('billModal').style.display = 'none';
-        }
-
-        // Print bill
-        function printBill() {
-            // Show print area and hide everything else
-            document.getElementById('billPrintArea').style.display = 'block';
-            
-            // Print
-            window.print();
-            
-            // Hide print area after printing
-            setTimeout(() => {
-                document.getElementById('billPrintArea').style.display = 'none';
-            }, 1000);
-        }
-
-        // Clear cart
-        function clearCart() {
-            if (confirm('Are you sure you want to clear the cart?')) {
-                cart = [];
-                updateCartUI();
-                
-                // Reset all quantity displays
-                document.querySelectorAll('[id^="qty-"]').forEach(element => {
-                    element.textContent = '0';
+        // Function to flatten groceryData into a single array for easier searching
+        function flattenProducts() {
+            allProducts = [];
+            for (const category in groceryData) {
+                groceryData[category].forEach(item => {
+                    allProducts.push({
+                        category: category,
+                        ...item
+                    });
                 });
             }
         }
 
-        // Update sales display
-        function updateSalesDisplay() {
-            document.getElementById('totalSalesToday').textContent = `${salesData.totalSales} PKR`;
-            document.getElementById('totalItemsSold').textContent = salesData.totalItems;
-            document.getElementById('totalRevenue').textContent = `${salesData.totalSales} PKR`;
-            document.getElementById('totalOrders').textContent = salesData.totalOrders;
+        // Initialize allProducts on load
+        flattenProducts();
+
+        function applyTranslations() {
+            document.querySelectorAll('[data-translate]').forEach(element => {
+                const key = element.getAttribute('data-translate');
+                if (translations[currentLanguage][key]) {
+                    element.innerHTML = translations[currentLanguage][key];
+                }
+            });
+            document.querySelectorAll('[data-translate-placeholder]').forEach(element => {
+                const key = element.getAttribute('data-translate-placeholder');
+                if (translations[currentLanguage][key]) {
+                    element.placeholder = translations[currentLanguage][key];
+                }
+            });
+
+            // Update category titles
+            const shopByCategoryElement = document.querySelector('h2 [data-translate="shop_by_category"]');
+            if (shopByCategoryElement) {
+                shopByCategoryElement.textContent = translations[currentLanguage]["shop_by_category"];
+            }
+            // Update the store name in the footer directly as it doesn't have data-translate attributes on the h3
+            document.querySelector('footer h3[data-translate="store_name"]').textContent = translations[currentLanguage]["store_name"];
+            document.querySelector('footer p[data-translate="store_description"]').textContent = translations[currentLanguage]["store_description"];
+
+            // Re-render categories and products to apply translations
+            renderCategories(); // Always re-render categories
             
-            const avgOrder = salesData.totalOrders > 0 ? 
-                Math.round(salesData.totalSales / salesData.totalOrders) : 0;
-            document.getElementById('avgOrderValue').textContent = `${avgOrder} PKR`;
-            
-            // Update recent sales
-            updateRecentSales();
+            const currentCategoryId = document.getElementById('categoryTitle').dataset.categoryId;
+            if (currentCategoryId && !document.getElementById('productsSection').classList.contains('hidden')) { 
+                renderProducts(currentCategoryId); // Re-render products if visible
+            }
         }
 
-        // Update recent sales
-        function updateRecentSales() {
-            const recentSalesElement = document.getElementById('recentSales');
-            const recentSales = salesData.salesHistory.slice(-5).reverse();
-            
-            if (recentSales.length === 0) {
-                recentSalesElement.innerHTML = '<p class="text-gray-500 text-center">No recent sales</p>';
+        function changeLanguage(lang) {
+            currentLanguage = lang;
+            document.querySelectorAll('.language-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`.language-btn[onclick="changeLanguage('${lang}')"]`).classList.add('active');
+            document.body.classList.toggle('rtl', lang === 'ur');
+            applyTranslations();
+        }
+
+        function renderCategories() {
+            const categoriesGrid = document.getElementById('categoriesGrid');
+            categoriesGrid.innerHTML = '';
+            for (const category in groceryData) {
+                // Get the translated category name
+                const categoryName = translations[currentLanguage][category] || category;
+                const iconClass = categoryIcons[category] || 'fas fa-box'; // Default icon if not found
+
+                const card = `
+                    <div class="category-card bg-white rounded-lg shadow-md p-6 text-white text-center cursor-pointer transform hover:scale-105" onclick="showProducts('${category}')">
+                        <i class="${iconClass} text-4xl mb-3"></i>
+                        <h3 class="text-xl font-semibold mb-2">${categoryName}</h3>
+                        <p class="text-sm opacity-90">${groceryData[category].length} items</p>
+                    </div>
+                `;
+                categoriesGrid.innerHTML += card;
+            }
+        }
+
+        function showProducts(category) {
+            document.getElementById('categoriesGrid').classList.add('hidden');
+            document.getElementById('productsSection').classList.remove('hidden');
+            const categoryTitleElement = document.getElementById('categoryTitle');
+            categoryTitleElement.textContent = translations[currentLanguage][category] || category; // Use translated category name
+            categoryTitleElement.dataset.categoryId = category; // Store category ID for re-rendering on language change
+            renderProducts(category);
+        }
+
+        function renderProducts(category) {
+            const productsGrid = document.getElementById('productsGrid');
+            productsGrid.innerHTML = '';
+            groceryData[category].forEach(product => {
+                const productName = currentLanguage === 'ur' ? product.nameUr : product.name;
+                const priceDisplay = isAdminMode ?
+                    `<input type="number" class="w-24 text-center border rounded px-2 py-1 price-input" value="${product.price}" data-product-category="${category}" data-product-name="${product.name}">` :
+                    `<span class="font-bold text-lg text-green-600 price-display">${product.price} PKR</span>`;
+
+                const productCard = `
+                    <div class="product-card bg-white rounded-lg shadow-md p-4 flex flex-col items-center text-center ${isAdminMode ? 'price-edit-mode' : ''}" data-original-base-price="${product.price}">
+                        <h3 class="text-lg font-semibold mb-2">${productName}</h3>
+                        <div class="flex items-center space-x-2 mb-3">
+                            <button class="weight-btn" onclick="updateWeight(this, -1, 'gram')">-100g</button>
+                            <span class="weight-display" data-grams="1000" data-unit="kg">1 kg</span>
+                            <button class="weight-btn" onclick="updateWeight(this, 1, 'gram')">+100g</button>
+                            <button class="weight-btn" onclick="updateWeight(this, -1, 'kg')">-1kg</button>
+                            <button class="weight-btn" onclick="updateWeight(this, 1, 'kg')">+1kg</button>
+                        </div>
+                        <p class="text-gray-700 mb-3" data-current-price="${product.price}">${priceDisplay}</p>
+                        <button class="add-to-cart-btn bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition mt-auto"
+                                data-product-name="${product.name}" data-product-price="${product.price}" data-product-ur="${product.nameUr}">
+                            <i class="fas fa-cart-plus mr-2"></i><span data-translate="add_to_cart">Add</span>
+                        </button>
+                    </div>
+                `;
+                productsGrid.innerHTML += productCard;
+            });
+
+            if (isAdminMode) {
+                document.querySelectorAll('.price-input').forEach(input => {
+                    input.addEventListener('change', (event) => {
+                        const productCard = event.target.closest('.product-card');
+                        const category = event.target.dataset.productCategory;
+                        const productName = event.target.dataset.productName;
+                        const newPrice = parseFloat(event.target.value);
+
+                        if (!isNaN(newPrice) && newPrice >= 0) {
+                            const product = groceryData[category].find(item => item.name === productName);
+                            if (product) {
+                                product.price = newPrice;
+                                productCard.dataset.originalBasePrice = newPrice; // Update original base price for future calculations
+                                productCard.querySelector('.add-to-cart-btn').dataset.productPrice = newPrice; // Update current price for add to cart
+                                productCard.querySelector('p').dataset.currentPrice = newPrice; // Update current price on paragraph
+                                saveGroceryData();
+                                updateSalesDashboard();
+                                renderCart(); // Update cart if this item is already there
+                            }
+                        } else {
+                            // Revert to original price if input is invalid
+                            event.target.value = productCard.dataset.originalBasePrice;
+                        }
+                    });
+                });
+            }
+            attachAddToCartListeners();
+        }
+
+        function updateWeight(button, change, unit) {
+            const productCard = button.closest('.product-card');
+            const weightDisplay = productCard.querySelector('.weight-display');
+            let currentGrams = parseInt(weightDisplay.dataset.grams);
+            // Get the original base price per KG from the product card's data attribute
+            const basePricePerKg = parseFloat(productCard.dataset.originalBasePrice); 
+
+            let newGrams;
+            if (unit === 'gram') {
+                newGrams = currentGrams + (change * 100);
+            } else { // 'kg'
+                newGrams = currentGrams + (change * 1000);
+            }
+
+            // Ensure weight doesn't go below 100g
+            newGrams = Math.max(100, newGrams);
+
+            let displayValue;
+            let actualPrice;
+
+            // Calculate actual price based on grams and base price per KG
+            actualPrice = (basePricePerKg / 1000) * newGrams;
+            actualPrice = Math.round(actualPrice); // Round to nearest integer
+
+            if (newGrams >= 1000) {
+                displayValue = `${newGrams / 1000} kg`;
             } else {
-                recentSalesElement.innerHTML = recentSales.map((sale, index) => {
-                    const date = new Date(sale.date);
-                    const timeString = date.toLocaleTimeString('en-GB', {hour12: false});
-                    return `
-                        <div class="bg-gray-50 p-3 rounded-lg">
-                            <div class="flex justify-between items-center">
-                                <span class="font-medium">Order #${salesData.salesHistory.length - index}</span>
-                                <span class="text-green-600 font-bold">${sale.total} PKR</span>
+                displayValue = `${newGrams} g`;
+            }
+            
+            weightDisplay.textContent = displayValue;
+            weightDisplay.dataset.grams = newGrams;
+
+            const priceElementP = productCard.querySelector('p'); // Get the parent <p> element
+            priceElementP.dataset.currentPrice = actualPrice; // Update the current price on the p tag
+
+            const priceDisplayElement = productCard.querySelector('.price-display, .price-input');
+            if (isAdminMode) {
+                priceDisplayElement.value = actualPrice;
+            } else {
+                priceDisplayElement.textContent = `${actualPrice} PKR`;
+            }
+
+            // Update the data-product-price attribute for adding to cart
+            productCard.querySelector('.add-to-cart-btn').dataset.productPrice = actualPrice;
+        }
+
+
+        function attachAddToCartListeners() {
+            document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+                button.onclick = null; // Remove previous listeners to prevent duplicates
+                button.addEventListener('click', (event) => {
+                    const productCard = event.target.closest('.product-card');
+                    const productName = productCard.querySelector('.add-to-cart-btn').dataset.productName;
+                    // Get the *currently displayed* price from the <p> tag's data-current-price
+                    const productPrice = parseFloat(productCard.querySelector('p').dataset.currentPrice); 
+                    const productUrName = productCard.querySelector('.add-to-cart-btn').dataset.productUr;
+                    const weightDisplay = productCard.querySelector('.weight-display');
+                    const weightInGrams = parseInt(weightDisplay.dataset.grams);
+                    const displayWeight = weightDisplay.textContent;
+
+                    addItemToCart(productName, productUrName, productPrice, weightInGrams, displayWeight);
+
+                    // Reset weight and price display after adding to cart
+                    weightDisplay.textContent = "1 kg";
+                    weightDisplay.dataset.grams = "1000";
+                    const originalPriceForReset = parseFloat(productCard.dataset.originalBasePrice);
+
+                    const priceDisplayElement = productCard.querySelector('.price-display, .price-input');
+                    if (isAdminMode) {
+                        priceDisplayElement.value = originalPriceForReset;
+                    } else {
+                        priceDisplayElement.textContent = `${originalPriceForReset} PKR`;
+                    }
+                    productCard.querySelector('.add-to-cart-btn').dataset.productPrice = originalPriceForReset;
+                    productCard.querySelector('p').dataset.currentPrice = originalPriceForReset; // Reset current price on p tag
+                });
+            });
+        }
+
+
+        let cartItems = [];
+
+        function addItemToCart(name, nameUr, price, weightInGrams, displayWeight) {
+            const existingItemIndex = cartItems.findIndex(item => item.name === name && item.weightInGrams === weightInGrams);
+
+            if (existingItemIndex > -1) {
+                cartItems[existingItemIndex].quantity += 1;
+                cartItems[existingItemIndex].totalPrice += price;
+            } else {
+                cartItems.push({
+                    name: name,
+                    nameUr: nameUr,
+                    pricePerUnit: price, // This is the calculated price for the specific weight
+                    quantity: 1,
+                    weightInGrams: weightInGrams,
+                    displayWeight: displayWeight,
+                    totalPrice: price
+                });
+            }
+            renderCart();
+            saveGroceryData();
+        }
+
+        function renderCart() {
+            const cartItemsContainer = document.getElementById('cartItems');
+            const cartTotalElement = document.getElementById('cartTotal');
+            const cartCountElement = document.getElementById('cartCount');
+            cartItemsContainer.innerHTML = '';
+            let total = 0;
+            let itemCount = 0;
+
+            if (cartItems.length === 0) {
+                cartItemsContainer.innerHTML = `<p class="text-gray-500 text-center py-8" data-translate="cart_empty">Cart is empty</p>`;
+            } else {
+                cartItems.forEach((item, index) => {
+                    const itemName = currentLanguage === 'ur' ? item.nameUr : item.name;
+                    const itemElement = `
+                        <div class="flex justify-between items-center bg-gray-100 p-3 rounded-lg mb-2">
+                            <div>
+                                <h4 class="font-semibold">${itemName} (${item.displayWeight})</h4>
+                                <p class="text-sm text-gray-600">${item.quantity} x ${item.pricePerUnit} PKR</p>
                             </div>
-                            <div class="text-sm text-gray-500">${timeString} • ${sale.items.length} items</div>
+                            <div class="flex items-center space-x-3">
+                                <span class="font-bold text-gray-800">${item.totalPrice} PKR</span>
+                                <button class="bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm" onclick="removeFromCart(${index})">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
                         </div>
                     `;
-                }).join('');
+                    cartItemsContainer.innerHTML += itemElement;
+                    total += item.totalPrice;
+                    itemCount += item.quantity;
+                });
             }
+            cartTotalElement.textContent = `${total} PKR`;
+            cartCountElement.textContent = itemCount;
+
+            applyTranslations(); // Apply translations again for dynamically added elements in cart
+        }
+
+        function removeFromCart(index) {
+            cartItems.splice(index, 1);
+            renderCart();
+            saveGroceryData();
+        }
+
+        function checkout() {
+            if (cartItems.length === 0) {
+                alert('Your cart is empty. Please add items before checking out.');
+                return;
+            }
+
+            const billDetails = document.getElementById('billDetails');
+            const billPrintArea = document.getElementById('billPrintArea');
+            let totalAmount = 0;
+            const now = new Date();
+            const date = now.toLocaleDateString();
+            const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            billDetails.innerHTML = '';
+            
+            let billTableRows = '';
+
+            cartItems.forEach(item => {
+                const itemName = currentLanguage === 'ur' ? item.nameUr : item.name;
+                // Make details bold and slightly larger in the modal
+                billDetails.innerHTML += `<p class="font-bold text-lg">${itemName} (${item.displayWeight}) x ${item.quantity} - ${item.totalPrice} PKR</p>`;
+                
+                // Add to print bill table
+                billTableRows += `
+                    <tr>
+                        <td>${itemName}</td>
+                        <td>${item.displayWeight}</td>
+                        <td>${item.pricePerUnit} PKR</td>
+                        <td class="text-right">${item.totalPrice} PKR</td>
+                    </tr>
+                `;
+                totalAmount += item.totalPrice;
+            });
+
+            // Construct the full bill print content dynamically
+            billPrintArea.innerHTML = `
+                <div class="bill-print-content">
+                    <div class="bill-header">
+                         <div class="flex justify-between items-center w-full mb-2">
+                            <span class="text-xs font-bold">1982</span>
+                            <h1 class="text-4xl font-bold urdu-font" style="margin: 0; padding: 0;">باغ عزیز</h1>
+                            <span class="text-xs font-bold">Since</span>
+                        </div>
+                        <h2 class="text-lg font-bold urdu-font" style="margin: 0; padding: 0;">حاجی فخرالدین کریانہ اینڈ جنرل</h2>
+                        <h2 class="text-lg font-bold urdu-font" style="margin: 0; padding: 0;">ہولسیل اسٹور</h2>
+                        <p style="margin: 5px 0; font-size: 10px;" data-translate="store_tagline">${translations[currentLanguage]["store_tagline"]}</p>
+                    </div>
+                    
+                    <div class="flex justify-between text-xs mb-3">
+                        <span><strong>Date:</strong> ${date}</span>
+                        <span><strong>Time:</strong> ${time}</span>
+                    </div>
+
+                    <table class="bill-table">
+                        <thead>
+                            <tr>
+                                <th><strong data-translate="bill_description">${translations[currentLanguage]["bill_description"]}</strong></th>
+                                <th><strong data-translate="bill_weight">${translations[currentLanguage]["bill_weight"]}</strong></th>
+                                <th><strong data-translate="bill_price">${translations[currentLanguage]["bill_price"]}</strong></th>
+                                <th class="text-right"><strong data-translate="bill_total">${translations[currentLanguage]["bill_total"]}</strong></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${billTableRows}
+                        </tbody>
+                    </table>
+                    
+                    <div class="bill-total">
+                        <div class="bill-total-row">
+                            <span><strong data-translate="bill_final_total">${translations[currentLanguage]["bill_final_total"]}</strong></span>
+                            <span id="billFinalTotal"><strong>${totalAmount} PKR</strong></span>
+                        </div>
+                    </div>
+                    
+                    <div class="bill-footer">
+                        <p style="font-size: 10px; margin: 5px 0;" data-translate="thank_you">${translations[currentLanguage]["thank_you"]}</p>
+                        <strong><p style="font-size: 12px; margin: 0;" data-translate="phone1">${translations[currentLanguage]["phone1"]}</p></strong>
+                        <strong><p style="font-size: 12px; margin: 0;" data-translate="phone2">${translations[currentLanguage]["phone2"]}</p></strong>
+                    </div>
+                    
+                    <div class="bill-number" id="billNumber">
+                        <strong>Bill #: </strong><span id="billNumberValue">${String(billCounter).padStart(4, '0')}</span>
+                    </div>
+                </div>
+            `;
+
+
+            document.getElementById('billTotal').textContent = `${totalAmount} PKR`;
+            
+            document.getElementById('billModal').classList.remove('hidden');
+            document.getElementById('billModal').classList.add('flex');
+
+            // Update sales data
+            salesData.totalRevenue = (salesData.totalRevenue || 0) + totalAmount;
+            salesData.totalItemsSold = (salesData.totalItemsSold || 0) + cartItems.reduce((sum, item) => sum + item.quantity, 0);
+            salesData.totalOrders = (salesData.totalOrders || 0) + 1;
+            
+            // Add to recent sales
+            salesData.recentSales = salesData.recentSales || [];
+            salesData.recentSales.unshift({
+                billId: billCounter,
+                total: totalAmount,
+                date: new Date().toLocaleString()
+            });
+            if (salesData.recentSales.length > 5) {
+                salesData.recentSales.pop(); // Keep only last 5
+            }
+
+            billCounter++; // Increment bill number for next transaction
+            cartItems = []; // Clear cart after checkout
+            renderCart(); // Update cart display
+            updateSalesDashboard(); // Update dashboard
+            saveGroceryData(); // Save all sales data
+            applyTranslations(); // Reapply translations for bill modal
+        }
+
+        function updateSalesDashboard() {
+            document.getElementById('totalSalesToday').textContent = `${salesData.totalRevenue || 0} PKR`;
+            document.getElementById('totalItemsSold').textContent = salesData.totalItemsSold || 0;
+            document.getElementById('totalRevenue').textContent = `${salesData.totalRevenue || 0} PKR`;
+            document.getElementById('totalOrders').textContent = salesData.totalOrders || 0;
+            const avgOrderValue = salesData.totalOrders > 0 ? (salesData.totalRevenue / salesData.totalOrders).toFixed(2) : 0;
+            document.getElementById('avgOrderValue').textContent = `${avgOrderValue} PKR`;
+
+            const recentSalesContainer = document.getElementById('recentSales');
+            recentSalesContainer.innerHTML = '';
+            if (salesData.recentSales && salesData.recentSales.length > 0) {
+                salesData.recentSales.forEach(sale => {
+                    recentSalesContainer.innerHTML += `
+                        <div class="flex justify-between items-center p-2 bg-gray-50 rounded-lg">
+                            <span>Bill #${String(sale.billId).padStart(4, '0')}</span>
+                            <span class="font-semibold">${sale.total} PKR</span>
+                            <span class="text-xs text-gray-500">${sale.date}</span>
+                        </div>
+                    `;
+                });
+            } else {
+                recentSalesContainer.innerHTML = `<p class="text-gray-500 text-center py-4">No recent sales</p>`;
+            }
+            applyTranslations();
+        }
+
+        function resetSales() {
+            if (confirm('Are you sure you want to reset all daily sales data? This cannot be undone.')) {
+                salesData = {};
+                localStorage.removeItem('groceryData'); // Clear stored sales data
+                updateSalesDashboard();
+                alert('Daily sales data has been reset.');
+            }
+        }
+
+        function saveGroceryData() {
+            localStorage.setItem('groceryData', JSON.stringify(salesData));
+            localStorage.setItem('billCounter', billCounter);
+            // Optionally, save processedGroceryData if it changes during runtime (not expected by prompt)
+            // localStorage.setItem('processedGroceryData', JSON.stringify(processedGroceryData)); 
         }
 
         // Load saved data on startup
         document.addEventListener('DOMContentLoaded', function() {
-            const savedGroceryData = localStorage.getItem('groceryData');
-            if (savedGroceryData) {
-                Object.assign(groceryData, JSON.parse(savedGroceryData));
+            const savedSalesData = localStorage.getItem('groceryData');
+            if (savedSalesData) {
+                Object.assign(salesData, JSON.parse(savedSalesData));
+            }
+            const savedBillCounter = localStorage.getItem('billCounter');
+            if (savedBillCounter) {
+                billCounter = parseInt(savedBillCounter);
+            }
+            // If processedGroceryData was saved and might change, load it here.
+            // const savedProcessedGroceryData = localStorage.getItem('processedGroceryData');
+            // if (savedProcessedGroceryData) {
+            //     processedGroceryData = JSON.parse(savedProcessedGroceryData);
+            // } else {
+            //     processedGroceryData = processGroceryData(groceryData); // Process if not saved
+            // }
+
+            applyTranslations();
+            renderCategories();
+            renderCart();
+            updateSalesDashboard();
+        });
+
+        document.getElementById('backToCategories').addEventListener('click', () => {
+            document.getElementById('productsSection').classList.add('hidden');
+            document.getElementById('categoriesGrid').classList.remove('hidden');
+            document.getElementById('searchInput').value = ''; // Clear search input
+            document.getElementById('searchResults').classList.add('hidden'); // Hide search results
+        });
+
+        document.getElementById('checkoutBtn').addEventListener('click', checkout);
+        document.getElementById('clearCartBtn').addEventListener('click', () => {
+            if (confirm('Are you sure you want to clear your shopping cart?')) {
+                cartItems = [];
+                renderCart();
+                saveGroceryData();
             }
         });
+        document.getElementById('resetSalesBtn').addEventListener('click', resetSales);
+
+        document.getElementById('closeBill').addEventListener('click', () => {
+            document.getElementById('billModal').classList.add('hidden');
+            document.getElementById('billModal').classList.remove('flex');
+        });
+
+        document.getElementById('printBill').addEventListener('click', () => {
+            const printArea = document.getElementById('billPrintArea');
+            const originalDisplay = printArea.style.display;
+            printArea.style.display = 'block'; // Make print area visible for printing
+            window.print();
+            printArea.style.display = originalDisplay; // Revert to original display style
+        });
+
+        // Admin Mode Toggle
+        document.getElementById('adminToggle').addEventListener('click', () => {
+            isAdminMode = !isAdminMode;
+            document.body.classList.toggle('admin-mode-active', isAdminMode); // Add a class to body for global styling if needed
+            renderCategories(); // Re-render categories to show/hide edit options
+            const currentCategoryId = document.getElementById('categoryTitle').dataset.categoryId;
+            if (currentCategoryId && !document.getElementById('productsSection').classList.contains('hidden')) {
+                renderProducts(currentCategoryId); // Re-render products if visible
+            }
+            alert(`Admin Mode is now ${isAdminMode ? 'ON' : 'OFF'}`);
+        });
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', (event) => {
+            const query = event.target.value.toLowerCase();
+            const searchResultsContainer = document.getElementById('searchResults');
+            searchResultsContainer.innerHTML = '';
+
+            if (query.length > 1) {
+                const filteredProducts = allProducts.filter(product =>
+                    product.name.toLowerCase().includes(query) ||
+                    (product.nameUr && product.nameUr.toLowerCase().includes(query))
+                );
+
+                if (filteredProducts.length > 0) {
+                    searchResultsContainer.classList.remove('hidden');
+                    filteredProducts.forEach(product => {
+                        const productName = currentLanguage === 'ur' ? product.nameUr : product.name;
+                        const searchItem = document.createElement('div');
+                        searchItem.classList.add('search-item');
+                        searchItem.textContent = `${productName} - ${product.price} PKR`;
+                        searchItem.dataset.productName = product.name;
+                        searchItem.dataset.productPrice = product.price; // This will be the base price
+                        searchItem.dataset.productUr = product.nameUr;
+                        searchItem.dataset.productCategory = product.category; // Needed for price update if admin mode active
+
+                        searchItem.addEventListener('click', (e) => {
+                            const category = e.target.dataset.productCategory;
+                            const fullProduct = groceryData[category].find(p => p.name === e.target.dataset.productName);
+
+                            if (fullProduct) {
+                                // For items added via search, assume 1 unit of base quantity (e.g., 1kg for kg items, 1pcs for pcs items)
+                                const defaultWeightInGrams = 1000; // Default to 1kg or 1 unit for search results
+                                const defaultDisplayWeight = "1 kg"; // Default to 1kg
+
+                                addItemToCart(
+                                    fullProduct.name,
+                                    fullProduct.nameUr,
+                                    fullProduct.price, // Use base price from groceryData, assumes per KG or per unit
+                                    defaultWeightInGrams,
+                                    defaultDisplayWeight
+                                );
+                            }
+                            searchResultsContainer.classList.add('hidden');
+                            document.getElementById('searchInput').value = '';
+                        });
+                        searchResultsContainer.appendChild(searchItem);
+                    });
+                } else {
+                    searchResultsContainer.classList.add('hidden');
+                }
+            } else {
+                searchResultsContainer.classList.add('hidden');
+            }
+        });
+
     </script>
 </body>
 </html>
