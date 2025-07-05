@@ -166,89 +166,59 @@
             text-align: center;
         }
 
-        /* Print Styles */
-        @media print {
-            body * {
-                visibility: hidden;
-            }
-            .print-area, .print-area * {
-                visibility: visible;
-            }
-            .print-area {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-            }
-            .no-print {
-                display: none !important;
-            }
-
-            /* Bold and slightly larger text in print bill */
-            .bill-print-content .bill-table td {
-                font-weight: bold;
-                font-size: 12px; /* Slightly larger */
-            }
-
-            .bill-print-content .bill-total-row span {
-                font-weight: bold; /* Already bold, ensure it stays */
-                font-size: 16px; /* Slightly larger total */
-            }
-        }
-
-        /* Enhanced Bill Print Styles */
+        /* --- UPDATED BILL STYLES --- */
         .bill-print-content {
             font-family: 'Courier New', monospace;
             max-width: 400px;
             margin: 0 auto;
             padding: 20px;
             background: white;
+            color: black;
         }
         
         .bill-header {
             text-align: center;
             padding-bottom: 15px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #000;
+        }
+
+        .bill-top-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 15px;
+        }
+
+        .bill-top-heading h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            line-height: 1;
+        }
+
+        .since-text {
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .store-name-subheading {
+            font-weight: bold;
+            font-size: 1.1rem;
+            line-height: 1.4;
+        }
+
+        .store-name-subheading p {
+            margin: 0;
+        }
+
+        .bill-header h2, .logo-brand, .store-tagline-print, .store-description-print {
+            display: none;
         }
         
-        .bill-header h2 {
-            font-size: 18px;
-            font-weight: bold;
-            margin: 0 0 5px 0;
-            font-family: 'Poppins', sans-serif;
-        }
-        
-        /* New Logo Styles for Print */
-        .logo-brand {
-            display: flex;
-            align-items: center;
-            justify-content: center; /* Center the entire logo assembly */
-            gap: 10px; /* Space between elements */
-            margin-bottom: 10px;
-        }
-
-        .logo-icon-print {
-            width: 40px; /* Same as current logo-print */
-            height: 40px; /* Same as current logo-print */
-            background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0; /* Prevent icon from shrinking */
-        }
-
-        .logo-text-left,
-        .logo-text-right {
-            font-size: 14px; /* Adjust font size as needed */
-            font-weight: bold;
-            color: #333; /* Darker color for print visibility */
-        }
-
         .bill-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         
         .bill-table th {
@@ -256,13 +226,16 @@
             padding: 8px 4px;
             text-align: left;
             font-size: 12px;
-            border-bottom: 1px solid #000;
+            border-bottom: 2px solid #000;
+            color: black;
         }
         
         .bill-table td {
-            padding: 6px 4px;
+            padding: 8px 4px;
             font-size: 11px;
-            border-bottom: 1px dotted #ccc;
+            border-bottom: none; /* REMOVED dotted underline */
+            color: black;
+            font-weight: bold; /* ADDED bold as requested */
         }
         
         .bill-table .text-right {
@@ -272,22 +245,26 @@
         .bill-total {
             padding-top: 10px;
             margin-top: 15px;
-            border-top: 1px solid #000;
+            border-top: 2px solid #000;
         }
         
         .bill-total-row {
             display: flex;
             justify-content: space-between;
             font-weight: bold;
-            font-size: 14px;
+            font-size: 16px;
             margin-bottom: 10px;
+            color: black;
         }
         
         .bill-footer {
             text-align: center;
             margin-top: 20px;
             padding-top: 15px;
-            border-top: 1px solid #ccc;
+            border-top: 1px dashed #666;
+            font-size: 12px;
+            color: black;
+            font-weight: bold;
         }
         
         .bill-number {
@@ -295,6 +272,121 @@
             font-size: 12px;
             margin-top: 15px;
             font-weight: bold;
+            color: black;
+        }
+
+        /* --- UPDATED PRINT STYLES --- */
+        @media print {
+            @page {
+                size: A4;
+                margin: 0.5in;
+            }
+            
+            * {
+                visibility: hidden;
+            }
+            
+            .print-area, .print-area * {
+                visibility: visible !important;
+            }
+            
+            .print-area {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                background: white !important;
+            }
+            
+            .bill-print-content {
+                width: 100% !important;
+                max-width: none !important;
+                margin: 0 auto !important;
+                padding: 20px !important;
+                color: black !important;
+                background: white !important;
+            }
+            
+            .bill-header {
+                border-bottom: 2px solid #000 !important;
+                margin-bottom: 20px !important;
+                padding-bottom: 15px !important;
+            }
+            
+            .bill-top-heading h1 {
+                font-size: 3rem !important;
+            }
+
+            .since-text {
+                font-size: 1.2rem !important;
+            }
+
+            .store-name-subheading {
+                font-size: 1.5rem !important;
+                line-height: 1.5 !important;
+            }
+            
+            .bill-table {
+                width: 100% !important;
+                border-collapse: collapse !important;
+                margin-bottom: 20px !important;
+            }
+            
+            .bill-table th {
+                font-weight: bold !important;
+                padding: 10px 5px !important;
+                font-size: 14px !important;
+                border-bottom: 2px solid #000 !important;
+                color: black !important;
+            }
+            
+            .bill-table td {
+                padding: 8px 5px !important;
+                font-size: 13px !important;
+                border-bottom: none !important;
+                color: black !important;
+                font-weight: bold !important;
+            }
+            
+            .bill-total {
+                border-top: 2px solid #000 !important;
+                padding-top: 15px !important;
+                margin-top: 20px !important;
+            }
+            
+            .bill-total-row {
+                font-size: 18px !important;
+                font-weight: bold !important;
+                color: black !important;
+                margin-bottom: 15px !important;
+            }
+            
+            .bill-footer {
+                border-top: 1px dashed #000 !important;
+                padding-top: 15px !important;
+                margin-top: 20px !important;
+                font-size: 14px !important;
+                color: black !important;
+                font-weight: bold !important;
+            }
+            
+            .bill-number {
+                font-size: 14px !important;
+                font-weight: bold !important;
+                color: black !important;
+                margin-top: 15px !important;
+            }
+            
+            .logo-icon-print {
+                display: none !important;
+            }
+            
+            .no-print {
+                display: none !important;
+            }
         }
 
         /* Cart styles for better mobile responsiveness */
@@ -486,9 +578,9 @@
             <div class="search-container mt-6">
                 <div class="relative">
                     <input type="text" id="searchInput" 
-                           class="w-full px-4 py-3 pl-12 pr-4 text-black bg-white rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-300" 
-                           data-translate-placeholder="search_placeholder" 
-                           placeholder="Search for grocery items...">
+                        class="w-full px-4 py-3 pl-12 pr-4 text-black bg-white rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-300" 
+                        data-translate-placeholder="search_placeholder" 
+                        placeholder="Search for grocery items...">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <i class="fas fa-search text-gray-400"></i>
                     </div>
@@ -499,7 +591,7 @@
     </header>
 
     <main class="container mx-auto px-4 py-8 no-print">
-        <section class="mb-12">
+        <section class="mb-12" id="categoriesSection">
             <h2 class="text-2xl md:text-3xl font-bold text-center mb-8 text-gray-800">
                 <i class="fas fa-th-large mr-3 text-blue-600"></i><span data-translate="shop_by_category">Shop by Category</span>
             </h2>
@@ -627,8 +719,7 @@
                     <h3 class="text-xl font-bold mb-4" data-translate="store_name"></h3>
                     <p class="text-gray-300" data-translate="store_description"></p>
                 </div>
-                <div class="hidden md:block"></div> <!-- Hidden on small screens -->
-                <div>
+                <div class="hidden md:block"></div> <div>
                     <h3 class="text-lg font-semibold mb-4" data-translate="connect_with_us">Connect With Us</h3>
                     <p class="text-gray-300"><i class="fas fa-phone mr-2"></i>0325-3545682</p>
                     <p class="text-gray-300"><i class="fas fa-phone mr-2"></i>0341-3020958</p>
@@ -697,8 +788,8 @@
                 "Other Items": "Other Items"
             },
             ur: {
-                store_name: "حاجی فخرالدین کریانہ اینڈ جنرل ہولسیل اسٹور",
-                store_tagline: "ہمارے یہاں ہر قسم کے چاول ہر قسم کے دالیں گرم مصالحہ جات اور بہترین ڈرایٔ فروٹ مناسب قیمت پر دستیاب ہیں ",
+                store_name: "باغ عزیز",
+                store_tagline: "حاجی فخرالدین کریانہ اینڈ جنرل ہولسیل اسٹور",
                 store_description: "ہمارے یہاں ہر قسم کے چاول ہر قسم کے دالیں گرم مصالحہ جات اور بہترین ڈرایٔ فروٹ مناسب قیمت پر دستیاب ہیں",
                 admin_mode: "ایڈمن موڈ",
                 search_placeholder: "کریانہ سامان تلاش کریں...",
@@ -838,695 +929,294 @@
                 {name: "Lazzat Nihari 1 pcs", nameUr: "لذت نہاری 1 پیس", price: 20, image: null},
                 {name: "Lazzat Shami Kabab 1 pcs", nameUr: "لذت شامی کباب 1 پیس", price: 20, image: null},
                 {name: "Lazzat Qeema Fry 1 pcs", nameUr: "لذت قیمہ فرائی 1 پیس", price: 10, image: null},
-                {name: "Lazzat Dal Masala 1 pcs", nameUr: "لذت دال مسالہ 1 پیس", price: 10, image: null},
-                {name: "Lazzat Mix Sabzi 1 pcs", nameUr: "لذت مکس سبزی 1 پیس", price: 10, image: null},
-                {name: "Lazzat Mirch Fry 1 pcs", nameUr: "لذت مرچ فرائی 1 پیس", price: 10, image: null},
-                {name: "Lazzat Gosht Galany ka Powder 1 pcs", nameUr: "لذت گوشت گلانے کا پاؤڈر 1 پیس", price: 20, image: null},
-                {name: "Lazzat Pulao 1 pcs", nameUr: "لذت پلاؤ 1 پیس", price: 20, image: null},
-                {name: "Lazzat Kaleji Masala 1 pcs", nameUr: "لذت کلیجی مسالہ 1 پیس", price: 20, image: null},
-                {name: "Lazzat Kali Mirch Powder 1 pcs", nameUr: "لذت کالی مرچ پاؤڈر 1 پیس", price: 20, image: null},
-                {name: "Lazzat Garam Masala Powder 1 pcs", nameUr: "لذت گرم مسالہ پاؤڈر 1 پیس", price: 20, image: null},
-                {name: "Lazzat Chat Masala 1 pcs", nameUr: "لذت چاٹ مسالہ 1 پیس", price: 10, image: null}
+                {name: "Lazzat Daal Fry 1 pcs", nameUr: "لذت دال فرائی 1 پیس", price: 10, image: null},
+                {name: "Lazzat Kofta 1 pcs", nameUr: "لذت کوفتہ 1 پیس", price: 10, image: null},
+                {name: "Lazzat Paya 1 pcs", nameUr: "لذت پایا 1 پیس", price: 20, image: null},
+                {name: "Lazzat Haleem 1 pcs", nameUr: "لذت حلیم 1 پیس", price: 20, image: null},
+                {name: "Lazzat White Karahi 1 pcs", nameUr: "لذت وائٹ کڑاہی 1 پیس", price: 20, image: null},
+                {name: "Lazzat Chasni 1 pcs", nameUr: "لذت چاشنی 1 پیس", price: 20, image: null},
+                {name: "Lazzat Chicken Masala 1 pcs", nameUr: "لذت چکن مسالہ 1 پیس", price: 10, image: null},
+                {name: "Lazzat Tikka Boti 1 pcs", nameUr: "لذت ٹکہ بوٹی 1 پیس", price: 10, image: null}
             ],
             "Premium Spices": [
-                {name: "Khashkhash VIP 1 kg", nameUr: "خشخاش وی آئی پی 1 کلو", price: 1000, image: null},
-                {name: "Sago Dana VIP 1 kg", nameUr: "ساگو دانا وی آئی پی 1 کلو", price: 440, image: null},
-                {name: "Sonf VIP 1 kg", nameUr: "سونف وی آئی پی 1 کلو", price: 800, image: null},
-                {name: "Tatri Top 1 kg", nameUr: "تاتری ٹاپ 1 کلو", price: 1000, image: null},
-                {name: "China Namak 1 kg", nameUr: "چائنا نمک 1 کلو", price: 1400, image: null},
-                {name: "Dar Chini Top 1 kg", nameUr: "دار چینی ٹاپ 1 کلو", price: 2800, image: null},
-                {name: "Badyan Phol VIP 1 kg", nameUr: "بادیان پھول وی آئی پی 1 کلو", price: 3200, image: null},
-                {name: "Bari Ilaichi VIP 1 kg", nameUr: "بڑی الائچی وی آئی پی 1 کلو", price: 6000, image: null},
-                {name: "Choti Ilaichi Top 1 kg", nameUr: "چھوٹی الائچی ٹاپ 1 کلو", price: 10000, image: null},
-                {name: "Long Top 1 kg", nameUr: "لونگ ٹاپ 1 کلو", price: 3000, image: null}
+                {name: "Elaichi Sabz 10g", nameUr: "الائچی سبز 10 گرام", price: 100, image: null},
+                {name: "Elaichi Sabz 25g", nameUr: "الائچی سبز 25 گرام", price: 240, image: null},
+                {name: "Elaichi Sabz 50g", nameUr: "الائچی سبز 50 گرام", price: 480, image: null},
+                {name: "Long 25g", nameUr: "لونگ 25 گرام", price: 150, image: null},
+                {name: "Long 50g", nameUr: "لونگ 50 گرام", price: 300, image: null},
+                {name: "Darchini 25g", nameUr: "دارچینی 25 گرام", price: 60, image: null},
+                {name: "Darchini 50g", nameUr: "دارچینی 50 گرام", price: 120, image: null},
+                {name: "Badiyan 25g", nameUr: "بادیان 25 گرام", price: 80, image: null},
+                {name: "Badiyan 50g", nameUr: "بادیان 50 گرام", price: 160, image: null},
+                {name: "Kabab Cheeni 25g", nameUr: "کباب چینی 25 گرام", price: 100, image: null},
+                {name: "Kabab Cheeni 50g", nameUr: "کباب چینی 50 گرام", price: 200, image: null},
+                {name: "Jaifal 25g", nameUr: "جائفل 25 گرام", price: 120, image: null},
+                {name: "Jaifal 50g", nameUr: "جائفل 50 گرام", price: 240, image: null},
+                {name: "Javitri 25g", nameUr: "جاوتری 25 گرام", price: 200, image: null},
+                {name: "Javitri 50g", nameUr: "جاوتری 50 گرام", price: 400, image: null},
+                {name: "Tez Patta 25g", nameUr: "تیز پتا 25 گرام", price: 50, image: null},
+                {name: "Tez Patta 50g", nameUr: "تیز پتا 50 گرام", price: 100, image: null},
+                {name: "Piple 25g", nameUr: "پیپل 25 گرام", price: 80, image: null},
+                {name: "Piple 50g", nameUr: "پیپل 50 گرام", price: 160, image: null},
+                {name: "Amla 25g", nameUr: "آملہ 25 گرام", price: 40, image: null},
+                {name: "Amla 50g", nameUr: "آملہ 50 گرام", price: 80, image: null},
+                {name: "Tukhmalo 50g", nameUr: "تخم بالنگا 50 گرام", price: 60, image: null},
+                {name: "Tukhmalo 100g", nameUr: "تخم بالنگا 100 گرام", price: 120, image: null}
             ],
             "Dry Fruits": [
-                {name: "Badam Top 1 kg", nameUr: "بادام ٹاپ 1 کلو", price: 3200, image: null},
-                {name: "Pisi Naryal China Top 1 kg", nameUr: "پسی ناریل چائنا ٹاپ 1 کلو", price: 1600, image: null},
-                {name: "Pista VIP 1 kg", nameUr: "پستہ وی آئی پی 1 کلو", price: 3000, image: null},
-                {name: "Kaju VIP 1 kg", nameUr: "کاجو وی آئی پی 1 کلو", price: 2800, image: null},
-                {name: "Akhrot VIP 1 kg", nameUr: "اخروٹ وی آئی پی 1 کلو", price: 2400, image: null},
-                {name: "Chilgoza VIP 1 kg", nameUr: "چلغوزہ وی آئی پی 1 کلو", price: 8000, image: null},
-                {name: "Kishmish VIP 1 kg", nameUr: "کشمش وی آئی پی 1 کلو", price: 1600, image: null},
-                {name: "Anjeer VIP 1 kg", nameUr: "انجیر وی آئی پی 1 کلو", price: 2000, image: null},
-                {name: "Khajoor VIP 1 kg", nameUr: "کھجور وی آئی پی 1 کلو", price: 1200, image: null},
-                {name: "Apricot VIP 1 kg", nameUr: "خوبانی وی آئی پی 1 کلو", price: 1800, image: null},
-                {name: "Mungfali Bhuni 1 kg", nameUr: "مونگ پھلی بھنی 1 کلو", price: 800, image: null},
-                {name: "Kaju Tukra 1 kg", nameUr: "کاجو ٹکڑا 1 کلو", price: 1800, image: null},
-                {name: "Badam Kagzi 1 kg", nameUr: "بادام کاغذی 1 کلو", price: 2800, image: null}
+                {name: "Badam 250g", nameUr: "بادام 250 گرام", price: 400, image: null},
+                {name: "Badam 500g", nameUr: "بادام 500 گرام", price: 800, image: null},
+                {name: "Badam 1 kg", nameUr: "بادام 1 کلو", price: 1600, image: null},
+                {name: "Pista 250g", nameUr: "پستہ 250 گرام", price: 500, image: null},
+                {name: "Pista 500g", nameUr: "پستہ 500 گرام", price: 1000, image: null},
+                {name: "Pista 1 kg", nameUr: "پستہ 1 کلو", price: 2000, image: null},
+                {name: "Akhrot 250g", nameUr: "اخروٹ 250 گرام", price: 300, image: null},
+                {name: "Akhrot 500g", nameUr: "اخروٹ 500 گرام", price: 600, image: null},
+                {name: "Akhrot 1 kg", nameUr: "اخروٹ 1 کلو", price: 1200, image: null},
+                {name: "Kaju 250g", nameUr: "کاجو 250 گرام", price: 600, image: null},
+                {name: "Kaju 500g", nameUr: "کاجو 500 گرام", price: 1200, image: null},
+                {name: "Kaju 1 kg", nameUr: "کاجو 1 کلو", price: 2400, image: null},
+                {name: "Kishmish 250g", nameUr: "کشمش 250 گرام", price: 200, image: null},
+                {name: "Kishmish 500g", nameUr: "کشمش 500 گرام", price: 400, image: null},
+                {name: "Kishmish 1 kg", nameUr: "کشمش 1 کلو", price: 800, image: null},
+                {name: "Khopra 250g", nameUr: "کھوپرا 250 گرام", price: 150, image: null},
+                {name: "Khopra 500g", nameUr: "کھوپرا 500 گرام", price: 300, image: null},
+                {name: "Khopra 1 kg", nameUr: "کھوپرا 1 کلو", price: 600, image: null},
+                {name: "Chilgoza 250g", nameUr: "چلغوزہ 250 گرام", price: 1500, image: null},
+                {name: "Chilgoza 500g", nameUr: "چلغوزہ 500 گرام", price: 3000, image: null},
+                {name: "Chilgoza 1 kg", nameUr: "چلغوزہ 1 کلو", price: 6000, image: null},
+                {name: "Anjeer 250g", nameUr: "انجیر 250 گرام", price: 400, image: null},
+                {name: "Anjeer 500g", nameUr: "انجیر 500 گرام", price: 800, image: null},
+                {name: "Anjeer 1 kg", nameUr: "انجیر 1 کلو", price: 1600, image: null},
+                {name: "Badam Giri 250g", nameUr: "بادام گری 250 گرام", price: 500, image: null},
+                {name: "Badam Giri 500g", nameUr: "بادام گری 500 گرام", price: 1000, image: null},
+                {name: "Badam Giri 1 kg", nameUr: "بادام گری 1 کلو", price: 2000, image: null}
             ],
             "Other Items": [
-                {name: "Dalia 1 kg", nameUr: "دلیہ 1 کلو", price: 140, image: null},
-                {name: "Sabudana 1 kg", nameUr: "ساگودانہ 1 کلو", price: 440, image: null},
-                {name: "Makhana 1 kg", nameUr: "مکھانا 1 کلو", price: 2000, image: null},
-                {name: "Imli 1 kg", nameUr: "املی 1 کلو", price: 400, image: null},
-                {name: "Aloo Bukhara 1 kg", nameUr: "آلو بخارا 1 کلو", price: 600, image: null},
-                {name: "Gari 1 kg", nameUr: "گاری 1 کلو", price: 800, image: null},
-                {name: "Sufaid Til 1 kg", nameUr: "سفید تل 1 کلو", price: 700, image: null},
-                {name: "Kala Til 1 kg", nameUr: "کالا تل 1 کلو", price: 700, image: null},
-                {name: "Khamira 1 kg", nameUr: "خمیرہ 1 کلو", price: 200, image: null},
-                {name: "Gulab Jal 1 pcs", nameUr: "گلاب جل 1 عدد", price: 100, image: null},
-                {name: "Ark-e-Gulab 1 pcs", nameUr: "عرق گلاب 1 عدد", price: 150, image: null},
-                {name: "Sirka 1 pcs", nameUr: "سرکہ 1 عدد", price: 80, image: null},
-                {name: "Kewra Water 1 pcs", nameUr: "کیوڑہ واٹر 1 عدد", price: 120, image: null},
-                {name: "Podina Khushk 1 kg", nameUr: "پودینہ خشک 1 کلو", price: 1000, image: null},
-                {name: "Adrak Powder 1 kg", nameUr: "ادرک پاؤڈر 1 کلو", price: 1200, image: null},
-                {name: "Lehsun Powder 1 kg", nameUr: "لہسن پاؤڈر 1 کلو", price: 1200, image: null},
-                {name: "Pyaz Powder 1 kg", nameUr: "پیاز پاؤڈر 1 کلو", price: 1000, image: null}
+                {name: "Imli", nameUr: "املی", price: 100, image: null},
+                {name: "Alu Bukhara", nameUr: "آلو بخارا", price: 150, image: null},
+                {name: "Hari Mirch", nameUr: "ہری مرچ", price: 50, image: null},
+                {name: "Lehsun", nameUr: "لہسن", price: 80, image: null},
+                {name: "Adrak", nameUr: "ادرک", price: 120, image: null},
+                {name: "Pyaz", nameUr: "پیاز", price: 60, image: null},
+                {name: "Tamatar", nameUr: "ٹماٹر", price: 70, image: null},
+                {name: "Aalo", nameUr: "آلو", price: 40, image: null},
+                {name: "Lemon", nameUr: "لیموں", price: 30, image: null},
+                {name: "Kata Chana", nameUr: "کٹا چنا", price: 180, image: null}
             ]
         };
 
+        let currentCategory = '';
+        let cart = []; // { name, nameUr, basePrice, quantityGrams, displayWeight, totalItemPrice }
         let currentLanguage = 'en';
-        let salesData = {};
-        let billCounter = 1;
-        let isAdminMode = false;
-        let allProducts = [];
+        let totalSalesToday = 0;
+        let totalItemsSold = 0;
+        let totalOrders = 0;
+        let recentSales = [];
+        const MAX_RECENT_SALES = 5; // Limit for recent sales display
 
-        // Category icons mapping
-        const categoryIcons = {
-            "Ghee": "fas fa-cheese",
-            "Oils": "fas fa-oil-can",
-            "Mixed Lentils": "fas fa-seedling", // Represents legumes/grains
-            "Wheat & Rice": "fas fa-wheat-alt",
-            "Flour": "fas fa-bread-slice",
-            "Sugar": "fas fa-cube", // Represents sugar cubes
-            "Millets & Grains": "fas fa-seedling", // Can reuse seedling or find a more specific grain icon
-            "Chickpeas": "fas fa-mitten", // A bit abstract, but could represent small, round items
-            "Mixed Spices": "fas fa-pepper-hot",
-            "Lazzat Masala Sachets": "fas fa-box", // Represents a packet/sachet
-            "Premium Spices": "fas fa-star", // Represents premium quality
-            "Dry Fruits": "fas fa-nut", // Or fas fa-apple-alt for general fruit/dry fruit
-            "Other Items": "fas fa-box-open" // General items
-        };
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSalesData();
+            loadAdminModeState();
+            applyLanguage('en'); 
 
-        // Function to flatten groceryData into a single array for easier searching
-        function flattenProducts() {
-            allProducts = [];
-            for (const category in groceryData) {
-                groceryData[category].forEach(item => {
-                    allProducts.push({
-                        category: category,
-                        ...item
-                    });
-                });
-            }
-        }
-
-        // Initialize allProducts on load
-        flattenProducts();
-
-        function applyTranslations() {
-            document.querySelectorAll('[data-translate]').forEach(element => {
-                const key = element.getAttribute('data-translate');
-                if (translations[currentLanguage][key]) {
-                    element.innerHTML = translations[currentLanguage][key];
-                }
+            // **FIX**: Corrected the event listener for the back button
+            document.getElementById('backToCategories').addEventListener('click', () => {
+                document.getElementById('productsSection').classList.add('hidden');
+                document.getElementById('categoriesSection').classList.remove('hidden');
+                currentCategory = '';
             });
-            document.querySelectorAll('[data-translate-placeholder]').forEach(element => {
-                const key = element.getAttribute('data-translate-placeholder');
-                if (translations[currentLanguage][key]) {
-                    element.placeholder = translations[currentLanguage][key];
-                }
-            });
-
-            // Update category titles
-            const shopByCategoryElement = document.querySelector('h2 [data-translate="shop_by_category"]');
-            if (shopByCategoryElement) {
-                shopByCategoryElement.textContent = translations[currentLanguage]["shop_by_category"];
-            }
-            // Update the store name in the footer directly as it doesn't have data-translate attributes on the h3
-            document.querySelector('footer h3[data-translate="store_name"]').textContent = translations[currentLanguage]["store_name"];
-            document.querySelector('footer p[data-translate="store_description"]').textContent = translations[currentLanguage]["store_description"];
-
-            // Re-render categories and products to apply translations
-            renderCategories(); // Always re-render categories
-            
-            const currentCategoryId = document.getElementById('categoryTitle').dataset.categoryId;
-            if (currentCategoryId && !document.getElementById('productsSection').classList.contains('hidden')) { 
-                renderProducts(currentCategoryId); // Re-render products if visible
-            }
-        }
+        });
 
         function changeLanguage(lang) {
             currentLanguage = lang;
+            applyLanguage(lang);
+
+            // Update active language button style
             document.querySelectorAll('.language-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
             document.querySelector(`.language-btn[onclick="changeLanguage('${lang}')"]`).classList.add('active');
-            document.body.classList.toggle('rtl', lang === 'ur');
-            applyTranslations();
+        }
+
+        function applyLanguage(lang) {
+             if (lang === 'ur') {
+                document.body.classList.add('rtl', 'urdu-font');
+            } else {
+                document.body.classList.remove('rtl', 'urdu-font');
+            }
+
+            document.querySelectorAll('[data-translate]').forEach(element => {
+                const key = element.getAttribute('data-translate');
+                if(translations[lang] && translations[lang][key]) {
+                    element.innerHTML = translations[lang][key];
+                }
+            });
+             document.querySelectorAll('[data-translate-placeholder]').forEach(element => {
+                const key = element.dataset.translatePlaceholder;
+                if (translations[lang] && translations[lang][key]) {
+                    element.placeholder = translations[lang][key];
+                }
+            });
+            
+            renderCategories();
+            if(currentCategory) {
+                 renderProducts(currentCategory);
+            }
+            updateCartDisplay();
+            updateSalesDashboard();
+        }
+
+
+        // Admin Mode Toggle
+        const adminToggleBtn = document.getElementById('adminToggle');
+        adminToggleBtn.addEventListener('click', toggleAdminMode);
+
+        function toggleAdminMode() {
+            document.body.classList.toggle('admin-mode');
+            const isAdmin = document.body.classList.contains('admin-mode');
+            localStorage.setItem('adminMode', isAdmin); // Save state
+            
+            renderCategories();
+            if (currentCategory) {
+                renderProducts(currentCategory);
+            }
+        }
+
+        function loadAdminModeState() {
+            const isAdmin = localStorage.getItem('adminMode') === 'true';
+            if (isAdmin) {
+                document.body.classList.add('admin-mode');
+            }
+        }
+
+        function formatPrice(price) {
+            return price.toLocaleString('en-PK', { style: 'currency', currency: 'PKR', minimumFractionDigits: 0 });
         }
 
         function renderCategories() {
             const categoriesGrid = document.getElementById('categoriesGrid');
             categoriesGrid.innerHTML = '';
             for (const category in groceryData) {
-                // Get the translated category name
-                const categoryName = translations[currentLanguage][category] || category;
-                const iconClass = categoryIcons[category] || 'fas fa-box'; // Default icon if not found
-
-                const card = `
-                    <div class="category-card bg-white rounded-lg shadow-md p-6 text-white text-center cursor-pointer transform hover:scale-105" onclick="showProducts('${category}')">
-                        <i class="${iconClass} text-4xl mb-3"></i>
-                        <h3 class="text-xl font-semibold mb-2">${categoryName}</h3>
-                        <p class="text-sm opacity-90">${groceryData[category].length} items</p>
-                    </div>
+                const categoryCard = document.createElement('div');
+                categoryCard.className = 'category-card bg-white rounded-lg shadow-md p-6 text-center cursor-pointer';
+                categoryCard.innerHTML = `
+                    <h3 class="text-xl font-semibold mb-2 text-white ${currentLanguage === 'ur' ? 'urdu-font' : ''}" data-translate="${category}">${translations[currentLanguage][category] || category}</h3>
+                    <p class="text-white text-opacity-80">${groceryData[category].length} items</p>
                 `;
-                categoriesGrid.innerHTML += card;
+                categoryCard.dataset.category = category;
+                
+                // **FIX**: Corrected the click handler to hide categories and show products
+                categoryCard.addEventListener('click', () => {
+                    currentCategory = category;
+                    document.getElementById('categoriesSection').classList.add('hidden');
+                    document.getElementById('productsSection').classList.remove('hidden');
+                    renderProducts(category);
+                });
+                categoriesGrid.appendChild(categoryCard);
             }
-        }
-
-        function showProducts(category) {
-            document.getElementById('categoriesGrid').classList.add('hidden');
-            document.getElementById('productsSection').classList.remove('hidden');
-            const categoryTitleElement = document.getElementById('categoryTitle');
-            categoryTitleElement.textContent = translations[currentLanguage][category] || category; // Use translated category name
-            categoryTitleElement.dataset.categoryId = category; // Store category ID for re-rendering on language change
-            renderProducts(category);
         }
 
         function renderProducts(category) {
+            if (!category) return;
             const productsGrid = document.getElementById('productsGrid');
+            const categoryTitle = document.getElementById('categoryTitle');
             productsGrid.innerHTML = '';
-            groceryData[category].forEach(product => {
-                const productName = currentLanguage === 'ur' ? product.nameUr : product.name;
-                const priceDisplay = isAdminMode ?
-                    `<input type="number" class="w-24 text-center border rounded px-2 py-1 price-input" value="${product.price}" data-product-category="${category}" data-product-name="${product.name}">` :
-                    `<span class="font-bold text-lg text-green-600 price-display">${product.price} PKR</span>`;
+            
+            categoryTitle.textContent = translations[currentLanguage][category] || category;
+            if(currentLanguage === 'ur') categoryTitle.classList.add('urdu-font');
+            else categoryTitle.classList.remove('urdu-font');
 
-                const productCard = `
-                    <div class="product-card bg-white rounded-lg shadow-md p-4 flex flex-col items-center text-center ${isAdminMode ? 'price-edit-mode' : ''}" data-original-base-price="${product.price}">
-                        <h3 class="text-lg font-semibold mb-2">${productName}</h3>
-                        <div class="flex items-center space-x-2 mb-3">
-                            <button class="weight-btn" onclick="updateWeight(this, -1, 'gram')">-100g</button>
-                            <span class="weight-display" data-grams="1000" data-unit="kg">1 kg</span>
-                            <button class="weight-btn" onclick="updateWeight(this, 1, 'gram')">+100g</button>
-                            <button class="weight-btn" onclick="updateWeight(this, -1, 'kg')">-1kg</button>
-                            <button class="weight-btn" onclick="updateWeight(this, 1, 'kg')">+1kg</button>
-                        </div>
-                        <p class="text-gray-700 mb-3" data-current-price="${product.price}">${priceDisplay}</p>
-                        <button class="add-to-cart-btn bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition mt-auto"
-                                data-product-name="${product.name}" data-product-price="${product.price}" data-product-ur="${product.nameUr}">
-                            <i class="fas fa-cart-plus mr-2"></i><span data-translate="add_to_cart">Add</span>
+            const products = groceryData[category];
+            products.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card bg-white rounded-lg shadow-md p-4 text-center relative';
+                productCard.innerHTML = `
+                    <h3 class="text-lg font-semibold mb-2 ${currentLanguage === 'ur' ? 'urdu-font' : ''}" data-name="${product.name}">${currentLanguage === 'ur' ? product.nameUr : product.name}</h3>
+                    <p class="text-gray-600 mb-3" data-price="${product.price}">${formatPrice(product.price)} / kg</p>
+                    <button class="add-to-cart-btn bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition ${currentLanguage === 'ur' ? 'urdu-font' : ''}"
+                            data-product-name="${product.name}"
+                            data-product-price="${product.price}"
+                            data-product-name-ur="${product.nameUr}">
+                        <i class="fas fa-cart-plus mr-2"></i><span data-translate="add_to_cart">${translations[currentLanguage].add_to_cart}</span>
+                    </button>
+                    ${document.body.classList.contains('admin-mode') ? `
+                        <button class="edit-price-btn absolute top-2 right-2 bg-yellow-500 text-white p-2 rounded-full text-sm"
+                                data-product-name="${product.name}" data-category="${category}">
+                            <i class="fas fa-edit"></i>
                         </button>
-                    </div>
+                    ` : ''}
                 `;
-                productsGrid.innerHTML += productCard;
+                productsGrid.appendChild(productCard);
             });
 
-            if (isAdminMode) {
-                document.querySelectorAll('.price-input').forEach(input => {
-                    input.addEventListener('change', (event) => {
-                        const productCard = event.target.closest('.product-card');
-                        const category = event.target.dataset.productCategory;
-                        const productName = event.target.dataset.productName;
-                        const newPrice = parseFloat(event.target.value);
+            productsGrid.querySelectorAll('.add-to-cart-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const productName = e.currentTarget.dataset.productName;
+                    const productNameUr = e.currentTarget.dataset.productNameUr;
+                    const productPrice = parseFloat(e.currentTarget.dataset.productPrice);
+                    
+                    const defaultWeightInGrams = 1000; 
+                    const defaultDisplayWeight = "1 kg"; 
 
-                        if (!isNaN(newPrice) && newPrice >= 0) {
-                            const product = groceryData[category].find(item => item.name === productName);
-                            if (product) {
-                                product.price = newPrice;
-                                productCard.dataset.originalBasePrice = newPrice; // Update original base price for future calculations
-                                productCard.querySelector('.add-to-cart-btn').dataset.productPrice = newPrice; // Update current price for add to cart
-                                productCard.querySelector('p').dataset.currentPrice = newPrice; // Update current price on paragraph
-                                saveGroceryData();
-                                updateSalesDashboard();
-                                renderCart(); // Update cart if this item is already there
-                            }
-                        } else {
-                            // Revert to original price if input is invalid
-                            event.target.value = productCard.dataset.originalBasePrice;
-                        }
+                    addItemToCart(productName, productNameUr, productPrice, defaultWeightInGrams, defaultDisplayWeight);
+                });
+            });
+
+            if (document.body.classList.contains('admin-mode')) {
+                productsGrid.querySelectorAll('.edit-price-btn').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const productName = e.currentTarget.dataset.productName;
+                        const categoryName = e.currentTarget.dataset.category;
+                        editProductPrice(productName, categoryName);
                     });
                 });
             }
-            attachAddToCartListeners();
         }
 
-        function updateWeight(button, change, unit) {
-            const productCard = button.closest('.product-card');
-            const weightDisplay = productCard.querySelector('.weight-display');
-            let currentGrams = parseInt(weightDisplay.dataset.grams);
-            // Get the original base price per KG from the product card's data attribute
-            const basePricePerKg = parseFloat(productCard.dataset.originalBasePrice); 
+        // Search Functionality
+        const searchInput = document.getElementById('searchInput');
+        const searchResultsContainer = document.getElementById('searchResults');
 
-            let newGrams;
-            if (unit === 'gram') {
-                newGrams = currentGrams + (change * 100);
-            } else { // 'kg'
-                newGrams = currentGrams + (change * 1000);
-            }
-
-            // Ensure weight doesn't go below 100g
-            newGrams = Math.max(100, newGrams);
-
-            let displayValue;
-            let actualPrice;
-
-            // Calculate actual price based on grams and base price per KG
-            actualPrice = (basePricePerKg / 1000) * newGrams;
-            actualPrice = Math.round(actualPrice); // Round to nearest integer
-
-            if (newGrams >= 1000) {
-                displayValue = `${newGrams / 1000} kg`;
-            } else {
-                displayValue = `${newGrams} g`;
-            }
-            
-            weightDisplay.textContent = displayValue;
-            weightDisplay.dataset.grams = newGrams;
-
-            const priceElementP = productCard.querySelector('p'); // Get the parent <p> element
-            priceElementP.dataset.currentPrice = actualPrice; // Update the current price on the p tag
-
-            const priceDisplayElement = productCard.querySelector('.price-display, .price-input');
-            if (isAdminMode) {
-                priceDisplayElement.value = actualPrice;
-            } else {
-                priceDisplayElement.textContent = `${actualPrice} PKR`;
-            }
-
-            // Update the data-product-price attribute for adding to cart
-            productCard.querySelector('.add-to-cart-btn').dataset.productPrice = actualPrice;
-        }
-
-
-        function attachAddToCartListeners() {
-            document.querySelectorAll('.add-to-cart-btn').forEach(button => {
-                button.onclick = null; // Remove previous listeners to prevent duplicates
-                button.addEventListener('click', (event) => {
-                    const productCard = event.target.closest('.product-card');
-                    const productName = productCard.querySelector('.add-to-cart-btn').dataset.productName;
-                    // Get the *currently displayed* price from the <p> tag's data-current-price
-                    const productPrice = parseFloat(productCard.querySelector('p').dataset.currentPrice); 
-                    const productUrName = productCard.querySelector('.add-to-cart-btn').dataset.productUr;
-                    const weightDisplay = productCard.querySelector('.weight-display');
-                    const weightInGrams = parseInt(weightDisplay.dataset.grams);
-                    const displayWeight = weightDisplay.textContent;
-
-                    addItemToCart(productName, productUrName, productPrice, weightInGrams, displayWeight);
-
-                    // Reset weight and price display after adding to cart
-                    weightDisplay.textContent = "1 kg";
-                    weightDisplay.dataset.grams = "1000";
-                    const originalPriceForReset = parseFloat(productCard.dataset.originalBasePrice);
-
-                    const priceDisplayElement = productCard.querySelector('.price-display, .price-input');
-                    if (isAdminMode) {
-                        priceDisplayElement.value = originalPriceForReset;
-                    } else {
-                        priceDisplayElement.textContent = `${originalPriceForReset} PKR`;
-                    }
-                    productCard.querySelector('.add-to-cart-btn').dataset.productPrice = originalPriceForReset;
-                    productCard.querySelector('p').dataset.currentPrice = originalPriceForReset; // Reset current price on p tag
-                });
-            });
-        }
-
-
-        let cartItems = [];
-
-        function addItemToCart(name, nameUr, price, weightInGrams, displayWeight) {
-            const existingItemIndex = cartItems.findIndex(item => item.name === name && item.weightInGrams === weightInGrams);
-
-            if (existingItemIndex > -1) {
-                cartItems[existingItemIndex].quantity += 1;
-                cartItems[existingItemIndex].totalPrice += price;
-            } else {
-                cartItems.push({
-                    name: name,
-                    nameUr: nameUr,
-                    pricePerUnit: price, // This is the calculated price for the specific weight
-                    quantity: 1,
-                    weightInGrams: weightInGrams,
-                    displayWeight: displayWeight,
-                    totalPrice: price
-                });
-            }
-            renderCart();
-            saveGroceryData();
-        }
-
-        function renderCart() {
-            const cartItemsContainer = document.getElementById('cartItems');
-            const cartTotalElement = document.getElementById('cartTotal');
-            const cartCountElement = document.getElementById('cartCount');
-            cartItemsContainer.innerHTML = '';
-            let total = 0;
-            let itemCount = 0;
-
-            if (cartItems.length === 0) {
-                cartItemsContainer.innerHTML = `<p class="text-gray-500 text-center py-8" data-translate="cart_empty">Cart is empty</p>`;
-            } else {
-                cartItems.forEach((item, index) => {
-                    const itemName = currentLanguage === 'ur' ? item.nameUr : item.name;
-                    const itemElement = `
-                        <div class="flex justify-between items-center bg-gray-100 p-3 rounded-lg mb-2">
-                            <div>
-                                <h4 class="font-semibold">${itemName} (${item.displayWeight})</h4>
-                                <p class="text-sm text-gray-600">${item.quantity} x ${item.pricePerUnit} PKR</p>
-                            </div>
-                            <div class="flex items-center space-x-3">
-                                <span class="font-bold text-gray-800">${item.totalPrice} PKR</span>
-                                <button class="bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm" onclick="removeFromCart(${index})">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                    cartItemsContainer.innerHTML += itemElement;
-                    total += item.totalPrice;
-                    itemCount += item.quantity;
-                });
-            }
-            cartTotalElement.textContent = `${total} PKR`;
-            cartCountElement.textContent = itemCount;
-
-            applyTranslations(); // Apply translations again for dynamically added elements in cart
-        }
-
-        function removeFromCart(index) {
-            cartItems.splice(index, 1);
-            renderCart();
-            saveGroceryData();
-        }
-
-        function checkout() {
-            if (cartItems.length === 0) {
-                // Using a custom modal for alerts
-                showCustomAlert('Your cart is empty. Please add items before checking out.');
-                return;
-            }
-
-            const billDetails = document.getElementById('billDetails');
-            const billPrintArea = document.getElementById('billPrintArea');
-            let totalAmount = 0;
-            const now = new Date();
-            const date = now.toLocaleDateString();
-            const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-            billDetails.innerHTML = '';
-            
-            let billTableRows = '';
-
-            cartItems.forEach(item => {
-                const itemName = currentLanguage === 'ur' ? item.nameUr : item.name;
-                // Make details bold and slightly larger in the modal
-                billDetails.innerHTML += `<p class="font-bold text-lg">${itemName} (${item.displayWeight}) x ${item.quantity} - ${item.totalPrice} PKR</p>`;
-                
-                // Add to print bill table
-                billTableRows += `
-                    <tr>
-                        <td>${itemName}</td>
-                        <td>${item.displayWeight}</td>
-                        <td>${item.pricePerUnit} PKR</td>
-                        <td class="text-right">${item.totalPrice} PKR</td>
-                    </tr>
-                `;
-                totalAmount += item.totalPrice;
-            });
-
-            // Construct the full bill print content dynamically
-            billPrintArea.innerHTML = `
-                <div class="bill-print-content">
-                    <div class="bill-header">
-                         <div class="flex justify-between items-center w-full mb-2">
-                            <span class="text-xs font-bold">Since</span>
-                            <h1 class="text-4xl font-bold urdu-font" style="margin: 0; padding: 0;">باغ عزیز</h1>
-                            <span class="text-xs font-bold">1980</span>
-                        </div>
-                        <h2 class="text-lg font-bold urdu-font" style="margin: 0; padding: 0;">حاجی فخرالدین کریانہ اینڈ جنرل</h2>
-                        <h2 class="text-lg font-bold urdu-font" style="margin: 0; padding: 0;">ہولسیل اسٹور</h2>
-                        <p style="margin: 5px 0; font-size: 10px;" data-translate="store_tagline">${translations[currentLanguage]["store_tagline"]}</p>
-                    </div>
-                    
-                    <div class="flex justify-between text-xs mb-3">
-                        <span><strong>Date:</strong> ${date}</span>
-                        <span><strong>Time:</strong> ${time}</span>
-                    </div>
-
-                    <table class="bill-table">
-                        <thead>
-                            <tr>
-                                <th><strong data-translate="bill_description">${translations[currentLanguage]["bill_description"]}</strong></th>
-                                <th><strong data-translate="bill_weight">${translations[currentLanguage]["bill_weight"]}</strong></th>
-                                <th><strong data-translate="bill_price">${translations[currentLanguage]["bill_price"]}</strong></th>
-                                <th class="text-right"><strong data-translate="bill_total">${translations[currentLanguage]["bill_total"]}</strong></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${billTableRows}
-                        </tbody>
-                    </table>
-                    
-                    <div class="bill-total">
-                        <div class="bill-total-row">
-                            <span><strong data-translate="bill_final_total">${translations[currentLanguage]["bill_final_total"]}</strong></span>
-                            <span id="billFinalTotal"><strong>${totalAmount} PKR</strong></span>
-                        </div>
-                    </div>
-                    
-                    <div class="bill-footer">
-                        <p style="font-size: 10px; margin: 5px 0;" data-translate="thank_you">${translations[currentLanguage]["thank_you"]}</p>
-                        <strong><p style="font-size: 12px; margin: 0;" data-translate="phone1">${translations[currentLanguage]["phone1"]}</p></strong>
-                        <strong><p style="font-size: 12px; margin: 0;" data-translate="phone2">${translations[currentLanguage]["phone2"]}</p></strong>
-                    </div>
-                    
-                    <div class="bill-number" id="billNumber">
-                        <strong>Bill #: </strong><span id="billNumberValue">${String(billCounter).padStart(4, '0')}</span>
-                    </div>
-                </div>
-            `;
-
-
-            document.getElementById('billTotal').textContent = `${totalAmount} PKR`;
-            
-            document.getElementById('billModal').classList.remove('hidden');
-            document.getElementById('billModal').classList.add('flex');
-
-            // Update sales data
-            salesData.totalRevenue = (salesData.totalRevenue || 0) + totalAmount;
-            salesData.totalItemsSold = (salesData.totalItemsSold || 0) + cartItems.reduce((sum, item) => sum + item.quantity, 0);
-            salesData.totalOrders = (salesData.totalOrders || 0) + 1;
-            
-            // Add to recent sales
-            salesData.recentSales = salesData.recentSales || [];
-            salesData.recentSales.unshift({
-                billId: billCounter,
-                total: totalAmount,
-                date: new Date().toLocaleString()
-            });
-            if (salesData.recentSales.length > 5) {
-                salesData.recentSales.pop(); // Keep only last 5
-            }
-
-            billCounter++; // Increment bill number for next transaction
-            cartItems = []; // Clear cart after checkout
-            renderCart(); // Update cart display
-            updateSalesDashboard(); // Update dashboard
-            saveGroceryData(); // Save all sales data
-            applyTranslations(); // Reapply translations for bill modal
-        }
-
-        function updateSalesDashboard() {
-            document.getElementById('totalSalesToday').textContent = `${salesData.totalRevenue || 0} PKR`;
-            document.getElementById('totalItemsSold').textContent = salesData.totalItemsSold || 0;
-            document.getElementById('totalRevenue').textContent = `${salesData.totalRevenue || 0} PKR`;
-            document.getElementById('totalOrders').textContent = salesData.totalOrders || 0;
-            const avgOrderValue = salesData.totalOrders > 0 ? (salesData.totalRevenue / salesData.totalOrders).toFixed(2) : 0;
-            document.getElementById('avgOrderValue').textContent = `${avgOrderValue} PKR`;
-
-            const recentSalesContainer = document.getElementById('recentSales');
-            recentSalesContainer.innerHTML = '';
-            if (salesData.recentSales && salesData.recentSales.length > 0) {
-                salesData.recentSales.forEach(sale => {
-                    recentSalesContainer.innerHTML += `
-                        <div class="flex justify-between items-center p-2 bg-gray-50 rounded-lg">
-                            <span>Bill #${String(sale.billId).padStart(4, '0')}</span>
-                            <span class="font-semibold">${sale.total} PKR</span>
-                            <span class="text-xs text-gray-500">${sale.date}</span>
-                        </div>
-                    `;
-                });
-            } else {
-                recentSalesContainer.innerHTML = `<p class="text-gray-500 text-center py-4">No recent sales</p>`;
-            }
-            applyTranslations();
-        }
-
-        // Custom Alert Modal
-        function showCustomAlert(message) {
-            const alertModal = document.createElement('div');
-            alertModal.id = 'customAlertModal';
-            alertModal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
-            alertModal.innerHTML = `
-                <div class="bg-white rounded-lg p-6 max-w-sm w-full mx-4 text-center shadow-lg">
-                    <p class="text-lg font-semibold mb-4">${message}</p>
-                    <button id="closeCustomAlert" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">OK</button>
-                </div>
-            `;
-            document.body.appendChild(alertModal);
-
-            document.getElementById('closeCustomAlert').addEventListener('click', () => {
-                document.body.removeChild(alertModal);
-            });
-        }
-
-        // Custom Confirmation Modal
-        function showCustomConfirm(message, onConfirm) {
-            const confirmModal = document.createElement('div');
-            confirmModal.id = 'customConfirmModal';
-            confirmModal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
-            confirmModal.innerHTML = `
-                <div class="bg-white rounded-lg p-6 max-w-sm w-full mx-4 text-center shadow-lg">
-                    <p class="text-lg font-semibold mb-4">${message}</p>
-                    <div class="flex justify-center space-x-4">
-                        <button id="confirmYes" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">Yes</button>
-                        <button id="confirmNo" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition">No</button>
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(confirmModal);
-
-            document.getElementById('confirmYes').addEventListener('click', () => {
-                onConfirm(true);
-                document.body.removeChild(confirmModal);
-            });
-
-            document.getElementById('confirmNo').addEventListener('click', () => {
-                onConfirm(false);
-                document.body.removeChild(confirmModal);
-            });
-        }
-
-
-        function resetSales() {
-            showCustomConfirm('Are you sure you want to reset all daily sales data? This cannot be undone.', (confirmed) => {
-                if (confirmed) {
-                    salesData = {};
-                    localStorage.removeItem('groceryData'); // Clear stored sales data
-                    updateSalesDashboard();
-                    showCustomAlert('Daily sales data has been reset.');
-                }
-            });
-        }
-
-        function saveGroceryData() {
-            localStorage.setItem('groceryData', JSON.stringify(salesData));
-            localStorage.setItem('billCounter', billCounter);
-            // Optionally, save processedGroceryData if it changes during runtime (not expected by prompt)
-            // localStorage.setItem('processedGroceryData', JSON.stringify(processedGroceryData)); 
-        }
-
-        // Load saved data on startup
-        document.addEventListener('DOMContentLoaded', function() {
-            const savedSalesData = localStorage.getItem('groceryData');
-            if (savedSalesData) {
-                Object.assign(salesData, JSON.parse(savedSalesData));
-            }
-            const savedBillCounter = localStorage.getItem('billCounter');
-            if (savedBillCounter) {
-                billCounter = parseInt(savedBillCounter);
-            }
-            // If processedGroceryData was saved and might change, load it here.
-            // const savedProcessedGroceryData = localStorage.getItem('processedGroceryData');
-            // if (savedProcessedGroceryData) {
-            //     processedGroceryData = JSON.parse(savedProcessedGroceryData);
-            // } else {
-            //     processedGroceryData = processGroceryData(groceryData); // Process if not saved
-            // }
-
-            applyTranslations();
-            renderCategories();
-            renderCart();
-            updateSalesDashboard();
-        });
-
-        document.getElementById('backToCategories').addEventListener('click', () => {
-            document.getElementById('productsSection').classList.add('hidden');
-            document.getElementById('categoriesGrid').classList.remove('hidden');
-            document.getElementById('searchInput').value = ''; // Clear search input
-            document.getElementById('searchResults').classList.add('hidden'); // Hide search results
-        });
-
-        document.getElementById('checkoutBtn').addEventListener('click', checkout);
-        document.getElementById('clearCartBtn').addEventListener('click', () => {
-            showCustomConfirm('Are you sure you want to clear your shopping cart?', (confirmed) => {
-                if (confirmed) {
-                    cartItems = [];
-                    renderCart();
-                    saveGroceryData();
-                }
-            });
-        });
-        document.getElementById('resetSalesBtn').addEventListener('click', resetSales);
-
-        document.getElementById('closeBill').addEventListener('click', () => {
-            document.getElementById('billModal').classList.add('hidden');
-            document.getElementById('billModal').classList.remove('flex');
-        });
-
-        document.getElementById('printBill').addEventListener('click', () => {
-            const printArea = document.getElementById('billPrintArea');
-            const originalDisplay = printArea.style.display;
-            printArea.style.display = 'block'; // Make print area visible for printing
-            window.print();
-            printArea.style.display = originalDisplay; // Revert to original display style
-        });
-
-        // Admin Mode Toggle
-        document.getElementById('adminToggle').addEventListener('click', () => {
-            isAdminMode = !isAdminMode;
-            document.body.classList.toggle('admin-mode-active', isAdminMode); // Add a class to body for global styling if needed
-            renderCategories(); // Re-render categories to show/hide edit options
-            const currentCategoryId = document.getElementById('categoryTitle').dataset.categoryId;
-            if (currentCategoryId && !document.getElementById('productsSection').classList.contains('hidden')) {
-                renderProducts(currentCategoryId); // Re-render products if visible
-            }
-            showCustomAlert(`Admin Mode is now ${isAdminMode ? 'ON' : 'OFF'}`);
-        });
-
-        // Search functionality
-        document.getElementById('searchInput').addEventListener('input', (event) => {
-            const query = event.target.value.toLowerCase();
-            const searchResultsContainer = document.getElementById('searchResults');
+        searchInput.addEventListener('input', () => {
+            const query = searchInput.value.toLowerCase();
             searchResultsContainer.innerHTML = '';
 
-            if (query.length > 1) {
-                const filteredProducts = allProducts.filter(product =>
-                    product.name.toLowerCase().includes(query) ||
-                    (product.nameUr && product.nameUr.toLowerCase().includes(query))
-                );
+            if (query.length > 2) {
+                let matches = [];
+                for (const category in groceryData) {
+                    groceryData[category].forEach(product => {
+                        if (product.name.toLowerCase().includes(query) || product.nameUr.toLowerCase().includes(query)) {
+                            matches.push({...product, category: category});
+                        }
+                    });
+                }
 
-                if (filteredProducts.length > 0) {
+                if (matches.length > 0) {
                     searchResultsContainer.classList.remove('hidden');
-                    filteredProducts.forEach(product => {
-                        const productName = currentLanguage === 'ur' ? product.nameUr : product.name;
+                    matches.forEach(product => {
                         const searchItem = document.createElement('div');
-                        searchItem.classList.add('search-item');
-                        searchItem.textContent = `${productName} - ${product.price} PKR`;
-                        searchItem.dataset.productName = product.name;
-                        searchItem.dataset.productPrice = product.price; // This will be the base price
-                        searchItem.dataset.productUr = product.nameUr;
-                        searchItem.dataset.productCategory = product.category; // Needed for price update if admin mode active
+                        searchItem.className = `search-item text-white flex justify-between items-center ${currentLanguage === 'ur' ? 'urdu-font' : ''}`;
+                        searchItem.innerHTML = `
+                            <span>${currentLanguage === 'ur' ? product.nameUr : product.name}</span>
+                            <button class="add-to-cart-btn-search bg-green-500 text-white px-3 py-1 rounded-md text-sm"
+                                    data-product-name="${product.name}"
+                                    data-category="${product.category}"
+                                    data-product-price="${product.price}"
+                                    data-product-name-ur="${product.nameUr}">
+                                <i class="fas fa-cart-plus"></i> ${translations[currentLanguage].add_to_cart}
+                            </button>
+                        `;
+                        searchItem.querySelector('.add-to-cart-btn-search').addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            const productName = e.currentTarget.dataset.productName;
+                            const productPrice = parseFloat(e.currentTarget.dataset.productPrice);
+                            const productNameUr = e.currentTarget.dataset.productNameUr;
 
-                        searchItem.addEventListener('click', (e) => {
-                            const category = e.target.dataset.productCategory;
-                            const fullProduct = groceryData[category].find(p => p.name === e.target.dataset.productName);
+                            const defaultWeightInGrams = 1000;
+                            const defaultDisplayWeight = "1 kg";
 
-                            if (fullProduct) {
-                                // For items added via search, assume 1 unit of base quantity (e.g., 1kg for kg items, 1pcs for pcs items)
-                                const defaultWeightInGrams = 1000; // Default to 1kg or 1 unit for search results
-                                const defaultDisplayWeight = "1 kg"; // Default to 1kg
-
-                                addItemToCart(
-                                    fullProduct.name,
-                                    fullProduct.nameUr,
-                                    fullProduct.price, // Use base price from groceryData, assumes per KG or per unit
-                                    defaultWeightInGrams,
-                                    defaultDisplayWeight
-                                );
-                            }
+                            addItemToCart(productName, productNameUr, productPrice, defaultWeightInGrams, defaultDisplayWeight);
                             searchResultsContainer.classList.add('hidden');
                             document.getElementById('searchInput').value = '';
                         });
@@ -1538,6 +1228,324 @@
             } else {
                 searchResultsContainer.classList.add('hidden');
             }
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!searchResultsContainer.contains(e.target) && e.target !== searchInput) {
+                searchResultsContainer.classList.add('hidden');
+            }
+        });
+
+        function addItemToCart(name, nameUr, basePrice, quantityGrams, displayWeight) {
+            const existingItemIndex = cart.findIndex(item => item.name === name);
+
+            if (existingItemIndex > -1) {
+                updateCartItemQuantity(existingItemIndex, cart[existingItemIndex].quantityGrams + quantityGrams);
+            } else {
+                const totalItemPrice = (basePrice / 1000) * quantityGrams;
+                cart.push({
+                    name, nameUr, basePrice,
+                    quantityGrams: quantityGrams,
+                    displayWeight: displayWeight,
+                    totalItemPrice: totalItemPrice
+                });
+            }
+            updateCartDisplay();
+        }
+
+        function updateCartItemQuantity(index, newQuantityGrams) {
+            if (index < 0 || index >= cart.length) return;
+
+            let item = cart[index];
+            item.quantityGrams = newQuantityGrams;
+            item.totalItemPrice = (item.basePrice / 1000) * item.quantityGrams;
+            item.displayWeight = formatWeight(item.quantityGrams);
+
+            if (item.quantityGrams <= 0) {
+                cart.splice(index, 1);
+            }
+            updateCartDisplay();
+        }
+
+        function formatWeight(grams) {
+            if (grams >= 1000) {
+                const kg = grams / 1000;
+                return Number.isInteger(kg) ? kg + ' kg' : kg.toFixed(2) + ' kg';
+            }
+            return grams + ' g';
+        }
+
+        function updateCartDisplay() {
+            const cartItemsContainer = document.getElementById('cartItems');
+            const cartCountElement = document.getElementById('cartCount');
+            const cartTotalElement = document.getElementById('cartTotal');
+            let total = 0;
+            let itemCount = 0;
+
+            cartItemsContainer.innerHTML = '';
+
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = `<p class="text-gray-500 text-center py-8 ${currentLanguage === 'ur' ? 'urdu-font' : ''}" data-translate="cart_empty">${translations[currentLanguage].cart_empty}</p>`;
+            } else {
+                cart.forEach((item, index) => {
+                    total += item.totalItemPrice;
+                    itemCount++;
+                    
+                    const cartItemDiv = document.createElement('div');
+                    cartItemDiv.className = 'flex justify-between items-center bg-gray-100 p-4 rounded-lg shadow-sm mb-3';
+                    cartItemDiv.innerHTML = `
+                        <div>
+                            <p class="font-semibold text-gray-800 ${currentLanguage === 'ur' ? 'urdu-font' : ''}">${currentLanguage === 'ur' ? item.nameUr : item.name}</p>
+                            <p class="text-sm text-gray-600">${item.displayWeight} @ ${formatPrice(item.basePrice)}/kg</p>
+                            <p class="text-lg font-bold text-green-600">${formatPrice(item.totalItemPrice)}</p>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="weight-controls">
+                                <button class="weight-btn" data-action="decrease" data-index="${index}" data-amount="250">-250g</button>
+                                <button class="weight-btn" data-action="decrease" data-index="${index}" data-amount="100">-100g</button>
+                                <span class="weight-display">${item.displayWeight}</span>
+                                <button class="weight-btn" data-action="increase" data-index="${index}" data-amount="100">+100g</button>
+                                <button class="weight-btn" data-action="increase" data-index="${index}" data-amount="250">+250g</button>
+                            </div>
+                            <button class="remove-item-btn bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition" data-index="${index}">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    `;
+                    cartItemsContainer.appendChild(cartItemDiv);
+                });
+            }
+
+            cartCountElement.textContent = itemCount;
+            cartTotalElement.textContent = formatPrice(total);
+
+            cartItemsContainer.querySelectorAll('.remove-item-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    cart.splice(parseInt(e.currentTarget.dataset.index), 1);
+                    updateCartDisplay();
+                });
+            });
+
+            cartItemsContainer.querySelectorAll('.weight-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const index = parseInt(e.currentTarget.dataset.index);
+                    const action = e.currentTarget.dataset.action;
+                    const amount = parseFloat(e.currentTarget.dataset.amount);
+                    
+                    let newQuantityGrams = cart[index].quantityGrams;
+                    if (action === 'increase') newQuantityGrams += amount;
+                    else if (action === 'decrease') newQuantityGrams -= amount;
+                    
+                    if (newQuantityGrams < 0) newQuantityGrams = 0;
+                    updateCartItemQuantity(index, newQuantityGrams);
+                });
+            });
+        }
+
+        document.getElementById('clearCartBtn').addEventListener('click', () => {
+            if (confirm(currentLanguage === 'ur' ? 'کیا آپ واقعی کارٹ صاف کرنا چاہتے ہیں؟' : 'Are you sure you want to clear the cart?')) {
+                cart = [];
+                updateCartDisplay();
+            }
+        });
+
+        document.getElementById('checkoutBtn').addEventListener('click', () => {
+            if (cart.length === 0) {
+                alert(currentLanguage === 'ur' ? 'کارٹ خالی ہے۔ براہ کرم اشیاء شامل کریں!' : 'Cart is empty. Please add items!');
+                return;
+            }
+            
+            const saleTotal = cart.reduce((sum, item) => sum + item.totalItemPrice, 0);
+            const saleItemsCount = cart.length;
+
+            totalSalesToday += saleTotal;
+            totalItemsSold += saleItemsCount;
+            totalOrders++;
+
+            const newSale = {
+                id: Date.now(),
+                total: saleTotal,
+                items: JSON.parse(JSON.stringify(cart)),
+                timestamp: new Date().toLocaleString()
+            };
+            recentSales.unshift(newSale);
+            if (recentSales.length > MAX_RECENT_SALES) recentSales.pop();
+
+            localStorage.setItem('totalSalesToday', totalSalesToday);
+            localStorage.setItem('totalItemsSold', totalItemsSold);
+            localStorage.setItem('totalOrders', totalOrders);
+            localStorage.setItem('recentSales', JSON.stringify(recentSales));
+
+            updateSalesDashboard();
+            generateBill();
+            
+            cart = [];
+            updateCartDisplay();
+        });
+
+        function updateSalesDashboard() {
+            document.getElementById('totalSalesToday').textContent = formatPrice(totalSalesToday);
+            document.getElementById('totalItemsSold').textContent = totalItemsSold;
+            document.getElementById('totalOrders').textContent = totalOrders;
+            const avgValue = totalOrders > 0 ? totalSalesToday / totalOrders : 0;
+            document.getElementById('avgOrderValue').textContent = formatPrice(avgValue);
+
+            const recentSalesContainer = document.getElementById('recentSales');
+            recentSalesContainer.innerHTML = '';
+            if (recentSales.length === 0) {
+                recentSalesContainer.innerHTML = `<p class="text-gray-500 text-center py-4 ${currentLanguage === 'ur' ? 'urdu-font' : ''}">${currentLanguage === 'ur' ? 'کوئی حالیہ سیلز نہیں' : 'No recent sales'}</p>`;
+            } else {
+                recentSales.forEach(sale => {
+                    const saleDiv = document.createElement('div');
+                    saleDiv.className = 'bg-gray-50 p-3 rounded-lg text-sm flex justify-between items-center';
+                    saleDiv.innerHTML = `
+                        <span>Order #${sale.id.toString().slice(-4)} (${sale.items.length} items)</span>
+                        <span class="font-bold text-green-600">${formatPrice(sale.total)}</span>
+                    `;
+                    recentSalesContainer.appendChild(saleDiv);
+                });
+            }
+        }
+
+        function loadSalesData() {
+            totalSalesToday = parseFloat(localStorage.getItem('totalSalesToday')) || 0;
+            totalItemsSold = parseInt(localStorage.getItem('totalItemsSold')) || 0;
+            totalOrders = parseInt(localStorage.getItem('totalOrders')) || 0;
+            try {
+                recentSales = JSON.parse(localStorage.getItem('recentSales')) || [];
+            } catch (e) {
+                console.error("Error parsing recent sales from localStorage", e);
+                recentSales = [];
+            }
+        }
+
+        document.getElementById('resetSalesBtn').addEventListener('click', () => {
+            if (confirm(currentLanguage === 'ur' ? 'کیا آپ واقعی یومیہ سیلز ری سیٹ کرنا چاہتے ہیں؟ یہ کارروائی ناقابل واپسی ہے!' : 'Are you sure you want to reset daily sales? This action is irreversible!')) {
+                totalSalesToday = 0;
+                totalItemsSold = 0;
+                totalOrders = 0;
+                recentSales = [];
+                localStorage.removeItem('totalSalesToday');
+                localStorage.removeItem('totalItemsSold');
+                localStorage.removeItem('totalOrders');
+                localStorage.removeItem('recentSales');
+                updateSalesDashboard();
+                alert(currentLanguage === 'ur' ? 'یومیہ سیلز ری سیٹ کر دی گئی ہیں۔' : 'Daily sales have been reset.');
+            }
+        });
+
+        function editProductPrice(productName, categoryName) {
+            const product = groceryData[categoryName].find(p => p.name === productName);
+            if (!product) return;
+
+            const newPrice = prompt(`${currentLanguage === 'ur' ? 'نئی قیمت درج کریں (فی کلو/یونٹ)' : 'Enter new price (per kg/unit) for'} ${currentLanguage === 'ur' ? product.nameUr : product.name}:`, product.price);
+            if (newPrice !== null && !isNaN(newPrice) && parseFloat(newPrice) >= 0) {
+                product.price = parseFloat(newPrice);
+                renderProducts(currentCategory);
+                alert(`${currentLanguage === 'ur' ? 'قیمت اپ ڈیٹ کر دی گئی ہے۔' : 'Price updated successfully!'}`);
+            } else if (newPrice !== null) {
+                alert(currentLanguage === 'ur' ? 'غلط قیمت۔' : 'Invalid price entered.');
+            }
+        }
+
+        const billModal = document.getElementById('billModal');
+        const billDetails = document.getElementById('billDetails');
+        const billTotalDisplay = document.getElementById('billTotal');
+        const closeBillBtn = document.getElementById('closeBill');
+        const printBillBtn = document.getElementById('printBill');
+
+        function generateBill() {
+            billDetails.innerHTML = '';
+            let totalAmount = 0;
+
+            const billContentDiv = document.createElement('div');
+            billContentDiv.className = 'bill-print-content';
+
+            const thankYou = translations[currentLanguage].thank_you;
+            const visitAgain = translations[currentLanguage].visit_again;
+            const billDescription = translations[currentLanguage].bill_description;
+            const billWeight = translations[currentLanguage].bill_weight;
+            const billPrice = translations[currentLanguage].bill_price;
+            const billTotal = translations[currentLanguage].bill_total;
+            const billFinalTotal = translations[currentLanguage].bill_final_total;
+            
+            billContentDiv.innerHTML = `
+                <div class="bill-header">
+                    <div class="bill-top-heading">
+                        <span class="since-text">1982</span>
+                        <h1 class="urdu-font">باغ عزیز</h1>
+                        <span class="since-text">Since</span>
+                    </div>
+                    <div class="store-name-subheading urdu-font">
+                        <P>حاجی فخرالدین کریانہ اینڈ جنرل ہولسیل اسٹور</P>
+                        <p>ہمارے یہاں ہر قسم کے چاول ہر قسم کے دالیں گرم مصالحہ جات اور بہترین ڈرایٔ فروٹ مناسب قیمت پر دستیاب ہیں</p>
+                    </div>
+                     <p style="font-weight: bold; text-align: center; margin-top: 10px; font-family: 'Poppins', sans-serif;">
+                        PHONE:NO 0325-3545682 / 0341-3020958
+                     </p>
+                </div>
+                <table class="bill-table ${currentLanguage === 'ur' ? 'urdu-font' : ''}">
+                    <thead>
+                        <tr>
+                            <th>${billDescription}</th>
+                            <th class="text-right">${billWeight}</th>
+                            <th class="text-right">${billPrice}</th>
+                            <th class="text-right">${billTotal}</th>
+                        </tr>
+                    </thead>
+                    <tbody id="billTableBody">
+                    </tbody>
+                </table>
+                <div class="bill-total">
+                    <div class="bill-total-row ${currentLanguage === 'ur' ? 'urdu-font' : ''}">
+                        <span>${billFinalTotal}</span>
+                        <span id="finalBillTotal"></span>
+                    </div>
+                </div>
+                <div class="bill-footer ${currentLanguage === 'ur' ? 'urdu-font' : ''}">
+                    <p>${thankYou}</p>
+                    <p>${visitAgain}</p>
+                </div>
+                <div class="bill-number">Bill # ${Date.now().toString().slice(-6)}</div>
+            `;
+            
+            const billTableBody = billContentDiv.querySelector('#billTableBody');
+
+            cart.forEach(item => {
+                totalAmount += item.totalItemPrice;
+                const itemRow = document.createElement('tr');
+                itemRow.innerHTML = `
+                    <td class="${currentLanguage === 'ur' ? 'urdu-font' : ''}">${currentLanguage === 'ur' ? item.nameUr : item.name}</td>
+                    <td class="text-right">${item.displayWeight}</td>
+                    <td class="text-right">${formatPrice(item.basePrice)}</td>
+                    <td class="text-right">${formatPrice(item.totalItemPrice)}</td>
+                `;
+                billTableBody.appendChild(itemRow);
+
+                const modalItemP = document.createElement('p');
+                modalItemP.innerHTML = `<span class="${currentLanguage === 'ur' ? 'urdu-font' : ''}">${currentLanguage === 'ur' ? item.nameUr : item.name}</span> - ${item.displayWeight} - <b>${formatPrice(item.totalItemPrice)}</b>`;
+                billDetails.appendChild(modalItemP);
+            });
+
+            billTotalDisplay.textContent = formatPrice(totalAmount);
+            billContentDiv.querySelector('#finalBillTotal').textContent = formatPrice(totalAmount);
+
+            document.getElementById('billPrintArea').innerHTML = '';
+            document.getElementById('billPrintArea').appendChild(billContentDiv);
+            document.getElementById('billPrintArea').style.display = 'block';
+
+            billModal.classList.remove('hidden');
+            billModal.classList.add('flex');
+        }
+
+        closeBillBtn.addEventListener('click', () => {
+            billModal.classList.add('hidden');
+            billModal.classList.remove('flex');
+            document.getElementById('billPrintArea').style.display = 'none';
+        });
+
+        printBillBtn.addEventListener('click', () => {
+            window.print();
         });
 
     </script>
