@@ -128,7 +128,7 @@
         }
 
         /* Weight Control Styles */
-        .weight-controls {
+        .weight-controls, .quantity-controls {
             display: flex;
             align-items: center;
             justify-content: center;
@@ -137,25 +137,25 @@
             flex-wrap: wrap;
         }
         
-        .weight-btn {
+        .weight-btn, .quantity-btn {
             padding: 4px 8px;
             background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
             color: white;
             border-radius: 6px;
-            font-size: 12px;
+            font-size: 14px;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.3s;
             border: none;
-            min-width: 50px;
+            min-width: 40px;
         }
         
-        .weight-btn:hover {
+        .weight-btn:hover, .quantity-btn:hover {
             background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
             transform: translateY(-1px);
         }
         
-        .weight-display {
+        .weight-display, .quantity-display {
             background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             color: white;
             padding: 4px 8px;
@@ -535,11 +535,11 @@
 
         /* Weight control buttons responsiveness */
         @media (max-width: 480px) {
-            .weight-controls {
+            .weight-controls, .quantity-controls {
                 flex-direction: column; /* Stack buttons vertically on very small screens */
                 gap: 5px;
             }
-            .weight-btn {
+            .weight-btn, .quantity-btn {
                 width: 100%; /* Full width for stacked buttons */
             }
         }
@@ -765,7 +765,7 @@
                 thank_you: "Thank you for your business!",
                 visit_again: "Visit us again!",
                 bill_description: "Description",
-                bill_weight: "Weight",
+                bill_weight: "Qty/Wt", // Changed for bill
                 bill_price: "Price",
                 bill_total: "Total",
                 bill_final_total: "TOTAL:",
@@ -818,7 +818,7 @@
                 thank_you: "آپ کے کاروبار کے لیے شکریہ!",
                 visit_again: "دوبارہ تشریف لائیں!",
                 bill_description: "تفصیل",
-                bill_weight: "وزن",
+                bill_weight: "تعداد/وزن", // Changed for bill
                 bill_price: "قیمت",
                 bill_total: "کل",
                 bill_final_total: "کل رقم",
@@ -992,22 +992,29 @@
                 {name: "Badam Giri 500g", nameUr: "بادام گری 500 گرام", price: 1000, image: null},
                 {name: "Badam Giri 1 kg", nameUr: "بادام گری 1 کلو", price: 2000, image: null}
             ],
+            // ***MODIFIED SECTION***: Added unit: 'pcs' to each item
             "Other Items": [
-                {name: "Imli", nameUr: "املی", price: 100, image: null},
-                {name: "Alu Bukhara", nameUr: "آلو بخارا", price: 150, image: null},
-                {name: "Hari Mirch", nameUr: "ہری مرچ", price: 50, image: null},
-                {name: "Lehsun", nameUr: "لہسن", price: 80, image: null},
-                {name: "Adrak", nameUr: "ادرک", price: 120, image: null},
-                {name: "Pyaz", nameUr: "پیاز", price: 60, image: null},
-                {name: "Tamatar", nameUr: "ٹماٹر", price: 70, image: null},
-                {name: "Aalo", nameUr: "آلو", price: 40, image: null},
-                {name: "Lemon", nameUr: "لیموں", price: 30, image: null},
-                {name: "Kata Chana", nameUr: "کٹا چنا", price: 180, image: null}
+                { "name": "Shan Biryani Masala", "nameUr": "شان بریانی مصالحہ", "price": 70, "unit": "pcs", "image": null },
+                { "name": "Shan Qourma Masala", "nameUr": "شان قورمہ مصالحہ", "price": 70, "unit": "pcs", "image": null },
+                { "name": "Shan Achar Gosht Masala", "nameUr": "شان اچار گوشت مصالحہ", "price": 70, "unit": "pcs", "image": null },
+                { "name": "Shan Karahi Gosht Masala", "nameUr": "شان کڑاہی گوشت مصالحہ", "price": 70, "unit": "pcs", "image": null },
+                { "name": "Shan Fish Masala", "nameUr": "شان مچھلی مصالحہ", "price": 70, "unit": "pcs", "image": null },
+                { "name": "Shan Pulao Masala", "nameUr": "شان پلاؤ مصالحہ", "price": 70, "unit": "pcs", "image": null },
+                { "name": "Shan Murghi Masala", "nameUr": "شان مرغی مصالحہ", "price": 70, "unit": "pcs", "image": null },
+                { "name": "Shan Kofta Masala", "nameUr": "شان کوفتہ مصالحہ", "price": 70, "unit": "pcs", "image": null },
+                { "name": "Shan Tikka Masala", "nameUr": "شان تکہ مصالحہ", "price": 70, "unit": "pcs", "image": null },
+                { "name": "Shan Shami Kabab Masala", "nameUr": "شان شامی کباب مصالحہ", "price": 70, "unit": "pcs", "image": null },
+                { "name": "Shan Nihari Masala", "nameUr": "شان نہاری مصالحہ", "price": 70, "unit": "pcs", "image": null },
+                { "name": "Shan Chicken Tikka Masala", "nameUr": "شان چکن تکہ مصالحہ", "price": 70, "unit": "pcs", "image": null },
+                { "name": "Shan Chaat Masala", "nameUr": "شان چاٹ مصالحہ", "price": 700, "unit": "pcs", "image": null },
+                { "name": "Shan Haleem Masala", "nameUr": "شان حلیم مصالحہ", "price": 140, "unit": "pcs", "image": null },
+                { "name": "Shan Bihari Kabab Masala", "nameUr": "شان بہاری کباب مصالحہ", "price": 140, "unit": "pcs", "image": null }
             ]
         };
 
         let currentCategory = '';
-        let cart = []; // { name, nameUr, basePrice, quantityGrams, displayWeight, totalItemPrice }
+        // ***MODIFIED***: Cart now stores a unified object structure
+        let cart = []; // { name, nameUr, price, type ('unit' or 'weight'), quantity (count or grams) }
         let currentLanguage = 'en';
         let totalSalesToday = 0;
         let totalItemsSold = 0;
@@ -1020,7 +1027,6 @@
             loadAdminModeState();
             applyLanguage('en'); 
 
-            // **FIX**: Corrected the event listener for the back button
             document.getElementById('backToCategories').addEventListener('click', () => {
                 document.getElementById('productsSection').classList.add('hidden');
                 document.getElementById('categoriesSection').classList.remove('hidden');
@@ -1032,7 +1038,6 @@
             currentLanguage = lang;
             applyLanguage(lang);
 
-            // Update active language button style
             document.querySelectorAll('.language-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
@@ -1106,7 +1111,6 @@
                 `;
                 categoryCard.dataset.category = category;
                 
-                // **FIX**: Corrected the click handler to hide categories and show products
                 categoryCard.addEventListener('click', () => {
                     currentCategory = category;
                     document.getElementById('categoriesSection').classList.add('hidden');
@@ -1129,15 +1133,19 @@
 
             const products = groceryData[category];
             products.forEach(product => {
+                const isUnitBased = product.unit === 'pcs';
+                const priceDisplay = isUnitBased ? `${formatPrice(product.price)} / ${product.unit}` : `${formatPrice(product.price)} / kg`;
+
                 const productCard = document.createElement('div');
                 productCard.className = 'product-card bg-white rounded-lg shadow-md p-4 text-center relative';
                 productCard.innerHTML = `
                     <h3 class="text-lg font-semibold mb-2 ${currentLanguage === 'ur' ? 'urdu-font' : ''}" data-name="${product.name}">${currentLanguage === 'ur' ? product.nameUr : product.name}</h3>
-                    <p class="text-gray-600 mb-3" data-price="${product.price}">${formatPrice(product.price)} / kg</p>
+                    <p class="text-gray-600 mb-3" data-price="${product.price}">${priceDisplay}</p>
                     <button class="add-to-cart-btn bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition ${currentLanguage === 'ur' ? 'urdu-font' : ''}"
                             data-product-name="${product.name}"
                             data-product-price="${product.price}"
-                            data-product-name-ur="${product.nameUr}">
+                            data-product-name-ur="${product.nameUr}"
+                            data-product-unit="${product.unit || ''}">
                         <i class="fas fa-cart-plus mr-2"></i><span data-translate="add_to_cart">${translations[currentLanguage].add_to_cart}</span>
                     </button>
                     ${document.body.classList.contains('admin-mode') ? `
@@ -1152,14 +1160,8 @@
 
             productsGrid.querySelectorAll('.add-to-cart-btn').forEach(button => {
                 button.addEventListener('click', (e) => {
-                    const productName = e.currentTarget.dataset.productName;
-                    const productNameUr = e.currentTarget.dataset.productNameUr;
-                    const productPrice = parseFloat(e.currentTarget.dataset.productPrice);
-                    
-                    const defaultWeightInGrams = 1000; 
-                    const defaultDisplayWeight = "1 kg"; 
-
-                    addItemToCart(productName, productNameUr, productPrice, defaultWeightInGrams, defaultDisplayWeight);
+                    const { productName, productNameUr, productPrice, productUnit } = e.currentTarget.dataset;
+                    addItemToCart(productName, productNameUr, parseFloat(productPrice), productUnit);
                 });
             });
 
@@ -1203,20 +1205,15 @@
                                     data-product-name="${product.name}"
                                     data-category="${product.category}"
                                     data-product-price="${product.price}"
-                                    data-product-name-ur="${product.nameUr}">
+                                    data-product-name-ur="${product.nameUr}"
+                                    data-product-unit="${product.unit || ''}">
                                 <i class="fas fa-cart-plus"></i> ${translations[currentLanguage].add_to_cart}
                             </button>
                         `;
                         searchItem.querySelector('.add-to-cart-btn-search').addEventListener('click', (e) => {
                             e.stopPropagation();
-                            const productName = e.currentTarget.dataset.productName;
-                            const productPrice = parseFloat(e.currentTarget.dataset.productPrice);
-                            const productNameUr = e.currentTarget.dataset.productNameUr;
-
-                            const defaultWeightInGrams = 1000;
-                            const defaultDisplayWeight = "1 kg";
-
-                            addItemToCart(productName, productNameUr, productPrice, defaultWeightInGrams, defaultDisplayWeight);
+                            const { productName, productPrice, productNameUr, productUnit } = e.currentTarget.dataset;
+                            addItemToCart(productName, productNameUr, parseFloat(productPrice), productUnit);
                             searchResultsContainer.classList.add('hidden');
                             document.getElementById('searchInput').value = '';
                         });
@@ -1236,32 +1233,49 @@
             }
         });
 
-        function addItemToCart(name, nameUr, basePrice, quantityGrams, displayWeight) {
-            const existingItemIndex = cart.findIndex(item => item.name === name);
+        // ***MODIFIED***: Unified addItemToCart logic
+        function addItemToCart(name, nameUr, price, unit) {
+            const existingItem = cart.find(item => item.name === name);
+            const isUnitItem = unit === 'pcs';
 
-            if (existingItemIndex > -1) {
-                updateCartItemQuantity(existingItemIndex, cart[existingItemIndex].quantityGrams + quantityGrams);
+            if (existingItem) {
+                if (isUnitItem) {
+                    existingItem.quantity++;
+                } else {
+                    // For weight items, add 1kg by default from product page
+                    existingItem.quantity += 1000; 
+                }
             } else {
-                const totalItemPrice = (basePrice / 1000) * quantityGrams;
                 cart.push({
-                    name, nameUr, basePrice,
-                    quantityGrams: quantityGrams,
-                    displayWeight: displayWeight,
-                    totalItemPrice: totalItemPrice
+                    name,
+                    nameUr,
+                    price,
+                    type: isUnitItem ? 'unit' : 'weight',
+                    quantity: isUnitItem ? 1 : 1000 // Start with 1 pc or 1000g
                 });
             }
             updateCartDisplay();
         }
 
-        function updateCartItemQuantity(index, newQuantityGrams) {
+        // ***NEW FUNCTION***: To handle quantity changes for unit-based items
+        function updateCartUnitQuantity(index, newQuantity) {
+            if (index < 0 || index >= cart.length) return;
+            
+            if (newQuantity > 0) {
+                cart[index].quantity = newQuantity;
+            } else {
+                cart.splice(index, 1); // Remove if quantity is 0 or less
+            }
+            updateCartDisplay();
+        }
+
+        // ***MODIFIED***: To handle weight changes for weight-based items
+        function updateCartWeightQuantity(index, newQuantityGrams) {
             if (index < 0 || index >= cart.length) return;
 
-            let item = cart[index];
-            item.quantityGrams = newQuantityGrams;
-            item.totalItemPrice = (item.basePrice / 1000) * item.quantityGrams;
-            item.displayWeight = formatWeight(item.quantityGrams);
-
-            if (item.quantityGrams <= 0) {
+            if (newQuantityGrams > 0) {
+                cart[index].quantity = newQuantityGrams;
+            } else {
                 cart.splice(index, 1);
             }
             updateCartDisplay();
@@ -1270,17 +1284,17 @@
         function formatWeight(grams) {
             if (grams >= 1000) {
                 const kg = grams / 1000;
-                return Number.isInteger(kg) ? kg + ' kg' : kg.toFixed(2) + ' kg';
+                return Number.isInteger(kg) ? `${kg} kg` : `${kg.toFixed(2)} kg`;
             }
-            return grams + ' g';
+            return `${grams} g`;
         }
 
+        // ***HEAVILY MODIFIED***: updateCartDisplay now handles both item types
         function updateCartDisplay() {
             const cartItemsContainer = document.getElementById('cartItems');
             const cartCountElement = document.getElementById('cartCount');
             const cartTotalElement = document.getElementById('cartTotal');
             let total = 0;
-            let itemCount = 0;
 
             cartItemsContainer.innerHTML = '';
 
@@ -1288,25 +1302,50 @@
                 cartItemsContainer.innerHTML = `<p class="text-gray-500 text-center py-8 ${currentLanguage === 'ur' ? 'urdu-font' : ''}" data-translate="cart_empty">${translations[currentLanguage].cart_empty}</p>`;
             } else {
                 cart.forEach((item, index) => {
-                    total += item.totalItemPrice;
-                    itemCount++;
+                    const isUnitItem = item.type === 'unit';
+                    const totalItemPrice = isUnitItem ? item.price * item.quantity : (item.price / 1000) * item.quantity;
+                    total += totalItemPrice;
                     
                     const cartItemDiv = document.createElement('div');
                     cartItemDiv.className = 'flex justify-between items-center bg-gray-100 p-4 rounded-lg shadow-sm mb-3';
-                    cartItemDiv.innerHTML = `
-                        <div>
-                            <p class="font-semibold text-gray-800 ${currentLanguage === 'ur' ? 'urdu-font' : ''}">${currentLanguage === 'ur' ? item.nameUr : item.name}</p>
-                            <p class="text-sm text-gray-600">${item.displayWeight} @ ${formatPrice(item.basePrice)}/kg</p>
-                            <p class="text-lg font-bold text-green-600">${formatPrice(item.totalItemPrice)}</p>
-                        </div>
-                        <div class="flex items-center space-x-2">
+
+                    let description, controls;
+
+                    if (isUnitItem) {
+                        description = `
+                            <p class="text-sm text-gray-600">${item.quantity} pcs @ ${formatPrice(item.price)}/pcs</p>
+                        `;
+                        controls = `
+                            <div class="quantity-controls">
+                                <button class="quantity-btn" data-action="decrease" data-index="${index}">-</button>
+                                <span class="quantity-display">${item.quantity} pcs</span>
+                                <button class="quantity-btn" data-action="increase" data-index="${index}">+</button>
+                            </div>
+                        `;
+                    } else { // Weight-based item
+                        const displayWeight = formatWeight(item.quantity);
+                        description = `
+                            <p class="text-sm text-gray-600">${displayWeight} @ ${formatPrice(item.price)}/kg</p>
+                        `;
+                        controls = `
                             <div class="weight-controls">
                                 <button class="weight-btn" data-action="decrease" data-index="${index}" data-amount="250">-250g</button>
                                 <button class="weight-btn" data-action="decrease" data-index="${index}" data-amount="100">-100g</button>
-                                <span class="weight-display">${item.displayWeight}</span>
+                                <span class="weight-display">${displayWeight}</span>
                                 <button class="weight-btn" data-action="increase" data-index="${index}" data-amount="100">+100g</button>
                                 <button class="weight-btn" data-action="increase" data-index="${index}" data-amount="250">+250g</button>
                             </div>
+                        `;
+                    }
+
+                    cartItemDiv.innerHTML = `
+                        <div>
+                            <p class="font-semibold text-gray-800 ${currentLanguage === 'ur' ? 'urdu-font' : ''}">${currentLanguage === 'ur' ? item.nameUr : item.name}</p>
+                            ${description}
+                            <p class="text-lg font-bold text-green-600">${formatPrice(totalItemPrice)}</p>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            ${controls}
                             <button class="remove-item-btn bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition" data-index="${index}">
                                 <i class="fas fa-times"></i>
                             </button>
@@ -1316,7 +1355,7 @@
                 });
             }
 
-            cartCountElement.textContent = itemCount;
+            cartCountElement.textContent = cart.length;
             cartTotalElement.textContent = formatPrice(total);
 
             cartItemsContainer.querySelectorAll('.remove-item-btn').forEach(button => {
@@ -1326,18 +1365,33 @@
                 });
             });
 
+            // Event listeners for new unit quantity buttons
+            cartItemsContainer.querySelectorAll('.quantity-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const index = parseInt(e.currentTarget.dataset.index);
+                    const action = e.currentTarget.dataset.action;
+                    let newQuantity = cart[index].quantity;
+
+                    if (action === 'increase') newQuantity++;
+                    else if (action === 'decrease') newQuantity--;
+                    
+                    updateCartUnitQuantity(index, newQuantity);
+                });
+            });
+            
+            // Event listeners for existing weight buttons
             cartItemsContainer.querySelectorAll('.weight-btn').forEach(button => {
                 button.addEventListener('click', (e) => {
                     const index = parseInt(e.currentTarget.dataset.index);
                     const action = e.currentTarget.dataset.action;
                     const amount = parseFloat(e.currentTarget.dataset.amount);
                     
-                    let newQuantityGrams = cart[index].quantityGrams;
+                    let newQuantityGrams = cart[index].quantity;
                     if (action === 'increase') newQuantityGrams += amount;
                     else if (action === 'decrease') newQuantityGrams -= amount;
                     
                     if (newQuantityGrams < 0) newQuantityGrams = 0;
-                    updateCartItemQuantity(index, newQuantityGrams);
+                    updateCartWeightQuantity(index, newQuantityGrams);
                 });
             });
         }
@@ -1349,13 +1403,20 @@
             }
         });
 
+        // ***MODIFIED***: Checkout now handles both item types correctly
         document.getElementById('checkoutBtn').addEventListener('click', () => {
             if (cart.length === 0) {
                 alert(currentLanguage === 'ur' ? 'کارٹ خالی ہے۔ براہ کرم اشیاء شامل کریں!' : 'Cart is empty. Please add items!');
                 return;
             }
             
-            const saleTotal = cart.reduce((sum, item) => sum + item.totalItemPrice, 0);
+            const saleTotal = cart.reduce((sum, item) => {
+                const itemTotal = item.type === 'unit' 
+                    ? item.price * item.quantity 
+                    : (item.price / 1000) * item.quantity;
+                return sum + itemTotal;
+            }, 0);
+            
             const saleItemsCount = cart.length;
 
             totalSalesToday += saleTotal;
@@ -1377,9 +1438,9 @@
             localStorage.setItem('recentSales', JSON.stringify(recentSales));
 
             updateSalesDashboard();
-            generateBill();
+            generateBill(); // generateBill uses the global 'cart' before it's cleared
             
-            cart = [];
+            cart = []; // Clear the cart *after* generating the bill
             updateCartDisplay();
         });
 
@@ -1454,6 +1515,7 @@
         const closeBillBtn = document.getElementById('closeBill');
         const printBillBtn = document.getElementById('printBill');
 
+        // ***MODIFIED***: Bill generation now handles both item types
         function generateBill() {
             billDetails.innerHTML = '';
             let totalAmount = 0;
@@ -1477,7 +1539,7 @@
                         <span class="since-text">Since</span>
                     </div>
                     <div class="store-name-subheading urdu-font">
-                        <P>حاجی فخرالدین کریانہ اینڈ جنرل ہولسیل اسٹور</P>
+                        <P>حاجی فخرالدین انصاری کریانہ اینڈ جنرل ہولسیل اسٹور</P>
                         <p>ہمارے یہاں ہر قسم کے چاول ہر قسم کے دالیں گرم مصالحہ جات اور بہترین ڈرایٔ فروٹ مناسب قیمت پر دستیاب ہیں</p>
                     </div>
                      <p style="font-weight: bold; text-align: center; margin-top: 10px; font-family: 'Poppins', sans-serif;">
@@ -1512,18 +1574,24 @@
             const billTableBody = billContentDiv.querySelector('#billTableBody');
 
             cart.forEach(item => {
-                totalAmount += item.totalItemPrice;
+                const isUnitItem = item.type === 'unit';
+                const itemTotalPrice = isUnitItem ? item.price * item.quantity : (item.price / 1000) * item.quantity;
+                const displayQty = isUnitItem ? `${item.quantity} pcs` : formatWeight(item.quantity);
+                const displayPrice = isUnitItem ? formatPrice(item.price) : formatPrice(item.price);
+                
+                totalAmount += itemTotalPrice;
+
                 const itemRow = document.createElement('tr');
                 itemRow.innerHTML = `
                     <td class="${currentLanguage === 'ur' ? 'urdu-font' : ''}">${currentLanguage === 'ur' ? item.nameUr : item.name}</td>
-                    <td class="text-right">${item.displayWeight}</td>
-                    <td class="text-right">${formatPrice(item.basePrice)}</td>
-                    <td class="text-right">${formatPrice(item.totalItemPrice)}</td>
+                    <td class="text-right">${displayQty}</td>
+                    <td class="text-right">${displayPrice}</td>
+                    <td class="text-right">${formatPrice(itemTotalPrice)}</td>
                 `;
                 billTableBody.appendChild(itemRow);
 
                 const modalItemP = document.createElement('p');
-                modalItemP.innerHTML = `<span class="${currentLanguage === 'ur' ? 'urdu-font' : ''}">${currentLanguage === 'ur' ? item.nameUr : item.name}</span> - ${item.displayWeight} - <b>${formatPrice(item.totalItemPrice)}</b>`;
+                modalItemP.innerHTML = `<span class="${currentLanguage === 'ur' ? 'urdu-font' : ''}">${currentLanguage === 'ur' ? item.nameUr : item.name}</span> - ${displayQty} - <b>${formatPrice(itemTotalPrice)}</b>`;
                 billDetails.appendChild(modalItemP);
             });
 
